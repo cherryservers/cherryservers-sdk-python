@@ -17,16 +17,16 @@ class CherryApiClient:
         self,
         token: str,
         api_endpoint: str = "https://api.cherryservers.com/v1/",
-        user_agent_context: str = "",
+        user_agent_suffix: str = "",
     ) -> None:
         self._token = token
         self._api_endpoint = api_endpoint
         self._requests_session = requests.Session()
-        self._headers = self._get_headers(user_agent_context)
+        self._headers = self._get_headers(user_agent_suffix)
 
-    def _get_headers(self, user_agent_context: str) -> dict[str, str]:
+    def _get_headers(self, user_agent_suffix: str) -> dict[str, str]:
         return {
-            "User-Agent": f"{user_agent_context}/cherry-python/{__version__} {requests.__name__}/{requests.__version__}",
+            "User-Agent": f"{user_agent_suffix}/cherry-python/{__version__} {requests.__name__}/{requests.__version__}",
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self._token}",
         }
