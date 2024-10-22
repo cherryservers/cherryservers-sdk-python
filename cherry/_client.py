@@ -60,7 +60,9 @@ class CherryApiClient:
     def get(
         self, url: str, params: dict[str, Any] | None = None, timeout: int = 10
     ) -> requests.Response:
-        return self._send_request("GET", url, params, None, timeout)
+        return self._send_request(
+            "GET", self._api_endpoint + url, params, None, timeout
+        )
 
     def post(
         self,
@@ -69,7 +71,9 @@ class CherryApiClient:
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:
-        return self._send_request("POST", url, params, payload, timeout)
+        return self._send_request(
+            "POST", self._api_endpoint + url, params, payload, timeout
+        )
 
     def put(
         self,
@@ -78,9 +82,13 @@ class CherryApiClient:
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:
-        return self._send_request("PUT", url, params, payload, timeout)
+        return self._send_request(
+            "PUT", self._api_endpoint + url, params, payload, timeout
+        )
 
     def delete(
         self, url: str, params: dict[str, Any] | None = None, timeout: int = 10
     ) -> requests.Response:
-        return self._send_request("DELETE", url, params, None, timeout)
+        return self._send_request(
+            "DELETE", self._api_endpoint + url, params, None, timeout
+        )

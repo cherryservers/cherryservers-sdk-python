@@ -9,6 +9,7 @@ version = "0.1.0"
 description = ""
 authors = ["Cherry Servers <support@cherryservers.com>"]
 readme = "README.md"
+packages = [{include = "cherry"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -22,7 +23,7 @@ mypy = "^1.12.0"
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D203", "D211", "D213", "E501", "COM812", "ISC001"]
+ignore = ["D203", "D104", "D211", "D213", "E501", "COM812", "ISC001"]
 
 [build-system]
 requires = ["poetry-core"]
