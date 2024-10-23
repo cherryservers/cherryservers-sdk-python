@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from ._client import CherryApiClient
-from .users.client import UserClient
+from cherry import _client, _sshkeys, _users
 
 
 class Client:
@@ -18,8 +17,10 @@ class Client:
         :param token: Cherry Servers API token. Can be created at https://portal.cherryservers.com/settings/api-keys.
         :param user_agent_suffix: User-Agent suffix to add to the client headers.
         """
-        self._api_client = CherryApiClient(
+        self._api_client = _client.CherryApiClient(
             token=token, user_agent_suffix=user_agent_suffix
         )
 
-        self.users = UserClient(self._api_client)
+        self.users = _users.UserClient(self._api_client)
+
+        self.sshkeys = _sshkeys.SSHKeyClient(self._api_client)
