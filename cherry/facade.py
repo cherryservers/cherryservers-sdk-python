@@ -1,18 +1,18 @@
-"""Cherry Servers API Python client."""
+"""Cherry Servers API Python facade."""
 
 from __future__ import annotations
 
 from cherry import _client, _sshkeys, _users
 
 
-class Client:
-    """Cherry Servers API Python client.
+class CherryApiFacade:
+    """Cherry Servers API Python facade.
 
     For Cherry Servers API reference, see https://api.cherryservers.com/doc/.
     """
 
     def __init__(self, token: str, user_agent_suffix: str = "") -> None:
-        """Create a new Client instance.
+        """Create a new CherryApiFacade instance.
 
         :param token: Cherry Servers API token. Can be created at https://portal.cherryservers.com/settings/api-keys.
         :param user_agent_suffix: User-Agent suffix to add to the client headers.
