@@ -18,3 +18,10 @@ class Creation(base.CherryRequestSchema):
 
     label: str = Field(description="SSH key label.")
     key: str = Field(description="Public SSH key.")
+
+
+class Update(base.CherryRequestSchema):
+    """TODO."""
+
+    label: str | None = Field(description="SSH key label.", default=None)
+    key: str | None = Field(description="Public SSH key.", default=None)
