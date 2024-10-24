@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from cherry import _client, _sshkeys, _users
+from cherry import _client, sshkeys, users
 
 
 class CherryApiFacade:
@@ -21,6 +21,6 @@ class CherryApiFacade:
             token=token, user_agent_suffix=user_agent_suffix
         )
 
-        self.users = _users.UserClient(self._api_client)
+        self.users = users.UserClient(self._api_client)
 
-        self.sshkeys = _sshkeys.SSHKeyClient(self._api_client)
+        self.sshkeys = sshkeys.SSHKeyClient(self._api_client)

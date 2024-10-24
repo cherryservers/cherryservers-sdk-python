@@ -1,3 +1,5 @@
+"""Cherry Servers user resource management module."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -53,6 +55,7 @@ class User:
     """
 
     def __init__(self, client: UserClient, model: UserModel) -> None:
+        """TODO."""
         self._client = client
         self.model = model
 

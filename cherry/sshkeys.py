@@ -1,8 +1,10 @@
+"""Cherry Servers SSH key resource management module."""
+
 from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, _users, request_schemas
+from cherry import _client, _models, request_schemas, users
 
 
 class SSHKeyModel(_models.DefaultModel):
@@ -13,7 +15,7 @@ class SSHKeyModel(_models.DefaultModel):
         label (str): SSH key label.
         key (str): Public SSH key.
         fingerprint (str): SSH key fingerprint.
-        user (cherry._users.UserModel): SSH key user.
+        user (cherry.users.UserModel): SSH key user.
         updated (str): Timestamp of the last SSH key update.
         created (str): Timestamp of the SSH key creation.
         href (str): SSH key href.
@@ -24,7 +26,7 @@ class SSHKeyModel(_models.DefaultModel):
     label: str = Field(description="SSH key label.")
     key: str = Field(description="Public SSH key.")
     fingerprint: str = Field(description="SSH key fingerprint.")
-    user: _users.UserModel = Field(description="SSH key user.")
+    user: users.UserModel = Field(description="SSH key user.")
     updated: str = Field(description="Timestamp of the last SSH key update.")
     created: str = Field(description="Timestamp of the SSH key creation.")
     href: str = Field(description="SSH key href.")
