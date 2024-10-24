@@ -8,14 +8,21 @@ from cherry import _client, sshkeys, users
 class CherryApiFacade:
     """Cherry Servers API Python facade.
 
+    This is the preferred way of managing Cherry Servers resources with the SDK.
     For Cherry Servers API reference, see https://api.cherryservers.com/doc/.
+
+    Attributes:
+        users (users.UserClient): Manage user resources.
+        sshkeys (sshkeys.SSHKeyClient): Manage SSH key resources.
+
     """
 
     def __init__(self, token: str, user_agent_suffix: str = "") -> None:
-        """Create a new CherryApiFacade instance.
+        """Create a new :class:`CherryApiFacade` instance.
 
-        :param token: Cherry Servers API token. Can be created at https://portal.cherryservers.com/settings/api-keys.
-        :param user_agent_suffix: User-Agent suffix to add to the client headers.
+        :param str token: Cherry Servers API token. Can be created at https://portal.cherryservers.com/settings/api-keys.
+        :param str user_agent_suffix:
+         User-Agent suffix that will be added to the header. Empty by default.
         """
         self._api_client = _client.CherryApiClient(
             token=token, user_agent_suffix=user_agent_suffix

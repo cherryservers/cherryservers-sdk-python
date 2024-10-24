@@ -10,6 +10,9 @@ from cherry import _client, _models, request_schemas, users
 class SSHKeyModel(_models.DefaultModel):
     """Cherry Servers SSH key model.
 
+    This model is frozen by default,
+    since it represents an actual Cherry Servers SSH key resource state.
+
     Attributes:
         id (int): SSH key ID.
         label (str): SSH key label.
@@ -33,31 +36,68 @@ class SSHKeyModel(_models.DefaultModel):
 
 
 class SSHKey:
-    """TODO."""
+    """Cherry Servers SSH key resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`SSHKeyClient`.
+
+    Attributes:
+        model (SSHKeyModel): Cherry Servers SSH key model.
+            This is a Pydantic model that contains SSH key data.
+            A standard dictionary can be extracted with ``model.model_dump()``.
+
+    """
 
     def __init__(self, client: SSHKeyClient, model: SSHKeyModel) -> None:
-        """TODO."""
+        """Initialize a Cherry Servers SSH key resource."""
         self._client = client
         self.model = model
 
     def delete(self) -> None:
-        """TODO."""
+        """Delete Cherry Servers SSH key resource."""
         self._client.delete(self.model.id)
 
-    def update(self, update_schema: request_schemas.sshkeys.Update) -> SSHKey:
-        """TODO."""
-        return self._client.update(self.model.id, update_schema)
+    def update(self, update_schema: request_schemas.sshkeys.UpdateRequest) -> None:
+        """Update Cherry Servers SSH key resource."""
+        updated = self._client.update(self.model.id, update_schema)
+        self.model = updated.model
 
 
 class SSHKeyClient:
-    """TODO."""
+    """Cherry Servers SSH key client.
+
+    Manage Cherry Servers SSH key resources.
+    This class should typically be initialized by
+    :class:`cherry.facade.CherryApiFacade`.
+
+    Example:
+        .. code-block:: python
+
+            # Create SSH key.
+            facade = cherry.facade.CherryApiFacade(token="my-token")
+            req = cherry.request_schemas.sshkeys.CreationRequest(
+                label = "test",
+                key = "my-public-api-key"
+            )
+            sshkey = facade.sshkeys.create(req)
+
+            # Update SSH key.
+            req = cherry.request_schemas.sshkeys.UpdateRequest(
+                label = "test-updated"
+            )
+            sshkey.update(req)
+
+            # Remove SSH key.
+            sshkey.delete()
+
+    """
 
     def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """TODO."""
+        """Initialize a Cherry Servers SSH key client."""
         self._api_client = api_client
 
     def get_by_id(self, sshkey_id: int) -> SSHKey:
-        """TODO."""
+        """Retrieve a SSH key by ID."""
         response = self._api_client.get(
             f"ssh-keys/{sshkey_id}",
             {"fields": "ssh_key,user"},
@@ -67,7 +107,7 @@ class SSHKeyClient:
         return SSHKey(self, sshkey_model)
 
     def get_all(self) -> list[SSHKey]:
-        """TODO."""
+        """Retrieve all SSH keys."""
         response = self._api_client.get("ssh-keys", {"fields": "ssh_key,user"}, 5)
         keys: list[SSHKey] = []
         for value in response.json():
@@ -76,18 +116,20 @@ class SSHKeyClient:
 
         return keys
 
-    def create(self, creation_schema: request_schemas.sshkeys.Creation) -> SSHKey:
-        """TODO."""
+    def create(
+        self, creation_schema: request_schemas.sshkeys.CreationRequest
+    ) -> SSHKey:
+        """Create a new SSH key."""
         response = self._api_client.post("ssh-keys", creation_schema, None, 5)
         return self.get_by_id(response.json()["id"])
 
     def delete(self, sshkey_id: int) -> None:
-        """TODO."""
+        """Delete SSH key by ID."""
         self._api_client.delete(f"ssh-keys/{sshkey_id}", None, 5)
 
     def update(
-        self, sshkey_id: int, update_schema: request_schemas.sshkeys.Update
+        self, sshkey_id: int, update_schema: request_schemas.sshkeys.UpdateRequest
     ) -> SSHKey:
-        """TODO."""
+        """Update SSH key by ID."""
         response = self._api_client.put(f"ssh-keys/{sshkey_id}", update_schema, None, 5)
         return self.get_by_id(response.json()["id"])

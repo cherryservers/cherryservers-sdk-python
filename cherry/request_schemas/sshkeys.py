@@ -7,7 +7,7 @@ from pydantic import Field
 from cherry.request_schemas import base
 
 
-class Creation(base.CherryRequestSchema):
+class CreationRequest(base.CherryRequestSchema):
     """Cherry Servers SSH key creation request schema.
 
     Attributes:
@@ -20,8 +20,14 @@ class Creation(base.CherryRequestSchema):
     key: str = Field(description="Public SSH key.")
 
 
-class Update(base.CherryRequestSchema):
-    """TODO."""
+class UpdateRequest(base.CherryRequestSchema):
+    """Cherry Servers SSH key update request schema.
+
+    Attributes:
+        label (str | None): SSH key label.
+        key (str | None): Public SSH key.
+
+    """
 
     label: str | None = Field(description="SSH key label.", default=None)
     key: str | None = Field(description="Public SSH key.", default=None)

@@ -13,7 +13,10 @@ if TYPE_CHECKING:
 
 
 class UserModel(_models.DefaultModel):
-    """Cherry Servers User model.
+    """Cherry Servers user model.
+
+    This model is frozen by default,
+    since it represents an actual Cherry Servers user resource state.
 
     Attributes:
         id (int): ID of the user.
@@ -42,39 +45,43 @@ class UserModel(_models.DefaultModel):
 
 
 class User:
-    """Cherry Servers user.
+    """Cherry Servers user resource.
 
-    This class represents an existing Cherry Servers User resource and
-    should only be instantiated by the UserClient.
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`UserClient`.
 
     Attributes:
-        model (UserModel): Cherry Servers User model.
-            This is Pydantic model that contains user data.
-            A standard dictionary can be extracted with model.model_dump().
+        model (UserModel): Cherry Servers user model.
+            This is a Pydantic model that contains user data.
+            A standard dictionary can be extracted with ``model.model_dump()``.
 
     """
 
     def __init__(self, client: UserClient, model: UserModel) -> None:
-        """TODO."""
+        """Initialize a Cherry Servers user resource."""
         self._client = client
         self.model = model
 
 
 class UserClient:
-    """TODO."""
+    """Cherry Servers user client.
+
+    Manage Cherry Servers user resources. This class should typically be initialized by
+    :class:`cherry.facade.CherryApiFacade`.
+    """
 
     def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """TODO."""
+        """Initialize a Cherry Servers user client."""
         self._api_client = api_client
 
     def get_by_id(self, user_id: int) -> User:
-        """TODO."""
+        """Retrieve a user by ID."""
         response = self._api_client.get(f"users/{user_id}", None, 5)
         user_model = UserModel.model_validate(response.json())
         return User(self, user_model)
 
     def get_current_user(self) -> User:
-        """TODO."""
+        """Retrieve the current user."""
         response = self._api_client.get("user", None, 5)
         user_model = UserModel.model_validate(response.json())
         return User(self, user_model)
