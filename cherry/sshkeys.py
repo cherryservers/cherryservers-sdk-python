@@ -66,7 +66,7 @@ class SSHKeyClient:
         sshkey_model = SSHKeyModel.model_validate(response.json())
         return SSHKey(self, sshkey_model)
 
-    def list(self) -> list[SSHKey]:
+    def get_all(self) -> list[SSHKey]:
         """TODO."""
         response = self._api_client.get("ssh-keys", {"fields": "ssh_key,user"}, 5)
         keys: list[SSHKey] = []
