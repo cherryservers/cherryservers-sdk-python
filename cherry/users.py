@@ -68,6 +68,18 @@ class UserClient:
 
     Manage Cherry Servers user resources. This class should typically be initialized by
     :class:`cherry.facade.CherryApiFacade`.
+
+    Example:
+        .. code-block:: python
+
+            facade = cherry.facade.CherryApiFacade(token="my-token")
+
+            # Retrieve by ID.
+            user = facade.users.get_by_id(123456)
+
+            # Retrieve current user..
+            user = facade.users.get_current_user()
+
     """
 
     def __init__(self, api_client: _client.CherryApiClient) -> None:
