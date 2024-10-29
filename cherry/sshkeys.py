@@ -82,10 +82,10 @@ class SSHKeyClient:
             sshkey = facade.sshkeys.create(req)
 
             # Update SSH key.
-            req = cherry.request_schemas.sshkeys.UpdateRequest(
+            upd_req = cherry.request_schemas.sshkeys.UpdateRequest(
                 label = "test-updated"
             )
-            sshkey.update(req)
+            sshkey.update(upd_req)
 
             # Remove SSH key.
             sshkey.delete()
