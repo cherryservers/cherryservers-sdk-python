@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pydantic import Field
 
 from cherry import _client, _models, request_schemas
-from cherry import pricing as pricing_model
+
+if TYPE_CHECKING:
+    from cherry.pricing import PricingModel
 
 
 class RemainingTimeModel(_models.DefaultModel):
@@ -40,9 +44,7 @@ class ResourcesModel(_models.DefaultModel):
 
     """
 
-    pricing: pricing_model.PricingModel = Field(
-        description="Team resource pricing data."
-    )
+    pricing: PricingModel = Field(description="Team resource pricing data.")
     remaining: RemainingTimeModel = Field(
         description="Team resource remaining time data."
     )
