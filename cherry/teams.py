@@ -5,6 +5,7 @@ from __future__ import annotations
 from pydantic import Field
 
 from cherry import _client, _models, request_schemas
+from cherry import pricing as pricing_model
 
 
 class RemainingTimeModel(_models.DefaultModel):
@@ -26,27 +27,6 @@ class RemainingTimeModel(_models.DefaultModel):
     unit: str = Field(description="Time unit type.")
 
 
-class PricingModel(_models.DefaultModel):
-    """Cherry Servers team credit resource pricing model.
-
-    This model is frozen by default,
-    since it represents an actual Cherry Servers teams credit resource pricing state.
-    Here, resources refers to infrastructure objects that have a real cost.
-
-    Attributes:
-        price (float): Total price of all active resources.
-        taxed (bool): Whether tax is applied.
-        currency (str): Currency type.
-        unit (str): Time unit type.
-
-    """
-
-    price: float = Field(description=" Total price of all active resources.")
-    taxed: bool = Field(description=" Whether tax is applied.")
-    currency: str = Field(description=" Currency type.")
-    unit: str = Field(description="Time unit type.")
-
-
 class ResourcesModel(_models.DefaultModel):
     """Cherry Servers team credit resource detail model.
 
@@ -55,12 +35,14 @@ class ResourcesModel(_models.DefaultModel):
     Here, resources refers to infrastructure objects that have a real cost.
 
     Attributes:
-        pricing (cherry.teams.PricingModel): Team resource pricing data.
+        pricing (cherry.pricing.PricingModel): Team resource pricing data.
         remaining (cherry.teams.RemainingTimeModel): Team resource remaining time data.
 
     """
 
-    pricing: PricingModel = Field(description="Team resource pricing data.")
+    pricing: pricing_model.PricingModel = Field(
+        description="Team resource pricing data."
+    )
     remaining: RemainingTimeModel = Field(
         description="Team resource remaining time data."
     )
