@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from cherry import _client, ips, projects, regions, sshkeys, users
+from cherry import _client, ips, projects, regions, sshkeys, teams, users
 
 
 class CherryApiFacade:
@@ -17,6 +17,7 @@ class CherryApiFacade:
         projects (projects.ProjectClient): Manage project resources.
         regions (regions.RegionClient): Manage region resources.
         ips (ips.IPClient): Manage IP resources.
+        teams (teams.TeamClient): Manage team resources.
 
     """
 
@@ -40,3 +41,5 @@ class CherryApiFacade:
         self.regions = regions.RegionClient(self._api_client)
 
         self.ips = ips.IPClient(self._api_client)
+
+        self.teams = teams.TeamClient(self._api_client)
