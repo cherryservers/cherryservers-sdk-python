@@ -2,14 +2,10 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
 from cherry import _client, _models, request_schemas
-
-if TYPE_CHECKING:
-    from cherry.pricing import PricingModel
+from cherry.pricing import PricingModel
 
 
 class RemainingTimeModel(_models.DefaultModel):
