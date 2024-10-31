@@ -8,8 +8,6 @@ Plans
 
 .. autoclass:: cherry.plans.BandwidthModel
 
-.. autoclass:: cherry.pricing.PricingModel
-
 .. autoclass:: cherry.plans.NicsModel
 
 .. autoclass:: cherry.plans.RaidModel
@@ -21,6 +19,8 @@ Plans
 .. autoclass:: cherry.plans.CPUModel
 
 .. autoclass:: cherry.plans.SpecsModel
+
+.. autoclass:: cherry.plans.PricingModel
 
 .. autoclass:: cherry.plans.PlanModel
 

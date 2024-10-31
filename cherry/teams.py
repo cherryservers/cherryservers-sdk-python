@@ -5,7 +5,7 @@ from __future__ import annotations
 from pydantic import Field
 
 from cherry import _client, _models, request_schemas
-from cherry.pricing import PricingModel
+from cherry.plans import PricingModel
 
 
 class RemainingTimeModel(_models.DefaultModel):
@@ -35,7 +35,7 @@ class ResourcesModel(_models.DefaultModel):
     Here, resources refers to infrastructure objects that have a real cost.
 
     Attributes:
-        pricing (cherry.pricing.PricingModel): Team resource pricing data.
+        pricing (cherry.plans.PricingModel): Team resource pricing data.
         remaining (cherry.teams.RemainingTimeModel): Team resource remaining time data.
 
     """

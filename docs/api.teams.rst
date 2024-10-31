@@ -6,8 +6,6 @@ Teams
 
 .. autoclass:: cherry.teams.RemainingTimeModel
 
-.. autoclass:: cherry.pricing.PricingModel
-
 .. autoclass:: cherry.teams.ResourcesModel
 
 .. autoclass:: cherry.teams.CreditDetailsModel

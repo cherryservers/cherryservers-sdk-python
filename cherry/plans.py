@@ -5,7 +5,6 @@ from __future__ import annotations
 from pydantic import Field
 
 from cherry import _client, _models, regions
-from cherry.pricing import PricingModel
 
 
 class AvailableRegionsModel(regions.RegionModel):
@@ -163,6 +162,26 @@ class SpecsModel(_models.DefaultModel):
     )
 
 
+class PricingModel(_models.DefaultModel):
+    """Cherry Servers pricing model.
+
+    This model is frozen by default,
+    since it represents an actual Cherry Servers pricing resource state.
+
+    Attributes:
+        price (float): Price.
+        taxed (bool): Whether tax is applied.
+        currency (str): Currency type.
+        unit (str): Time unit type.
+
+    """
+
+    price: float = Field(description="Price.")
+    taxed: bool = Field(description="Whether tax is applied.")
+    currency: str = Field(description=" Currency type.")
+    unit: str = Field(description="Time unit type.")
+
+
 class PlanModel(_models.DefaultModel):
     """Cherry Servers plan model.
 
@@ -175,7 +194,7 @@ class PlanModel(_models.DefaultModel):
         slug (str): Plan name slug.
         type (str): Plan type, such as `baremetal` or `premium-vds`.
         specs (cherry.plans.SpecsModel): Plan specs.
-        pricing (list[cherry.pricing.PricingModel]): Plan pricing.
+        pricing (list[cherry.plans.PricingModel]): Plan pricing.
         available_regions (list[cherry.plans.AvailableRegionsModel]):
         Available regions for the plan.
 
