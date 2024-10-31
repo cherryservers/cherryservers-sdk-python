@@ -7,6 +7,31 @@ from pydantic import Field
 from cherry import _client, _models, projects, regions, request_schemas
 
 
+class AttachedServerModel(_models.DefaultModel):
+    """Cherry Servers attached server model.
+
+    This model is frozen by default,
+    since it represents an actual Cherry Servers server
+    resource.
+
+    This is a minimal server model meant for other resource models
+    than contain a server. Avoids circular references.
+
+    Attributes:
+        id (int): Server ID. Non-existent server will have value `0`.
+        href (str): Server href.
+        hostname (str): Server hostname.
+        Can be used to identify servers in most contexts.
+
+    """
+
+    id: int = Field(description="Server ID.")
+    href: str = Field(description="Server href.")
+    hostname: str = Field(
+        description="Server hostname. Can be used to identify servers in most contexts."
+    )
+
+
 class IPModel(_models.DefaultModel):
     """Cherry Servers IP address model.
 
@@ -21,8 +46,10 @@ class IPModel(_models.DefaultModel):
         gateway (str | None): IP address gateway address, if applicable.
         type (str): IP address type, such as `floating-ip` or `primary-ip`.
         region (cherry.regions.RegionModel): IP address region.
-        routed_to (cherry.ips.IPModel):
+        routed_to (cherry.ips.IPModel | None):
          IP address that this address is routed, if applicable.
+        targeted_to (cherry.ips.AttachedServerModel | None):
+         Server that this address is targeted to, if applicable.
         project (cherry.projects.ProjectModel):
          The project that the IP address belongs to.
         ptr_record (str | None): IP address PTR record, if applicable.
@@ -44,6 +71,10 @@ class IPModel(_models.DefaultModel):
     region: regions.RegionModel = Field(description="IP address region.")
     routed_to: IPModel | None = Field(
         description="IP address that this address is routed to, if applicable.",
+        default=None,
+    )
+    targeted_to: AttachedServerModel | None = Field(
+        description="Server that this address is targeted to, if applicable.",
         default=None,
     )
 

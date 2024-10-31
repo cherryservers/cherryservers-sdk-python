@@ -195,7 +195,7 @@ class PlanModel(_models.DefaultModel):
         type (str): Plan type, such as `baremetal` or `premium-vds`.
         specs (cherry.plans.SpecsModel): Plan specs.
         pricing (list[cherry.plans.PricingModel]): Plan pricing.
-        available_regions (list[cherry.plans.AvailableRegionsModel]):
+        available_regions (list[cherry.plans.AvailableRegionsModel] | None):
         Available regions for the plan.
 
     """
@@ -206,8 +206,8 @@ class PlanModel(_models.DefaultModel):
     type: str = Field(description="Plan type, such as `baremetal` or `premium-vds`.")
     specs: SpecsModel = Field(description="Plan specs.")
     pricing: list[PricingModel] = Field(description="Plan pricing.")
-    available_regions: list[AvailableRegionsModel] = Field(
-        description="Available regions for the plan."
+    available_regions: list[AvailableRegionsModel] | None = Field(
+        description="Available regions for the plan.", default=None
     )
 
 
