@@ -59,6 +59,10 @@ class CherryApiClient:
                 headers=self._headers,
                 data=data,
             )
+        if method == "PATCH":
+            r = self._requests_session.patch(
+                url, params=params, timeout=timeout, headers=self._headers, data=data
+            )
         if method == "DELETE":
             r = self._requests_session.delete(
                 url, params=params, timeout=timeout, headers=self._headers
@@ -99,6 +103,21 @@ class CherryApiClient:
     ) -> requests.Response:
         return self._send_request(
             "PUT",
+            self._api_endpoint_base + path,
+            params,
+            data.model_dump_json(),
+            timeout,
+        )
+
+    def patch(
+        self,
+        path: str,
+        data: base_request.CherryRequestSchema,
+        params: dict[str, Any] | None = None,
+        timeout: int = 10,
+    ) -> requests.Response:
+        return self._send_request(
+            "PATCH",
             self._api_endpoint_base + path,
             params,
             data.model_dump_json(),
