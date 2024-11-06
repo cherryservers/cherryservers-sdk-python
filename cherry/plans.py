@@ -192,8 +192,8 @@ class PlanModel(_models.DefaultModel):
         id (int): Plan ID.
         name (str): Plan full name.
         slug (str): Plan name slug.
-        type (str): Plan type, such as `baremetal` or `premium-vds`.
-        specs (cherry.plans.SpecsModel): Plan specs.
+        type (str | None): Plan type, such as `baremetal` or `premium-vds`.
+        specs (cherry.plans.SpecsModel | None): Plan specs.
         pricing (list[cherry.plans.PricingModel]): Plan pricing.
         available_regions (list[cherry.plans.AvailableRegionsModel] | None):
         Available regions for the plan.
@@ -203,8 +203,10 @@ class PlanModel(_models.DefaultModel):
     id: int = Field(description="Plan ID.")
     name: str = Field(description="Plan full name.")
     slug: str = Field(description="Plan name slug.")
-    type: str = Field(description="Plan type, such as `baremetal` or `premium-vds`.")
-    specs: SpecsModel = Field(description="Plan specs.")
+    type: str | None = Field(
+        description="Plan type, such as `baremetal` or `premium-vds`.", default=None
+    )
+    specs: SpecsModel | None = Field(description="Plan specs.", default=None)
     pricing: list[PricingModel] = Field(description="Plan pricing.")
     available_regions: list[AvailableRegionsModel] | None = Field(
         description="Available regions for the plan.", default=None

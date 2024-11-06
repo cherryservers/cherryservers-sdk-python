@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from cherry import (
     _client,
+    backup_storages,
     block_storages,
     images,
     ips,
@@ -34,6 +35,8 @@ class CherryApiFacade:
         images (images.ImageClient): Manage image resources.
         servers (servers.ServerClient): Manage server resources.
         block_storages (block_storages.BlockStorageClient): Manage EBS resources.
+        backup_storages (backup_storages.BackupStorageClient):
+         Manage backup storage resources.
 
     """
 
@@ -67,3 +70,5 @@ class CherryApiFacade:
         self.servers = servers.ServerClient(self._api_client)
 
         self.block_storages = block_storages.BlockStorageClient(self._api_client)
+
+        self.backup_storages = backup_storages.BackupStorageClient(self._api_client)
