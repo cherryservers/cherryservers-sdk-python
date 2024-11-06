@@ -7,6 +7,14 @@ from pydantic import Field
 from cherry import _client, _models, projects, regions, request_schemas
 
 
+class AddressAttachedError(Exception):
+    """Attempted operation forbidden for attached IP addresses."""
+
+    def __init__(self, msg: str) -> None:
+        """Initialize error."""
+        super().__init__(msg)
+
+
 class AttachedServerModel(_models.DefaultModel):
     """Cherry Servers attached server model.
 
@@ -115,7 +123,8 @@ class IP:
     def delete(self) -> None:
         """Delete Cherry Servers IP address resource."""
         if self.model.routed_to:
-            self.update(request_schemas.ips.UpdateRequest(targeted_to=0))
+            msg = "Attached IP address cannot be deleted."
+            raise AddressAttachedError(msg)
         self._client.delete(self.model.id)
 
     def update(self, update_schema: request_schemas.ips.UpdateRequest) -> None:
