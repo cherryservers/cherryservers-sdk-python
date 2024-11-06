@@ -34,6 +34,6 @@ class BackupStorageModel(_models.DefaultModel):
     public_ip: str = Field(description="Backup storage public IP.")
     size_gigabytes: int = Field(description="Backup storage total size in GB.")
     used_gigabytes: int = Field(description="Backup storage used size in GB.")
-    attached_to: cherry.servers.AttachedServerModel | None = Field(
+    attached_to: cherry.ips.AttachedServerModel | None = Field(
         description="Server to which the storage is attached to.", default=None
     )
