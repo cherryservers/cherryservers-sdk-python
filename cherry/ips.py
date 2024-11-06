@@ -173,7 +173,7 @@ class IPClient:
         """Retrieve a IP address by ID."""
         response = self._api_client.get(
             f"ips/{ip_id}",
-            {"fields": "ip,project,routed_to,region,href,bgp"},
+            {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
             10,
         )
         ip_model = IPModel.model_validate(response.json())
@@ -183,7 +183,7 @@ class IPClient:
         """Retrieve all IPs that belong to a specified project."""
         response = self._api_client.get(
             f"projects/{project_id}/ips",
-            {"fields": "ip,project,routed_to,region,href,bgp"},
+            {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
             10,
         )
         ips: list[IP] = []
