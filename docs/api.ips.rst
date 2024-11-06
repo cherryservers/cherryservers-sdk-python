@@ -6,6 +6,8 @@ IPs
 
 .. autoclass:: cherry.ips.IPModel
 
+.. autoclass:: cherry.ips.AttachedServerModel
+
 .. autoclass:: cherry.ips.IPClient
     :members:
 

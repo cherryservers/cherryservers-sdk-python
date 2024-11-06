@@ -21,7 +21,7 @@ class AttachedServerModel(_models.DefaultModel):
         id (int): Server ID. Non-existent server will have value `0`.
         href (str): Server href.
         hostname (str): Server hostname.
-        Can be used to identify servers in most contexts.
+         Can be used to identify servers in most contexts.
 
     """
 
