@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, request_schemas
+from cherry import _client, _models
 from cherry.ips import AttachedServerModel, IPModel
 from cherry.plans import PlanModel, PricingModel
 from cherry.regions import RegionModel
@@ -155,6 +155,63 @@ class BackupStorageModel(_models.DefaultModel):
     href: str = Field(description="Backup href.")
 
 
+class CreationRequest(_models.CherryRequestSchema):
+    """Cherry Servers backup storage creation request schema.
+
+    Attributes:
+        region (str):  Region slug. Required.
+        slug (str):  Backup storage plan slug. Required.
+        ssh_key (str | None):  Public SSH key for storage access.
+
+    """
+
+    region: str = Field(description="Region slug. Required.")
+    slug: str = Field(description="Backup storage plan slug. Required.")
+    ssh_key: str | None = Field(
+        description="Public SSH key for storage access.", default=None
+    )
+
+
+class UpdateRequest(_models.CherryRequestSchema):
+    """Cherry Servers backup storage update request schema.
+
+    Attributes:
+        slug (str | None):  Backup storage plan slug.
+        password (str | None): Password for backup storage access.
+        ssh_key (str | None):  Public SSH key for storage access.
+
+    """
+
+    slug: str | None = Field(description="Backup storage plan slug.", default=None)
+    password: str | None = Field(
+        description="Password for backup storage access.", default=None
+    )
+    ssh_key: str | None = Field(
+        description="Public SSH key for storage access.", default=None
+    )
+
+
+class UpdateAccessMethodsRequest(_models.CherryRequestSchema):
+    """Cherry Servers backup storage update access methods request schema.
+
+    Attributes:
+        enabled (bool | None):  Enable/Disable backup storage access methods.
+        whitelist (list[str] | None): List of whitelisted IP addresses.
+        ssh_key (str | None):  Public SSH key for storage access.
+
+    """
+
+    enabled: bool | None = Field(
+        description="Enable/Disable backup storage access methods.", default=None
+    )
+    whitelist: list[str] | None = Field(
+        description="List of  whitelisted IP addresses.", default=None
+    )
+    ssh_key: str | None = Field(
+        description="Public SSH key for storage access.", default=None
+    )
+
+
 class BackupStorage:
     """Cherry Servers backup storage resource.
 
@@ -177,16 +234,14 @@ class BackupStorage:
         """Delete Cherry Servers backup storage resource."""
         self._client.delete(self.model.id)
 
-    def update(
-        self, update_schema: request_schemas.backup_storages.UpdateRequest
-    ) -> None:
+    def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers backup storage resource."""
         updated = self._client.update(self.model.id, update_schema)
         self.model = updated.model
 
     def update_access_method(
         self,
-        update_schema: request_schemas.backup_storages.UpdateAccessMethodsRequest,
+        update_schema: UpdateAccessMethodsRequest,
         method_name: str,
     ) -> None:
         """Update Cherry Servers backup storage access method."""
@@ -225,20 +280,20 @@ class BackupStorageClient:
             print("______________________________")
 
             # Create a storage.
-            creation_req = cherry.request_schemas.backup_storages.CreationRequest(
+            creation_req = cherry.backup_storages.CreationRequest(
                 region="eu_nord_1", slug="backup_50"
             )
             storage = facade.backup_storages.create(creation_req, server_id=123456)
 
             # Update storage.
             update_req = (
-                cherry.request_schemas.backup_storages.UpdateRequest(slug="backup_500")
+                cherry.backup_storages.UpdateRequest(slug="backup_500")
             )
             storage.update(update_req)
 
             # Update storage access method.
             update_access_req = (
-                cherry.request_schemas.backup_storages.UpdateAccessMethodsRequest(
+                cherry.backup_storages.UpdateAccessMethodsRequest(
                     enabled=False,
                 )
             )
@@ -299,7 +354,7 @@ class BackupStorageClient:
 
     def create(
         self,
-        creation_schema: request_schemas.backup_storages.CreationRequest,
+        creation_schema: CreationRequest,
         server_id: int,
     ) -> BackupStorage:
         """Create a backup storage."""
@@ -315,7 +370,7 @@ class BackupStorageClient:
     def update(
         self,
         storage_id: int,
-        update_schema: request_schemas.backup_storages.UpdateRequest,
+        update_schema: UpdateRequest,
     ) -> BackupStorage:
         """Update backup storage."""
         response = self._api_client.put(
@@ -327,7 +382,7 @@ class BackupStorageClient:
         self,
         storage_id: int,
         method_name: str,
-        update_schema: request_schemas.backup_storages.UpdateAccessMethodsRequest,
+        update_schema: UpdateAccessMethodsRequest,
     ) -> BackupStorage:
         """Update backup storage access method."""
         self._api_client.patch(

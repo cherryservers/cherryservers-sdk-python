@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, request_schemas
+from cherry import _client, _models
 from cherry.block_storages import BlockStorageModel
 from cherry.ips import IPModel
 from cherry.plans import PlanModel, PricingModel
@@ -194,6 +194,160 @@ class ServerModel(_models.DefaultModel):
     project: ProjectModel = Field(description="Project data.")
 
 
+class CreationRequest(_models.CherryRequestSchema):
+    """Cherry Servers server creation request schema.
+
+    Attributes:
+        plan (str): Plan slug. Required.
+        image (str | None): Image slug.
+        os_partition_size (int | None): OS partition size.
+        region (str): Region slug. Required.
+        hostname (str | None): Server hostname.
+         Can be used to identify servers in most contexts.
+        ssh_keys (Set[int] | None): IDs of SSH keys that will be added to the server.
+        ip_addresses (Set[str] | None):
+         IDs of extra IP addresses that will be attached to the server.
+        user_data (str | None): Base64 encoded user-data blob.
+         Either a bash or cloud-config script.
+        tags (dict[str, str] | None): User-defined server tags.
+        spot_market (bool): Whether the server should be a spot instance.
+         Defaults to False.
+        storage_id (int | None): ID of the EBS that will be attached to the server.
+
+    """
+
+    plan: str = Field(description="Plan slug. Required.")
+    image: str | None = Field(description="Image slug.", default=None)
+    os_partition_size: int | None = Field(
+        description="OS partition size.", default=None
+    )
+    region: str = Field(description="Region slug. Required.")
+    hostname: str | None = Field(
+        description="Server hostname."
+        "Can be used to identify servers in most contexts.",
+        default=None,
+    )
+    ssh_keys: set[int] | None = Field(
+        description="IDs of the SSH keys that will be added to the server.",
+        default=None,
+    )
+    ip_addresses: set[str] | None = Field(
+        description="IDs of extra IP addresses that will be attached to the server.",
+        default=None,
+    )
+    user_data: str | None = Field(
+        description="Base64 encoded user-data blob. Either a bash or cloud-config script.",
+        default=None,
+    )
+    tags: dict[str, str] | None = Field(
+        description="User-defined server tags.", default=None
+    )
+    spot_market: bool = Field(
+        description="Whether the server should be a spot instance. Defaults to False.",
+        default=False,
+    )
+    storage_id: int | None = Field(
+        description="ID of the EBS that will be attached to the server.", default=None
+    )
+
+
+class UpdateRequest(_models.CherryRequestSchema):
+    """Cherry Servers server update request schema.
+
+    Attributes:
+        name (str | None): Server name.
+        hostname (str | None): Server hostname.
+        tags (dict[str, str] | None): User-defined server tags.
+        bgp (bool | None): Whether the server should have BGP enabled.
+
+    """
+
+    name: str | None = Field(description="Server name.", default=None)
+    hostname: str | None = Field(description="Server hostname.", default=None)
+    tags: dict[str, str] | None = Field(
+        description="User-defined server tags.", default=None
+    )
+    bgp: bool | None = Field(
+        description="Whether the server should have BGP enabled.", default=None
+    )
+
+
+class PowerOffRequest(_models.CherryRequestSchema):
+    """Cherry Servers server power off request schema."""
+
+    type: str = "power-off"
+
+
+class PowerOnRequest(_models.CherryRequestSchema):
+    """Cherry Servers server power on request schema."""
+
+    type: str = "power-on"
+
+
+class RebootRequest(_models.CherryRequestSchema):
+    """Cherry Servers server reboot request schema."""
+
+    type: str = "reboot"
+
+
+class EnterRescueModeRequest(_models.CherryRequestSchema):
+    """Cherry Servers server enter rescue mode request schema.
+
+    Attributes:
+        password (str):
+         The password that the server will have while in rescue mode. Required.
+
+    """
+
+    type: str = "enter-rescue-mode"
+    password: str = Field(
+        description="The password that the server will have while in rescue mode. Required.",
+    )
+
+
+class ExitRescueModeRequest(_models.CherryRequestSchema):
+    """Cherry Servers server exit rescue mode request schema."""
+
+    type: str = "exit-rescue-mode"
+
+
+class ResetBMCPasswordRequest(_models.CherryRequestSchema):
+    """Cherry Servers server reset BMC password request schema."""
+
+    type: str = "reset-bmc-password"
+
+
+class RebuildRequest(_models.CherryRequestSchema):
+    """Cherry Servers server rebuild request schema.
+
+    Attributes:
+        image (str | None): Image slug.
+        hostname (str): Server hostname. Required.
+        password (str): Server root user password. Required
+        ssh_keys (Set[int] | None):
+         IDs of SSH keys that will be added to the server.
+        user_data (str | None): Base64 encoded user-data blob.
+         Either a bash or cloud-config script.
+        os_partition_size (int | None): OS partition size in GB.
+
+    """
+
+    type: str = "rebuild"
+    image: str | None = Field(description="Image slug.", default=None)
+    hostname: str = Field(description="Server hostname.")
+    password: str = Field(description="Server root user password.")
+    ssh_keys: set[int] | None = Field(
+        description="IDs of SSH keys that will be added to the server.", default=None
+    )
+    user_data: str | None = Field(
+        description="Base64 encoded user-data blob. Either a bash or cloud-config script.",
+        default=None,
+    )
+    os_partition_size: int | None = Field(
+        description="OS partition size.", default=None
+    )
+
+
 class Server:
     """Cherry Servers Server resource.
 
@@ -212,7 +366,7 @@ class Server:
         self._client = client
         self.model = model
 
-    def update(self, update_schema: request_schemas.servers.UpdateRequest) -> None:
+    def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers server resource."""
         updated = self._client.update(self.model.id, update_schema)
         self.model = updated.model
@@ -236,9 +390,7 @@ class Server:
         serv = self._client.reboot(self.model.id)
         self.model = serv.model
 
-    def enter_rescue_mode(
-        self, rescue_mode_schema: request_schemas.servers.EnterRescueModeRequest
-    ) -> None:
+    def enter_rescue_mode(self, rescue_mode_schema: EnterRescueModeRequest) -> None:
         """Put a Cherry Servers server into rescue mode.
 
         Only for baremetal servers!
@@ -251,7 +403,7 @@ class Server:
         serv = self._client.exit_rescue_mode(self.model.id)
         self.model = serv.model
 
-    def rebuild(self, rebuild_schema: request_schemas.servers.RebuildRequest) -> None:
+    def rebuild(self, rebuild_schema: RebuildRequest) -> None:
         """Rebuild a Cherry Servers server.
 
         WARNING: this a destructive action that will delete all of your data.
@@ -289,13 +441,13 @@ class ServerClient:
                 print(server.model)
 
             # Create a server.
-            creation_req = cherry.request_schemas.servers.CreationRequest(
+            creation_req = cherry.servers.CreationRequest(
                 region="eu_nord_1", plan="cloud_vps_1"
             )
             server = facade.servers.create(creation_req, project_id=217727)
 
             # Update server.
-            update_req = cherry.request_schemas.servers.UpdateRequest(
+            update_req = cherry.servers.UpdateRequest(
                 name="test", hostname="test", tags={"env": "test"}, bgp=True
             )
             server.update(update_req)
@@ -333,9 +485,7 @@ class ServerClient:
 
         return servers
 
-    def create(
-        self, creation_schema: request_schemas.servers.CreationRequest, project_id: int
-    ) -> Server:
+    def create(self, creation_schema: CreationRequest, project_id: int) -> Server:
         """Create a new server."""
         response = self._api_client.post(
             f"projects/{project_id}/servers", creation_schema, None, 30
@@ -346,9 +496,7 @@ class ServerClient:
         """Delete server by ID."""
         self._api_client.delete(f"servers/{server_id}", None, 20)
 
-    def update(
-        self, server_id: int, update_schema: request_schemas.servers.UpdateRequest
-    ) -> Server:
+    def update(self, server_id: int, update_schema: UpdateRequest) -> Server:
         """Update server by ID."""
         response = self._api_client.put(f"servers/{server_id}", update_schema, None, 30)
         return self.get_by_id(response.json()["id"])
@@ -357,7 +505,7 @@ class ServerClient:
         """Power off server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
-            request_schemas.servers.PowerOffRequest(),
+            PowerOffRequest(),
             None,
             30,
         )
@@ -367,7 +515,7 @@ class ServerClient:
         """Power on server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
-            request_schemas.servers.PowerOnRequest(),
+            PowerOnRequest(),
             None,
             30,
         )
@@ -377,7 +525,7 @@ class ServerClient:
         """Reboot server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
-            request_schemas.servers.RebootRequest(),
+            RebootRequest(),
             None,
             30,
         )
@@ -386,7 +534,7 @@ class ServerClient:
     def enter_rescue_mode(
         self,
         server_id: int,
-        rescue_mode_schema: request_schemas.servers.EnterRescueModeRequest,
+        rescue_mode_schema: EnterRescueModeRequest,
     ) -> Server:
         """Put server into rescue mode.
 
@@ -410,16 +558,14 @@ class ServerClient:
         """Put server out of rescue mode."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
-            request_schemas.servers.ExitRescueModeRequest(),
+            ExitRescueModeRequest(),
             None,
             30,
         )
 
         return self.get_by_id(response.json()["id"])
 
-    def rebuild(
-        self, server_id: int, rebuild_schema: request_schemas.servers.RebuildRequest
-    ) -> Server:
+    def rebuild(self, server_id: int, rebuild_schema: RebuildRequest) -> Server:
         """Rebuild server.
 
         WARNING: this a destructive action that will delete all of your data.
@@ -445,7 +591,7 @@ class ServerClient:
 
         response = self._api_client.post(
             f"servers/{server_id}/actions",
-            request_schemas.servers.ResetBMCPasswordRequest(),
+            ResetBMCPasswordRequest(),
             None,
             30,
         )

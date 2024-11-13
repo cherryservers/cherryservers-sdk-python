@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, request_schemas
+from cherry import _client, _models
 from cherry.plans import PricingModel
 
 
@@ -168,6 +168,38 @@ class TeamModel(_models.DefaultModel):
     href: str = Field(description="Team href.")
 
 
+class CreationRequest(_models.CherryRequestSchema):
+    """Cherry Servers team creation request schema.
+
+    Attributes:
+        name (str): The name of the team. Required.
+        type (str): Team type. Required. Defaults to `personal`.
+        currency (str | None): Currency type.
+
+    """
+
+    name: str = Field(description="The name of the team. Required.")
+    type: str = Field(
+        description="Team type. Required. Defaults to `personal`.", default="personal"
+    )
+    currency: str | None = Field(description="Currency type.", default=None)
+
+
+class UpdateRequest(_models.CherryRequestSchema):
+    """Cherry Servers team update request schema.
+
+    Attributes:
+        name (str | None): The name of the team.
+        type (str | None): Team type.
+        currency (str | None): Currency type.
+
+    """
+
+    name: str | None = Field(description="The name of the team.", default=None)
+    type: str | None = Field(description="Team type.", default=None)
+    currency: str | None = Field(description="Currency type.", default=None)
+
+
 class Team:
     """Cherry Servers team resource.
 
@@ -190,7 +222,7 @@ class Team:
         """Delete Cherry Servers team resource."""
         self._client.delete(self.model.id)
 
-    def update(self, update_schema: request_schemas.teams.UpdateRequest) -> None:
+    def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers team resource."""
         updated = self._client.update(self.model.id, update_schema)
         self.model = updated.model
@@ -213,13 +245,13 @@ class TeamClient:
             team = facade.teams.get_by_id(123456)
 
             # Create a team.
-            create_req = cherry.request_schemas.teams.CreationRequest(
+            create_req = cherry.teams.CreationRequest(
                 name="python-sdk-test", currency="EUR"
             )
             new_team = facade.teams.create(create_req)
 
             # Update team.
-            update_req = cherry.request_schemas.teams.UpdateRequest(
+            update_req = cherry.teams.UpdateRequest(
                 name="python-sdk-test-updated"
             )
             new_team.update(update_req)
@@ -253,7 +285,7 @@ class TeamClient:
 
         return teams
 
-    def create(self, creation_schema: request_schemas.teams.CreationRequest) -> Team:
+    def create(self, creation_schema: CreationRequest) -> Team:
         """Create a new team."""
         response = self._api_client.post("teams", creation_schema, None, 15)
         return self.get_by_id(response.json()["id"])
@@ -262,9 +294,7 @@ class TeamClient:
         """Delete a team by ID."""
         self._api_client.delete(f"teams/{team_id}", None, 5)
 
-    def update(
-        self, team_id: int, update_schema: request_schemas.teams.UpdateRequest
-    ) -> Team:
+    def update(self, team_id: int, update_schema: UpdateRequest) -> Team:
         """Update a team by ID."""
         response = self._api_client.put(f"teams/{team_id}", update_schema, None, 10)
         return self.get_by_id(response.json()["id"])

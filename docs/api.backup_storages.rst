@@ -1,24 +1,5 @@
 Backup storages
 ================
 
-.. autoclass:: cherry.backup_storages.BackupStorage
+.. automodule:: cherry.backup_storages
     :members:
-
-.. autoclass:: cherry.backup_storages.BackupStoragePlanModel
-
-.. autoclass:: cherry.backup_storages.BackupMethodModel
-
-.. autoclass:: cherry.backup_storages.RuleMethodModel
-
-.. autoclass:: cherry.backup_storages.RuleModel
-
-.. autoclass:: cherry.backup_storages.BackupStorageModel
-
-.. autoclass:: cherry.backup_storages.BackupStorageClient
-    :members:
-
-.. autoclass:: cherry.request_schemas.backup_storages.CreationRequest
-
-.. autoclass:: cherry.request_schemas.backup_storages.UpdateRequest
-
-.. autoclass:: cherry.request_schemas.backup_storages.UpdateAccessMethodsRequest

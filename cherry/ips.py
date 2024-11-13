@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, projects, regions, request_schemas
+from cherry import _client, _models, projects, regions
 
 
 class AddressAttachedError(Exception):
@@ -102,6 +102,84 @@ class IPModel(_models.DefaultModel):
     href: str = Field(description="IP address href.")
 
 
+class CreationRequest(_models.CherryRequestSchema):
+    """Cherry Servers IP address creation request schema.
+
+    Attributes:
+        region (str): IP address region slug. Required.
+        routed_to (str | None):
+         ID of the IP address that the created address will be routed to.
+         Mutually exclusive with `targeted_to`.
+        targeted_to (int | None):
+         ID of the server that the created address will be targeted to.
+         Mutually exclusive with `routed_to`.
+        ptr_record (str | None): IP address PTR record.
+        a_record (str | None): IP address A record.
+        ddos_scrubbing (bool):
+         Whether DDoS scrubbing should be enabled for this IP address.
+         Disabled by default.
+        tags (dict[str, str] | None): User-defined IP address tags.
+
+    """
+
+    region: str = Field(description="IP address region slug. Required.")
+    routed_to: str | None = Field(
+        description="ID of the IP address that the created address will be routed to."
+        " Mutually exclusive with `targeted_to`. Optional.",
+        default=None,
+    )
+    targeted_to: int | None = Field(
+        description="ID of the server that the created address will be targeted to."
+        " Mutually exclusive with `routed_to`.",
+        default=None,
+    )
+    ptr_record: str | None = Field(description="IP address PTR record.", default=None)
+    a_record: str | None = Field(description="IP address A record.", default=None)
+    ddos_scrubbing: bool = Field(
+        description="Whether DDoS scrubbing should be enabled for this IP address."
+        "Disabled by default.",
+        default=False,
+    )
+    tags: dict[str, str] | None = Field(
+        description="User-defined IP address tags.", default=None
+    )
+
+
+class UpdateRequest(_models.CherryRequestSchema):
+    """Cherry Servers IP address update request schema.
+
+    Attributes:
+        ptr_record (str | None): IP address PTR record.
+        a_record (str | None): IP address A record.
+        routed_to (str | None):
+         ID of the IP address that this address will be routed to.
+         Mutually exclusive with `targeted_to`.
+        targeted_to (int | None):
+         ID of the server that this address will be targeted to.
+         Mutually exclusive with `routed_to`.
+         Set to 0 to unassign IP address from server.
+        tags (dict[str, str] | None): User-defined IP address tags.
+
+    """
+
+    ptr_record: str | None = Field(description="IP address PTR record.", default=None)
+    a_record: str | None = Field(description="IP address A record.", default=None)
+    routed_to: str | None = Field(
+        description="ID of the IP address that this address will be routed to."
+        " Mutually exclusive with `targeted_to`.",
+        default=None,
+    )
+    targeted_to: int | None = Field(
+        description="ID of the server that the address will be targeted to."
+        " Mutually exclusive with `routed_to`."
+        " Set to 0 to unassign IP address from server.",
+        default=None,
+    )
+    tags: dict[str, str] | None = Field(
+        description="User-defined IP address tags.", default=None
+    )
+
+
 class IP:
     """Cherry Servers IP address resource.
 
@@ -127,7 +205,7 @@ class IP:
             raise AddressAttachedError(msg)
         self._client.delete(self.model.id)
 
-    def update(self, update_schema: request_schemas.ips.UpdateRequest) -> None:
+    def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers IP address resource."""
         updated = self._client.update(self.model.id, update_schema)
         self.model = updated.model
@@ -153,7 +231,7 @@ class IPClient:
             ips = facade.ips.get_by_project(123456)
 
             # Create an IP address.
-            creation_req = cherry.request_schemas.ips.CreationRequest(
+            creation_req = cherry.ips.CreationRequest(
                 region="eu_nord_1",
                 ptr_record="test",
                 a_record="test",
@@ -163,7 +241,7 @@ class IPClient:
             fip = facade.ips.create(creation_req, project_id=123456)
 
             # Update IP address.
-            update_req = cherry.request_schemas.ips.UpdateRequest(
+            update_req = cherry.ips.UpdateRequest(
                 ptr_record="",
                 a_record="",
             )
@@ -202,9 +280,7 @@ class IPClient:
 
         return ips
 
-    def create(
-        self, creation_schema: request_schemas.ips.CreationRequest, project_id: int
-    ) -> IP:
+    def create(self, creation_schema: CreationRequest, project_id: int) -> IP:
         """Create a new IP address."""
         response = self._api_client.post(
             f"projects/{project_id}/ips", creation_schema, None, 30
@@ -215,9 +291,7 @@ class IPClient:
         """Delete IP address by ID."""
         self._api_client.delete(f"ips/{ip_id}", None, 10)
 
-    def update(
-        self, ip_id: str, update_schema: request_schemas.ips.UpdateRequest
-    ) -> IP:
+    def update(self, ip_id: str, update_schema: UpdateRequest) -> IP:
         """Update IP address by ID."""
         response = self._api_client.put(f"ips/{ip_id}", update_schema, None, 30)
         return self.get_by_id(response.json()["id"])

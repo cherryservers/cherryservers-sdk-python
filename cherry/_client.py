@@ -7,7 +7,7 @@ import requests
 from cherry import _version
 
 if TYPE_CHECKING:
-    from cherry.request_schemas import base as base_request
+    from cherry import _models
 
 
 class InvalidMethodError(Exception):
@@ -82,7 +82,7 @@ class CherryApiClient:
     def post(
         self,
         path: str,
-        data: base_request.CherryRequestSchema,
+        data: _models.CherryRequestSchema,
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:
@@ -97,7 +97,7 @@ class CherryApiClient:
     def put(
         self,
         path: str,
-        data: base_request.CherryRequestSchema,
+        data: _models.CherryRequestSchema,
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:
@@ -112,7 +112,7 @@ class CherryApiClient:
     def patch(
         self,
         path: str,
-        data: base_request.CherryRequestSchema,
+        data: _models.CherryRequestSchema,
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:

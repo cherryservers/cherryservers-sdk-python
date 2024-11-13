@@ -1,16 +1,5 @@
 IPs
 =========
 
-.. autoclass:: cherry.ips.IP
+.. automodule:: cherry.ips
     :members:
-
-.. autoclass:: cherry.ips.IPModel
-
-.. autoclass:: cherry.ips.AttachedServerModel
-
-.. autoclass:: cherry.ips.IPClient
-    :members:
-
-.. autoclass:: cherry.request_schemas.ips.CreationRequest
-
-.. autoclass:: cherry.request_schemas.ips.UpdateRequest

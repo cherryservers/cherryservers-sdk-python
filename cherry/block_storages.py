@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, request_schemas
+from cherry import _client, _models
 from cherry.ips import AttachedServerModel
 from cherry.regions import RegionModel
 
@@ -50,6 +50,54 @@ class BlockStorageModel(_models.DefaultModel):
     region: RegionModel = Field(description="Region data.")
 
 
+class CreationRequest(_models.CherryRequestSchema):
+    """Cherry Servers block storage creation request schema.
+
+    Attributes:
+        region (str):  Region slug. Required.
+        size (int):  Block storage size in GB. Required.
+        description (str | None):  Block storage description.
+
+    """
+
+    region: str = Field(description="Region slug. Required.")
+    size: int = Field(description="Block storage size in GB. Required.")
+    description: str | None = Field(
+        description="Block storage description.", default=None
+    )
+
+
+class UpdateRequest(_models.CherryRequestSchema):
+    """Cherry Servers block storage update request schema.
+
+    Attributes:
+        size (int | None): Block storage size in GB. Storage size cannot be reduced.
+        description (str | None): Block storage description.
+
+    """
+
+    size: int | None = Field(
+        description="Block storage size in GB. Storage size cannot be reduced",
+        default=None,
+    )
+    description: str | None = Field(
+        description="Block storage description.", default=None
+    )
+
+
+class AttachRequest(_models.CherryRequestSchema):
+    """Cherry Servers block storage server attachment request schema.
+
+    Attributes:
+        attach_to (int): ID of the server, to which the storage will be attached.
+
+    """
+
+    attach_to: int = Field(
+        description="ID of the server, to which the storage will be attached."
+    )
+
+
 class BlockStorage:
     """Cherry Servers block storage resource.
 
@@ -72,9 +120,7 @@ class BlockStorage:
         """Delete Cherry Servers block storage resource."""
         self._client.delete(self.model.id)
 
-    def update(
-        self, update_schema: request_schemas.block_storages.UpdateRequest
-    ) -> None:
+    def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers block storage resource.
 
         WARNING: increasing storage size will generate a new block storage ID
@@ -84,9 +130,7 @@ class BlockStorage:
         """
         self._client.update(self.model.id, update_schema)
 
-    def attach(
-        self, attach_schema: request_schemas.block_storages.AttachRequest
-    ) -> None:
+    def attach(self, attach_schema: AttachRequest) -> None:
         """Attach Cherry Servers block storage resource to server.
 
         Block storage volumes can only be attached to baremetal servers.
@@ -119,19 +163,19 @@ class BlockStorageClient:
                 print(storage.model)
 
             # Create a storage.
-            creation_req = cherry.request_schemas.block_storages.CreationRequest(
+            creation_req = cherry.block_storages.CreationRequest(
                 region="eu_nord_1", size=1
             )
             storage = facade.block_storages.create(creation_req, project_id=123456)
 
             # Update storage.
-            update_req = cherry.request_schemas.block_storages.UpdateRequest(
+            update_req = cherry.block_storages.UpdateRequest(
                 description="updated", size=2
             )
             storage.update(update_req)
 
             # Attach storage.
-            attach_req = cherry.request_schemas.block_storages.AttachRequest(
+            attach_req = cherry.block_storages.AttachRequest(
                 attach_to=123456
             )
             storage.attach(attach_req)
@@ -174,7 +218,7 @@ class BlockStorageClient:
 
     def create(
         self,
-        creation_schema: request_schemas.block_storages.CreationRequest,
+        creation_schema: CreationRequest,
         project_id: int,
     ) -> BlockStorage:
         """Create a new block storage."""
@@ -190,7 +234,7 @@ class BlockStorageClient:
     def update(
         self,
         storage_id: int,
-        update_schema: request_schemas.block_storages.UpdateRequest,
+        update_schema: UpdateRequest,
     ) -> None:
         """Update block storage.
 
@@ -202,7 +246,7 @@ class BlockStorageClient:
     def attach(
         self,
         storage_id: int,
-        attach_schema: request_schemas.block_storages.AttachRequest,
+        attach_schema: AttachRequest,
     ) -> BlockStorage:
         """Attach block storage to server."""
         response = self._api_client.post(

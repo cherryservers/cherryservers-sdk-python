@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, request_schemas
+from cherry import _client, _models
 
 
 class ProjectBGPModel(_models.DefaultModel):
@@ -43,6 +43,37 @@ class ProjectModel(_models.DefaultModel):
     href: str = Field(description="Project href.")
 
 
+class CreationRequest(_models.CherryRequestSchema):
+    """Cherry Servers project creation request schema.
+
+    Attributes:
+        name (str): Project name.
+        bgp (bool): Whether BGP is enabled for the project. Defaults to False.
+
+    """
+
+    name: str = Field(description="Project name.")
+    bgp: bool = Field(
+        description="Whether BGP is enabled for the project. Defaults to False.",
+        default=False,
+    )
+
+
+class UpdateRequest(_models.CherryRequestSchema):
+    """Cherry Servers project update request schema.
+
+    Attributes:
+        name (str | None): Project name.
+        bgp (bool | None): Whether BGP is enabled for the project..
+
+    """
+
+    name: str | None = Field(description="Project name.", default=None)
+    bgp: bool | None = Field(
+        description="Whether BGP is enabled for the project.", default=None
+    )
+
+
 class Project:
     """Cherry Servers project resource.
 
@@ -65,7 +96,7 @@ class Project:
         """Delete Cherry Servers project resource."""
         self._client.delete(self.model.id)
 
-    def update(self, update_schema: request_schemas.projects.UpdateRequest) -> None:
+    def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers project resource."""
         updated = self._client.update(self.model.id, update_schema)
         self.model = updated.model
@@ -87,13 +118,13 @@ class ProjectClient:
             existing_project = facade.projects.get_by_id(123456)
 
             # Create project.
-            req = cherry.request_schemas.projects.CreationRequest(
+            req = cherry.projects.CreationRequest(
                 name = "my-project"
             )
             project = facade.projects.create(req, 123456)
 
             # Update project.
-            upd_req = cherry.request_schemas.projects.UpdateRequest(
+            upd_req = cherry.projects.UpdateRequest(
                 name = "my-project-updated",
                 bgp = True
             )
@@ -128,9 +159,7 @@ class ProjectClient:
 
         return projects
 
-    def create(
-        self, creation_schema: request_schemas.projects.CreationRequest, team_id: int
-    ) -> Project:
+    def create(self, creation_schema: CreationRequest, team_id: int) -> Project:
         """Create a new project."""
         response = self._api_client.post(
             f"teams/{team_id}/projects", creation_schema, None, 5
@@ -141,9 +170,7 @@ class ProjectClient:
         """Delete project by ID."""
         self._api_client.delete(f"projects/{project_id}", None, 5)
 
-    def update(
-        self, project_id: int, update_schema: request_schemas.projects.UpdateRequest
-    ) -> Project:
+    def update(self, project_id: int, update_schema: UpdateRequest) -> Project:
         """Update project by ID."""
         response = self._api_client.put(
             f"projects/{project_id}", update_schema, None, 5

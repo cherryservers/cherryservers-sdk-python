@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, request_schemas, users
+from cherry import _client, _models, users
 
 
 class SSHKeyModel(_models.DefaultModel):
@@ -35,6 +35,32 @@ class SSHKeyModel(_models.DefaultModel):
     href: str = Field(description="SSH key href.")
 
 
+class CreationRequest(_models.CherryRequestSchema):
+    """Cherry Servers SSH key creation request schema.
+
+    Attributes:
+        label (str): SSH key label.
+        key (str): Public SSH key.
+
+    """
+
+    label: str = Field(description="SSH key label.")
+    key: str = Field(description="Public SSH key.")
+
+
+class UpdateRequest(_models.CherryRequestSchema):
+    """Cherry Servers SSH key update request schema.
+
+    Attributes:
+        label (str | None): SSH key label.
+        key (str | None): Public SSH key.
+
+    """
+
+    label: str | None = Field(description="SSH key label.", default=None)
+    key: str | None = Field(description="Public SSH key.", default=None)
+
+
 class SSHKey:
     """Cherry Servers SSH key resource.
 
@@ -57,7 +83,7 @@ class SSHKey:
         """Delete Cherry Servers SSH key resource."""
         self._client.delete(self.model.id)
 
-    def update(self, update_schema: request_schemas.sshkeys.UpdateRequest) -> None:
+    def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers SSH key resource."""
         updated = self._client.update(self.model.id, update_schema)
         self.model = updated.model
@@ -75,14 +101,14 @@ class SSHKeyClient:
 
             # Create SSH key.
             facade = cherry.facade.CherryApiFacade(token="my-token")
-            req = cherry.request_schemas.sshkeys.CreationRequest(
+            req = cherry.sshkeys.CreationRequest(
                 label = "test",
                 key = "my-public-api-key"
             )
             sshkey = facade.sshkeys.create(req)
 
             # Update SSH key.
-            upd_req = cherry.request_schemas.sshkeys.UpdateRequest(
+            upd_req = cherry.sshkeys.UpdateRequest(
                 label = "test-updated"
             )
             sshkey.update(upd_req)
@@ -116,9 +142,7 @@ class SSHKeyClient:
 
         return keys
 
-    def create(
-        self, creation_schema: request_schemas.sshkeys.CreationRequest
-    ) -> SSHKey:
+    def create(self, creation_schema: CreationRequest) -> SSHKey:
         """Create a new SSH key."""
         response = self._api_client.post("ssh-keys", creation_schema, None, 5)
         return self.get_by_id(response.json()["id"])
@@ -127,9 +151,7 @@ class SSHKeyClient:
         """Delete SSH key by ID."""
         self._api_client.delete(f"ssh-keys/{sshkey_id}", None, 5)
 
-    def update(
-        self, sshkey_id: int, update_schema: request_schemas.sshkeys.UpdateRequest
-    ) -> SSHKey:
+    def update(self, sshkey_id: int, update_schema: UpdateRequest) -> SSHKey:
         """Update SSH key by ID."""
         response = self._api_client.put(f"ssh-keys/{sshkey_id}", update_schema, None, 5)
         return self.get_by_id(response.json()["id"])

@@ -10,14 +10,13 @@ import pytest
 import requests
 from pydantic import Field
 
-from cherry import _client, _version
-from cherry.request_schemas.base import CherryRequestSchema
+from cherry import _client, _models, _version
 
 if TYPE_CHECKING:
     from collections.abc import Generator
 
 
-class RequestSchema(CherryRequestSchema):
+class RequestSchema(_models.CherryRequestSchema):
     """Cherry Servers request schema for testing.."""
 
     data: str = Field(description="Test data.", default="my-test")
