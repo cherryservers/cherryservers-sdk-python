@@ -15,24 +15,28 @@ class SSHKeyModel(_models.DefaultModel):
 
     Attributes:
         id (int): SSH key ID.
-        label (str): SSH key label.
-        key (str): Public SSH key.
-        fingerprint (str): SSH key fingerprint.
-        user (cherry.users.UserModel): SSH key user.
-        updated (str): Timestamp of the last SSH key update.
-        created (str): Timestamp of the SSH key creation.
-        href (str): SSH key href.
+        label (str | None): SSH key label.
+        key (str | None): Public SSH key.
+        fingerprint (str | None): SSH key fingerprint.
+        user (cherry.users.UserModel | None): SSH key user.
+        updated (str | None): Timestamp of the last SSH key update.
+        created (str | None): Timestamp of the SSH key creation.
+        href (str | None): SSH key href.
 
     """
 
     id: int = Field(description="SSH key ID.")
-    label: str = Field(description="SSH key label.")
-    key: str = Field(description="Public SSH key.")
-    fingerprint: str = Field(description="SSH key fingerprint.")
-    user: users.UserModel = Field(description="SSH key user.")
-    updated: str = Field(description="Timestamp of the last SSH key update.")
-    created: str = Field(description="Timestamp of the SSH key creation.")
-    href: str = Field(description="SSH key href.")
+    label: str | None = Field(description="SSH key label.", default=None)
+    key: str | None = Field(description="Public SSH key.", default=None)
+    fingerprint: str | None = Field(description="SSH key fingerprint.", default=None)
+    user: users.UserModel | None = Field(description="SSH key user.", default=None)
+    updated: str | None = Field(
+        description="Timestamp of the last SSH key update.", default=None
+    )
+    created: str | None = Field(
+        description="Timestamp of the SSH key creation.", default=None
+    )
+    href: str | None = Field(description="SSH key href.", default=None)
 
 
 class CreationRequest(_models.CherryRequestSchema):
