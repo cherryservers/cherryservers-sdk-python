@@ -49,7 +49,11 @@ class CherryApiClient:
             )
         if method == "POST":
             r = self._requests_session.post(
-                url, params=params, timeout=timeout, headers=self._headers, data=data
+                url,
+                params=params,
+                timeout=timeout,
+                headers=self._headers,
+                data=data,
             )
         if method == "PUT":
             r = self._requests_session.put(
@@ -61,14 +65,21 @@ class CherryApiClient:
             )
         if method == "PATCH":
             r = self._requests_session.patch(
-                url, params=params, timeout=timeout, headers=self._headers, data=data
+                url,
+                params=params,
+                timeout=timeout,
+                headers=self._headers,
+                data=data,
             )
         if method == "DELETE":
             r = self._requests_session.delete(
                 url, params=params, timeout=timeout, headers=self._headers
             )
         if isinstance(r, requests.Response):
-            r.raise_for_status()
+            try:
+                r.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                raise requests.exceptions.HTTPError(e.response.text) from e
             return r
         raise InvalidMethodError(method)
 
