@@ -2,17 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
-from cherry import _models
-
-if TYPE_CHECKING:
-    from cherry import _client
+from cherry import _base
 
 
-class UserModel(_models.DefaultModel):
+class UserModel(_base.ResourceModel):
     """Cherry Servers user model.
 
     This model is frozen by default,
@@ -49,26 +44,7 @@ class UserModel(_models.DefaultModel):
     href: str | None = Field(description="Href URL of the user.", default=None)
 
 
-class User:
-    """Cherry Servers user resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`UserClient`.
-
-    Attributes:
-        model (UserModel): Cherry Servers user model.
-            This is a Pydantic model that contains user data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: UserClient, model: UserModel) -> None:
-        """Initialize a Cherry Servers user resource."""
-        self._client = client
-        self.model = model
-
-
-class UserClient:
+class UserClient(_base.ResourceClient):
     """Cherry Servers user client.
 
     Manage Cherry Servers user resources. This class should typically be initialized by
@@ -87,10 +63,6 @@ class UserClient:
 
     """
 
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers user client."""
-        self._api_client = api_client
-
     def get_by_id(self, user_id: int) -> User:
         """Retrieve a user by ID."""
         response = self._api_client.get(f"users/{user_id}", None, 5)
@@ -102,3 +74,11 @@ class UserClient:
         response = self._api_client.get("user", None, 5)
         user_model = UserModel.model_validate(response.json())
         return User(self, user_model)
+
+
+class User(_base.Resource[UserClient, UserModel]):
+    """Cherry Servers user resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`UserClient`.
+    """
