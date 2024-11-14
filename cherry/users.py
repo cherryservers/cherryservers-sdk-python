@@ -20,28 +20,33 @@ class UserModel(_models.DefaultModel):
 
     Attributes:
         id (int): ID of the user.
-        first_name (str): First name of the user.
-        last_name (str): Last name of the user.
-        email (str): Email address of the user.
-        email_verified (bool): Whether user email address is verified.
-        phone(str): Phone number of the user.
-        security_phone(str): Security phone number of the user.
-        security_phone_verified(bool): Whether user security phone number is verified.
-        href(str): Href URL of the user.
+        first_name (str | None): First name of the user.
+        last_name (str | None): Last name of the user.
+        email (str | None): Email address of the user.
+        email_verified (bool | None): Whether user email address is verified.
+        phone(str | None): Phone number of the user.
+        security_phone(str | None): Security phone number of the user.
+        security_phone_verified(bool | None):
+        Whether user security phone number is verified.
+        href(str | None): Href URL of the user.
 
     """
 
     id: int = Field(description="ID of the user.")
-    first_name: str = Field(description="First name of the user.")
-    last_name: str = Field(description="Last name of the user.")
-    email: str = Field(description="Email address of the user.")
-    email_verified: bool = Field(description="Whether user email address is verified.")
-    phone: str = Field(description="Phone number of the user.")
-    security_phone: str = Field(description="Security phone number of the user.")
-    security_phone_verified: bool = Field(
-        description="Whether user security phone number is verified."
+    first_name: str | None = Field(description="First name of the user.", default=None)
+    last_name: str | None = Field(description="Last name of the user.", default=None)
+    email: str | None = Field(description="Email address of the user.", default=None)
+    email_verified: bool | None = Field(
+        description="Whether user email address is verified.", default=None
     )
-    href: str = Field(description="Href URL of the user.")
+    phone: str | None = Field(description="Phone number of the user.", default=None)
+    security_phone: str | None = Field(
+        description="Security phone number of the user.", default=None
+    )
+    security_phone_verified: bool | None = Field(
+        description="Whether user security phone number is verified.", default=None
+    )
+    href: str | None = Field(description="Href URL of the user.", default=None)
 
 
 class User:
