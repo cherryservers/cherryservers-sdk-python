@@ -2,15 +2,19 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pydantic import Field
 
-from cherry import _client, _models
-from cherry.block_storages import BlockStorageModel
-from cherry.ips import IPModel
-from cherry.plans import PlanModel, PricingModel
-from cherry.projects import ProjectModel
-from cherry.regions import RegionModel
-from cherry.sshkeys import SSHKeyModel
+from cherry import _base
+
+if TYPE_CHECKING:
+    from cherry.block_storages import BlockStorageModel
+    from cherry.ips import IPModel
+    from cherry.plans import PlanModel, PricingModel
+    from cherry.projects import ProjectModel
+    from cherry.regions import RegionModel
+    from cherry.sshkeys import SSHKeyModel
 
 
 class NotBaremetalError(Exception):
@@ -21,7 +25,7 @@ class NotBaremetalError(Exception):
         super().__init__("Only baremetal servers can enter rescue mode.")
 
 
-class ServerBGPRouteModel(_models.DefaultModel):
+class ServerBGPRouteModel(_base.ResourceModel):
     """Cherry Servers server BGP route model.
 
     This model is frozen by default,
@@ -46,7 +50,7 @@ class ServerBGPRouteModel(_models.DefaultModel):
     updated: str | None = Field(description="Date of last update.", default=None)
 
 
-class ServerBGPModel(_models.DefaultModel):
+class ServerBGPModel(_base.ResourceModel):
     """Cherry Servers server BGP model.
 
     This model is frozen by default,
@@ -81,7 +85,7 @@ class ServerBGPModel(_models.DefaultModel):
     updated: str | None = Field(description="Date of last update.", default=None)
 
 
-class ServerDeployedImageModel(_models.DefaultModel):
+class ServerDeployedImageModel(_base.ResourceModel):
     """Cherry Servers server deployed image model.
 
     This model is frozen by default,
@@ -102,7 +106,7 @@ class ServerDeployedImageModel(_models.DefaultModel):
     )
 
 
-class ServerBMCModel(_models.DefaultModel):
+class ServerBMCModel(_base.ResourceModel):
     """Cherry Servers server BMC model.
 
     This model is frozen by default,
@@ -125,7 +129,7 @@ class ServerBMCModel(_models.DefaultModel):
     )
 
 
-class ServerModel(_models.DefaultModel):
+class ServerModel(_base.ResourceModel):
     """Cherry Servers server model.
 
     This model is frozen by default,
@@ -217,7 +221,7 @@ class ServerModel(_models.DefaultModel):
     project: ProjectModel | None = Field(description="Project data.", default=None)
 
 
-class CreationRequest(_models.CherryRequestSchema):
+class CreationRequest(_base.RequestSchema):
     """Cherry Servers server creation request schema.
 
     Attributes:
@@ -274,7 +278,7 @@ class CreationRequest(_models.CherryRequestSchema):
     )
 
 
-class UpdateRequest(_models.CherryRequestSchema):
+class UpdateRequest(_base.RequestSchema):
     """Cherry Servers server update request schema.
 
     Attributes:
@@ -295,25 +299,25 @@ class UpdateRequest(_models.CherryRequestSchema):
     )
 
 
-class PowerOffRequest(_models.CherryRequestSchema):
+class PowerOffRequest(_base.RequestSchema):
     """Cherry Servers server power off request schema."""
 
     type: str = "power-off"
 
 
-class PowerOnRequest(_models.CherryRequestSchema):
+class PowerOnRequest(_base.RequestSchema):
     """Cherry Servers server power on request schema."""
 
     type: str = "power-on"
 
 
-class RebootRequest(_models.CherryRequestSchema):
+class RebootRequest(_base.RequestSchema):
     """Cherry Servers server reboot request schema."""
 
     type: str = "reboot"
 
 
-class EnterRescueModeRequest(_models.CherryRequestSchema):
+class EnterRescueModeRequest(_base.RequestSchema):
     """Cherry Servers server enter rescue mode request schema.
 
     Attributes:
@@ -328,19 +332,19 @@ class EnterRescueModeRequest(_models.CherryRequestSchema):
     )
 
 
-class ExitRescueModeRequest(_models.CherryRequestSchema):
+class ExitRescueModeRequest(_base.RequestSchema):
     """Cherry Servers server exit rescue mode request schema."""
 
     type: str = "exit-rescue-mode"
 
 
-class ResetBMCPasswordRequest(_models.CherryRequestSchema):
+class ResetBMCPasswordRequest(_base.RequestSchema):
     """Cherry Servers server reset BMC password request schema."""
 
     type: str = "reset-bmc-password"
 
 
-class RebuildRequest(_models.CherryRequestSchema):
+class RebuildRequest(_base.RequestSchema):
     """Cherry Servers server rebuild request schema.
 
     Attributes:
@@ -371,79 +375,7 @@ class RebuildRequest(_models.CherryRequestSchema):
     )
 
 
-class Server:
-    """Cherry Servers Server resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`ServerClient`.
-
-    Attributes:
-        model (ServerModel): Cherry Servers server model.
-            This is a Pydantic model that contains server data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: ServerClient, model: ServerModel) -> None:
-        """Initialize a Cherry Servers server resource."""
-        self._client = client
-        self.model = model
-
-    def update(self, update_schema: UpdateRequest) -> None:
-        """Update Cherry Servers server resource."""
-        updated = self._client.update(self.model.id, update_schema)
-        self.model = updated.model
-
-    def delete(self) -> None:
-        """Delete Cherry Servers server resource."""
-        self._client.delete(self.model.id)
-
-    def power_off(self) -> None:
-        """Power off Cherry Servers server."""
-        serv = self._client.power_off(self.model.id)
-        self.model = serv.model
-
-    def power_on(self) -> None:
-        """Power on Cherry Servers server."""
-        serv = self._client.power_on(self.model.id)
-        self.model = serv.model
-
-    def reboot(self) -> None:
-        """Reboot a Cherry Servers server."""
-        serv = self._client.reboot(self.model.id)
-        self.model = serv.model
-
-    def enter_rescue_mode(self, rescue_mode_schema: EnterRescueModeRequest) -> None:
-        """Put a Cherry Servers server into rescue mode.
-
-        Only for baremetal servers!
-        """
-        serv = self._client.enter_rescue_mode(self.model.id, rescue_mode_schema)
-        self.model = serv.model
-
-    def exit_rescue_mode(self) -> None:
-        """Put a Cherry Servers server out of rescue mode."""
-        serv = self._client.exit_rescue_mode(self.model.id)
-        self.model = serv.model
-
-    def rebuild(self, rebuild_schema: RebuildRequest) -> None:
-        """Rebuild a Cherry Servers server.
-
-        WARNING: this a destructive action that will delete all of your data.
-        """
-        serv = self._client.rebuild(self.model.id, rebuild_schema)
-        self.model = serv.model
-
-    def reset_bmc_password(self) -> None:
-        """Reset server BMC password.
-
-        Only for baremetal servers!
-        """
-        serv = self._client.reset_bmc_password(self.model.id)
-        self.model = serv.model
-
-
-class ServerClient:
+class ServerClient(_base.ResourceClient):
     """Cherry Servers server client.
 
     Manage Cherry Servers server resources.
@@ -479,10 +411,6 @@ class ServerClient:
             server.delete()
 
     """
-
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers server client."""
-        self._api_client = api_client
 
     def get_by_id(self, server_id: int) -> Server:
         """Retrieve a server by ID."""
@@ -565,7 +493,7 @@ class ServerClient:
         """
         server = self.get_by_id(server_id)
 
-        if server.model.plan.type != "baremetal":
+        if server._model.plan.type != "baremetal":  # noqa: SLF001
             raise NotBaremetalError
 
         response = self._api_client.post(
@@ -609,7 +537,7 @@ class ServerClient:
         """
         server = self.get_by_id(server_id)
 
-        if server.model.plan.type != "baremetal":
+        if server._model.plan.type != "baremetal":  # noqa: SLF001
             raise NotBaremetalError
 
         response = self._api_client.post(
@@ -620,3 +548,64 @@ class ServerClient:
         )
 
         return self.get_by_id(response.json()["id"])
+
+
+class Server(_base.Resource[ServerClient, ServerModel]):
+    """Cherry Servers Server resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`ServerClient`.
+    """
+
+    def update(self, update_schema: UpdateRequest) -> None:
+        """Update Cherry Servers server resource."""
+        updated = self._client.update(self._model.id, update_schema)
+        self._model = updated._model  # noqa: SLF001
+
+    def delete(self) -> None:
+        """Delete Cherry Servers server resource."""
+        self._client.delete(self._model.id)
+
+    def power_off(self) -> None:
+        """Power off Cherry Servers server."""
+        serv = self._client.power_off(self._model.id)
+        self._model = serv._model  # noqa: SLF001
+
+    def power_on(self) -> None:
+        """Power on Cherry Servers server."""
+        serv = self._client.power_on(self._model.id)
+        self._model = serv._model  # noqa: SLF001
+
+    def reboot(self) -> None:
+        """Reboot a Cherry Servers server."""
+        serv = self._client.reboot(self._model.id)
+        self._model = serv._model  # noqa: SLF001
+
+    def enter_rescue_mode(self, rescue_mode_schema: EnterRescueModeRequest) -> None:
+        """Put a Cherry Servers server into rescue mode.
+
+        Only for baremetal servers!
+        """
+        serv = self._client.enter_rescue_mode(self._model.id, rescue_mode_schema)
+        self._model = serv._model  # noqa: SLF001
+
+    def exit_rescue_mode(self) -> None:
+        """Put a Cherry Servers server out of rescue mode."""
+        serv = self._client.exit_rescue_mode(self._model.id)
+        self._model = serv._model  # noqa: SLF001
+
+    def rebuild(self, rebuild_schema: RebuildRequest) -> None:
+        """Rebuild a Cherry Servers server.
+
+        WARNING: this a destructive action that will delete all of your data.
+        """
+        serv = self._client.rebuild(self._model.id, rebuild_schema)
+        self._model = serv._model  # noqa: SLF001
+
+    def reset_bmc_password(self) -> None:
+        """Reset server BMC password.
+
+        Only for baremetal servers!
+        """
+        serv = self._client.reset_bmc_password(self._model.id)
+        self._model = serv._model  # noqa: SLF001
