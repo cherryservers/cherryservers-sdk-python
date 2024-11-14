@@ -29,19 +29,21 @@ class ServerBGPRouteModel(_models.DefaultModel):
     server BGP route resource state.
 
     Attributes:
-        subnet (str): BGP route subnet.
-        active (bool): Whether the BGP route is active.
-        router (str): BGP router address.
-        age (str): BGP route age.
-        updated (str): Date of last update.
+        subnet (str | None): BGP route subnet.
+        active (bool | None): Whether the BGP route is active.
+        router (str | None): BGP router address.
+        age (str | None): BGP route age.
+        updated (str | None): Date of last update.
 
     """
 
-    subnet: str = Field(description="BGP route subnet.")
-    active: bool = Field(description="Whether the BGP route is active.")
-    router: str = Field(description="BGP router address.")
-    age: str = Field(description="BGP route age.")
-    updated: str = Field(description="Date of last update.")
+    subnet: str | None = Field(description="BGP route subnet.", default=None)
+    active: bool | None = Field(
+        description="Whether the BGP route is active.", default=None
+    )
+    router: str | None = Field(description="BGP router address.", default=None)
+    age: str | None = Field(description="BGP route age.", default=None)
+    updated: str | None = Field(description="Date of last update.", default=None)
 
 
 class ServerBGPModel(_models.DefaultModel):
@@ -52,27 +54,31 @@ class ServerBGPModel(_models.DefaultModel):
     server BGP resource state.
 
     Attributes:
-        enabled (bool): Whether BGP is enabled.
-        available (bool): Whether BGP is available.
-        status (str): BGP status.
-        routers (int): BGP routers.
-        connected (int): BGP connections.
-        limit (int): BGP limit.
-        active (int): BGP active.
-        routes (list[cherry.servers.ServerBGPRouteModel]): BGP routes.
-        updated (str): Date of last update.
+        enabled (bool | None): Whether BGP is enabled.
+        available (bool | None): Whether BGP is available.
+        status (str | None): BGP status.
+        routers (int | None): BGP routers.
+        connected (int | None): BGP connections.
+        limit (int | None): BGP limit.
+        active (int | None): BGP active.
+        routes (list[cherry.servers.ServerBGPRouteModel] | None): BGP routes.
+        updated (str | None): Date of last update.
 
     """
 
-    enabled: bool = Field(description="Whether BGP is enabled.")
-    available: bool = Field(description="Whether BGP is available.")
-    status: str = Field(description="BGP status.")
-    routers: int = Field(description="BGP routers.")
-    connected: int = Field(description="BGP connections.")
-    limit: int = Field(description="BGP limit.")
-    active: bool = Field(description="BGP active.")
-    routes: list[ServerBGPRouteModel] = Field(description="BGP routes.")
-    updated: str = Field(description="Date of last update.")
+    enabled: bool | None = Field(description="Whether BGP is enabled.", default=None)
+    available: bool | None = Field(
+        description="Whether BGP is available.", default=None
+    )
+    status: str | None = Field(description="BGP status.", default=None)
+    routers: int | None = Field(description="BGP routers.", default=None)
+    connected: int | None = Field(description="BGP connections.", default=None)
+    limit: int | None = Field(description="BGP limit.", default=None)
+    active: bool | None = Field(description="BGP active.", default=None)
+    routes: list[ServerBGPRouteModel] | None = Field(
+        description="BGP routes.", default=None
+    )
+    updated: str | None = Field(description="Date of last update.", default=None)
 
 
 class ServerDeployedImageModel(_models.DefaultModel):
@@ -83,13 +89,17 @@ class ServerDeployedImageModel(_models.DefaultModel):
     server deployed image resource state.
 
     Attributes:
-        name (str): Full name of the deployed image.
-        slug (str): Slug of the deployed image name.
+        name (str | None): Full name of the deployed image.
+        slug (str | None): Slug of the deployed image name.
 
     """
 
-    name: str = Field(description="Full name of the deployed image.")
-    slug: str = Field(description="Slug of the deployed image name.")
+    name: str | None = Field(
+        description="Full name of the deployed image.", default=None
+    )
+    slug: str | None = Field(
+        description="Slug of the deployed image name.", default=None
+    )
 
 
 class ServerBMCModel(_models.DefaultModel):
@@ -123,44 +133,47 @@ class ServerModel(_models.DefaultModel):
 
     Attributes:
         id (int): Server ID.
-        name (str): Server name. Typically corresponds to plan name.
-        href (str): Server href.
+        name (str | None): Server name. Typically corresponds to plan name.
+        href (str | None): Server href.
         bmc (cherry.servers.ServerBMCModel | None):
          Server BMC credential data. Only for baremetal servers.
          Scrubbed at 24 hours after creation.
-        hostname (str): Server hostname.
+        hostname (str | None): Server hostname.
         Can be used to identify servers in most contexts.
         password (str | None): Server user password. Scrubbed 24 hours after creation.
         username (str | None): Server user username. Scrubbed 24 hours after creation.
          deployed_image (cherry.servers.ServerDeployedImageModel | None): OS image data.
-        spot_instance (bool): Whether the server belongs the spot market.
-        region (cherry.regions.RegionModel): Region data.
-        state (str): Server state.
-        status (str): Server status.
-        bgp (cherry.servers.ServerBGPModel): BGP data.
+        spot_instance (bool | None): Whether the server belongs the spot market.
+        region (cherry.regions.RegionModel | None): Region data.
+        state (str | None): Server state.
+        status (str | None): Server status.
+        bgp (cherry.servers.ServerBGPModel | None): BGP data.
         plan (cherry.plans.PlanModel): Plan data.
-        pricing (cherry.plans.PricingModel): Pricing data.
-        ssh_keys (list[cherry.sshkeys.SSHKeyModel]): SSH key data.
-        tags (dict[str, str]): User-defined server tags.
-        termination_date (str): Server termination date.
+        pricing (cherry.plans.PricingModel | None): Pricing data.
+        ssh_keys (list[cherry.sshkeys.SSHKeyModel] | None): SSH key data.
+        tags (dict[str, str] | None): User-defined server tags.
+        termination_date (str | None): Server termination date.
         created_at (str | None): Server deployment date.
-        traffic_used_bytes (int): Server traffic usage.
-        project (cherry.projects.ProjectModel): Project data.
-        ip_addresses (list[cherry.ips.IPModel]): Server IP address data.
+        traffic_used_bytes (int | None): Server traffic usage.
+        project (cherry.projects.ProjectModel | None): Project data.
+        ip_addresses (list[cherry.ips.IPModel] | None): Server IP address data.
         storage (cherry.block_storages.BlockStorageModel | None): Block storage data.
 
     """
 
     id: int = Field(description="Server ID.")
-    name: str = Field(description="Server name. Typically corresponds to plan name.")
-    href: str = Field(description="Server href.")
+    name: str = Field(
+        description="Server name. Typically corresponds to plan name.", default=None
+    )
+    href: str = Field(description="Server href.", default=None)
     bmc: ServerBMCModel | None = Field(
         description="Server BMC credential data. Only for baremetal servers."
         "Scrubbed at 24 hours after creation.",
         default=None,
     )
     hostname: str = Field(
-        description="Server hostname. Can be used to identify servers in most contexts."
+        description="Server hostname. Can be used to identify servers in most contexts.",
+        default=None,
     )
     password: str | None = Field(
         description="Server user password. Scrubbed at 24 hours after creation.",
@@ -173,25 +186,35 @@ class ServerModel(_models.DefaultModel):
     deployed_image: ServerDeployedImageModel | None = Field(
         description="OS image data.", default=None
     )
-    spot_instance: bool = Field(
-        description="Whether the server belongs the spot market."
+    spot_instance: bool | None = Field(
+        description="Whether the server belongs the spot market.", default=None
     )
-    region: RegionModel = Field(description="Region data.")
-    state: str = Field(description="Server state.")
-    status: str = Field(description="Server status.")
-    bgp: ServerBGPModel = Field(description="BGP data.")
+    region: RegionModel | None = Field(description="Region data.", default=None)
+    state: str | None = Field(description="Server state.", default=None)
+    status: str | None = Field(description="Server status.", default=None)
+    bgp: ServerBGPModel | None = Field(description="BGP data.", default=None)
     plan: PlanModel = Field(description="Plan data.")
-    pricing: PricingModel = Field(description="Pricing data.")
-    ssh_keys: list[SSHKeyModel] = Field(description="SSH key data.")
-    ip_addresses: list[IPModel] = Field(description="Server IP address data.")
+    pricing: PricingModel | None = Field(description="Pricing data.", default=None)
+    ssh_keys: list[SSHKeyModel] | None = Field(
+        description="SSH key data.", default=None
+    )
+    ip_addresses: list[IPModel] | None = Field(
+        description="Server IP address data.", default=None
+    )
     storage: BlockStorageModel | None = Field(
         description="Block storage data.", default=None
     )
-    tags: dict[str, str] = Field(description="User-defined server tags.")
-    termination_date: str = Field(description="Server termination date.")
+    tags: dict[str, str] | None = Field(
+        description="User-defined server tags.", default=None
+    )
+    termination_date: str | None = Field(
+        description="Server termination date.", default=None
+    )
     created_at: str | None = Field(description="Server deployment date.", default=None)
-    traffic_used_bytes: int = Field(description="Server traffic usage.")
-    project: ProjectModel = Field(description="Project data.")
+    traffic_used_bytes: int | None = Field(
+        description="Server traffic usage.", default=None
+    )
+    project: ProjectModel | None = Field(description="Project data.", default=None)
 
 
 class CreationRequest(_models.CherryRequestSchema):
