@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, users
+from cherry import _base, users
 
 
-class SSHKeyModel(_models.DefaultModel):
+class SSHKeyModel(_base.ResourceModel):
     """Cherry Servers SSH key model.
 
     This model is frozen by default,
@@ -39,7 +39,7 @@ class SSHKeyModel(_models.DefaultModel):
     href: str | None = Field(description="SSH key href.", default=None)
 
 
-class CreationRequest(_models.CherryRequestSchema):
+class CreationRequest(_base.RequestSchema):
     """Cherry Servers SSH key creation request schema.
 
     Attributes:
@@ -52,7 +52,7 @@ class CreationRequest(_models.CherryRequestSchema):
     key: str = Field(description="Public SSH key.")
 
 
-class UpdateRequest(_models.CherryRequestSchema):
+class UpdateRequest(_base.RequestSchema):
     """Cherry Servers SSH key update request schema.
 
     Attributes:
@@ -65,35 +65,7 @@ class UpdateRequest(_models.CherryRequestSchema):
     key: str | None = Field(description="Public SSH key.", default=None)
 
 
-class SSHKey:
-    """Cherry Servers SSH key resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`SSHKeyClient`.
-
-    Attributes:
-        model (SSHKeyModel): Cherry Servers SSH key model.
-            This is a Pydantic model that contains SSH key data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: SSHKeyClient, model: SSHKeyModel) -> None:
-        """Initialize a Cherry Servers SSH key resource."""
-        self._client = client
-        self.model = model
-
-    def delete(self) -> None:
-        """Delete Cherry Servers SSH key resource."""
-        self._client.delete(self.model.id)
-
-    def update(self, update_schema: UpdateRequest) -> None:
-        """Update Cherry Servers SSH key resource."""
-        updated = self._client.update(self.model.id, update_schema)
-        self.model = updated.model
-
-
-class SSHKeyClient:
+class SSHKeyClient(_base.ResourceClient):
     """Cherry Servers SSH key client.
 
     Manage Cherry Servers SSH key resources.
@@ -121,10 +93,6 @@ class SSHKeyClient:
             sshkey.delete()
 
     """
-
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers SSH key client."""
-        self._api_client = api_client
 
     def get_by_id(self, sshkey_id: int) -> SSHKey:
         """Retrieve a SSH key by ID."""
@@ -159,3 +127,20 @@ class SSHKeyClient:
         """Update SSH key by ID."""
         response = self._api_client.put(f"ssh-keys/{sshkey_id}", update_schema, None, 5)
         return self.get_by_id(response.json()["id"])
+
+
+class SSHKey(_base.Resource[SSHKeyClient, SSHKeyModel]):
+    """Cherry Servers SSH key resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`SSHKeyClient`.
+    """
+
+    def delete(self) -> None:
+        """Delete Cherry Servers SSH key resource."""
+        self._client.delete(self._model.id)
+
+    def update(self, update_schema: UpdateRequest) -> None:
+        """Update Cherry Servers SSH key resource."""
+        updated = self._client.update(self._model.id, update_schema)
+        self._model = updated._model  # noqa: SLF001

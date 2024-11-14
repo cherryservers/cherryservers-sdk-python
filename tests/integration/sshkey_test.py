@@ -19,9 +19,10 @@ class TestSSHKey:
             label="cherry-python-sdk-test",
         )
         ssh_key = facade.sshkeys.create(creation_req)
+        key_model = ssh_key.get_model_copy()
 
-        assert ssh_key.model.label == creation_req.label
-        assert ssh_key.model.key == creation_req.key
+        assert key_model.label == creation_req.label
+        assert key_model.key == creation_req.key
 
         return ssh_key
 
@@ -29,10 +30,13 @@ class TestSSHKey:
         self, ssh_key: cherry.sshkeys.SSHKey, facade: cherry.facade.CherryApiFacade
     ) -> None:
         """Test getting a single SSH key by ID."""
-        key = facade.sshkeys.get_by_id(ssh_key.model.id)
+        key_model = ssh_key.get_model_copy()
+        retrieved_key = facade.sshkeys.get_by_id(key_model.id)
 
-        assert key.model.label == ssh_key.model.label
-        assert key.model.key == ssh_key.model.key
+        retrieved_model = retrieved_key.get_model_copy()
+
+        assert key_model.label == retrieved_model.label
+        assert key_model.key == retrieved_model.key
 
     def test_get_all(
         self, ssh_key: cherry.sshkeys.SSHKey, facade: cherry.facade.CherryApiFacade
@@ -40,10 +44,13 @@ class TestSSHKey:
         """Test getting all SSH keys."""
         keys = facade.sshkeys.get_all()
 
+        retrieved_key_models = [key.get_model_copy() for key in keys]
+        fixture_key_model = ssh_key.get_model_copy()
+
         assert any(
-            key.model.label == ssh_key.model.label
-            and key.model.key == ssh_key.model.key
-            for key in keys
+            key_model.label == fixture_key_model.label
+            and key_model.key == fixture_key_model.key
+            for key_model in retrieved_key_models
         )
 
     def test_update(self, ssh_key: cherry.sshkeys.SSHKey) -> None:
@@ -54,8 +61,10 @@ class TestSSHKey:
         )
         ssh_key.update(update_req)
 
-        assert ssh_key.model.label == update_req.label
-        assert ssh_key.model.key == update_req.key
+        updated_key_model = ssh_key.get_model_copy()
+
+        assert updated_key_model.label == update_req.label
+        assert updated_key_model.key == update_req.key
 
     def test_delete(
         self, ssh_key: cherry.sshkeys.SSHKey, facade: cherry.facade.CherryApiFacade
@@ -63,5 +72,7 @@ class TestSSHKey:
         """Test deleting an SSH key."""
         ssh_key.delete()
 
+        key_model = ssh_key.get_model_copy()
+
         with pytest.raises(requests.exceptions.HTTPError):
-            facade.sshkeys.get_by_id(ssh_key.model.id)
+            facade.sshkeys.get_by_id(key_model.id)
