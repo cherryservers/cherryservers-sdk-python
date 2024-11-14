@@ -17,7 +17,9 @@ class TestTeam:
         creation_req = cherry.teams.CreationRequest(name="cherry-python-sdk-test")
         team = facade.teams.create(creation_req)
 
-        assert team.model.name == creation_req.name
+        team_model = team.get_model_copy()
+
+        assert team_model.name == creation_req.name
 
         return team
 
@@ -25,18 +27,24 @@ class TestTeam:
         self, team: cherry.teams.Team, facade: cherry.facade.CherryApiFacade
     ) -> None:
         """Test getting a single team by ID."""
-        retrieved_team = facade.teams.get_by_id(team.model.id)
+        team_model = team.get_model_copy()
+        retrieved_team = facade.teams.get_by_id(team_model.id)
+        retrieved_team_model = retrieved_team.get_model_copy()
 
-        assert retrieved_team.model.name == team.model.name
+        assert retrieved_team_model.name == team_model.name
 
     def test_get_all(
         self, team: cherry.teams.Team, facade: cherry.facade.CherryApiFacade
     ) -> None:
         """Test getting all teams."""
-        teams = facade.teams.get_all()
+        retrieved_teams = facade.teams.get_all()
+        team_model = team.get_model_copy()
+
+        retrieved_team_models = [model.get_model_copy() for model in retrieved_teams]
 
         assert any(
-            team.model.name == retrieved_team.model.name for retrieved_team in teams
+            team_model.name == retrieved_team_model.name
+            for retrieved_team_model in retrieved_team_models
         )
 
     def test_update(self, team: cherry.teams.Team) -> None:
@@ -44,13 +52,16 @@ class TestTeam:
         update_req = cherry.teams.UpdateRequest(name="cherry-python-sdk-test-updated")
         team.update(update_req)
 
-        assert team.model.name == update_req.name
+        updated_model = team.get_model_copy()
+
+        assert updated_model.name == update_req.name
 
     def test_delete(
         self, team: cherry.teams.Team, facade: cherry.facade.CherryApiFacade
     ) -> None:
         """Test deleting a team."""
         team.delete()
+        team_model = team.get_model_copy()
 
         with pytest.raises(requests.exceptions.HTTPError):
-            facade.teams.get_by_id(team.model.id)
+            facade.teams.get_by_id(team_model.id)

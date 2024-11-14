@@ -2,13 +2,17 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pydantic import Field
 
-from cherry import _client, _models
-from cherry.plans import PricingModel
+from cherry import _base
+
+if TYPE_CHECKING:
+    from cherry.plans import PricingModel
 
 
-class RemainingTimeModel(_models.DefaultModel):
+class RemainingTimeModel(_base.ResourceModel):
     """Cherry Servers team credit resource remaining time model.
 
     This model is frozen by default,
@@ -27,7 +31,7 @@ class RemainingTimeModel(_models.DefaultModel):
     unit: str | None = Field(description="Time unit type.", default=None)
 
 
-class ResourcesModel(_models.DefaultModel):
+class ResourcesModel(_base.ResourceModel):
     """Cherry Servers team credit resource detail model.
 
     This model is frozen by default,
@@ -49,7 +53,7 @@ class ResourcesModel(_models.DefaultModel):
     )
 
 
-class CreditDetailsModel(_models.DefaultModel):
+class CreditDetailsModel(_base.ResourceModel):
     """Cherry Servers team credit details model.
 
     This model is frozen by default,
@@ -67,7 +71,7 @@ class CreditDetailsModel(_models.DefaultModel):
     currency: str | None = Field(description="Credit currency.", default=None)
 
 
-class CreditModel(_models.DefaultModel):
+class CreditModel(_base.ResourceModel):
     """Cherry Servers team credit model.
 
     This model is frozen by default,
@@ -91,7 +95,7 @@ class CreditModel(_models.DefaultModel):
     )
 
 
-class VatModel(_models.DefaultModel):
+class VatModel(_base.ResourceModel):
     """Cherry Servers team VAT model.
 
     This model is frozen by default,
@@ -111,7 +115,7 @@ class VatModel(_models.DefaultModel):
     )
 
 
-class BillingModel(_models.DefaultModel):
+class BillingModel(_base.ResourceModel):
     """Cherry Servers team billing model.
 
     This model is frozen by default,
@@ -159,7 +163,7 @@ class BillingModel(_models.DefaultModel):
     currency: str | None = Field(description="Currency type.", default=None)
 
 
-class TeamModel(_models.DefaultModel):
+class TeamModel(_base.ResourceModel):
     """Cherry Servers team model.
 
     This model is frozen by default,
@@ -181,7 +185,7 @@ class TeamModel(_models.DefaultModel):
     href: str | None = Field(description="Team href.", default=None)
 
 
-class CreationRequest(_models.CherryRequestSchema):
+class CreationRequest(_base.RequestSchema):
     """Cherry Servers team creation request schema.
 
     Attributes:
@@ -198,7 +202,7 @@ class CreationRequest(_models.CherryRequestSchema):
     currency: str | None = Field(description="Currency type.", default=None)
 
 
-class UpdateRequest(_models.CherryRequestSchema):
+class UpdateRequest(_base.RequestSchema):
     """Cherry Servers team update request schema.
 
     Attributes:
@@ -213,35 +217,7 @@ class UpdateRequest(_models.CherryRequestSchema):
     currency: str | None = Field(description="Currency type.", default=None)
 
 
-class Team:
-    """Cherry Servers team resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`TeamClient`.
-
-    Attributes:
-        model (TeamModel): Cherry Servers team model.
-            This is a Pydantic model that contains team data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: TeamClient, model: TeamModel) -> None:
-        """Initialize a Cherry Servers team resource."""
-        self._client = client
-        self.model = model
-
-    def delete(self) -> None:
-        """Delete Cherry Servers team resource."""
-        self._client.delete(self.model.id)
-
-    def update(self, update_schema: UpdateRequest) -> None:
-        """Update Cherry Servers team resource."""
-        updated = self._client.update(self.model.id, update_schema)
-        self.model = updated.model
-
-
-class TeamClient:
+class TeamClient(_base.ResourceClient):
     """Cherry Servers team client.
 
     Manage Cherry Servers team resources.
@@ -273,10 +249,6 @@ class TeamClient:
             new_team.delete()
 
     """
-
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers team client."""
-        self._api_client = api_client
 
     def get_by_id(self, team_id: int) -> Team:
         """Retrieve a team by ID."""
@@ -311,3 +283,20 @@ class TeamClient:
         """Update a team by ID."""
         response = self._api_client.put(f"teams/{team_id}", update_schema, None, 10)
         return self.get_by_id(response.json()["id"])
+
+
+class Team(_base.Resource[TeamClient, TeamModel]):
+    """Cherry Servers team resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`TeamClient`.
+    """
+
+    def delete(self) -> None:
+        """Delete Cherry Servers team resource."""
+        self._client.delete(self._model.id)
+
+    def update(self, update_schema: UpdateRequest) -> None:
+        """Update Cherry Servers team resource."""
+        updated = self._client.update(self._model.id, update_schema)
+        self._model = updated._model  # noqa: SLF001
