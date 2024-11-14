@@ -16,15 +16,15 @@ class RemainingTimeModel(_models.DefaultModel):
     Here, resources refers to infrastructure objects that have a real cost.
 
     Attributes:
-        time (int): Remaining time at the current usage rate and credit.
-        unit (str): Time unit type.
+        time (int | None): Remaining time at the current usage rate and credit.
+        unit (str | None): Time unit type.
 
     """
 
-    time: int = Field(
-        description="Remaining time at the current usage rate and credit."
+    time: int | None = Field(
+        description="Remaining time at the current usage rate and credit.", default=None
     )
-    unit: str = Field(description="Time unit type.")
+    unit: str | None = Field(description="Time unit type.", default=None)
 
 
 class ResourcesModel(_models.DefaultModel):
@@ -35,14 +35,17 @@ class ResourcesModel(_models.DefaultModel):
     Here, resources refers to infrastructure objects that have a real cost.
 
     Attributes:
-        pricing (cherry.plans.PricingModel): Team resource pricing data.
-        remaining (cherry.teams.RemainingTimeModel): Team resource remaining time data.
+        pricing (cherry.plans.PricingModel | None): Team resource pricing data.
+        remaining (cherry.teams.RemainingTimeModel | None):
+        Team resource remaining time data.
 
     """
 
-    pricing: PricingModel = Field(description="Team resource pricing data.")
-    remaining: RemainingTimeModel = Field(
-        description="Team resource remaining time data."
+    pricing: PricingModel | None = Field(
+        description="Team resource pricing data.", default=None
+    )
+    remaining: RemainingTimeModel | None = Field(
+        description="Team resource remaining time data.", default=None
     )
 
 
@@ -53,15 +56,15 @@ class CreditDetailsModel(_models.DefaultModel):
     since it represents an actual Cherry Servers team credit detail resource state.
 
     Attributes:
-        remaining (float): Remaining credit.
-        usage (float): Credit usage rate.
-        currency (str): Credit currency.
+        remaining (float | None): Remaining credit.
+        usage (float | None): Credit usage rate.
+        currency (str | None): Credit currency.
 
     """
 
-    remaining: float = Field(description="Remaining credit.")
-    usage: float = Field(description="Credit usage rate.")
-    currency: str = Field(description="Credit currency.")
+    remaining: float | None = Field(description="Remaining credit.", default=None)
+    usage: float | None = Field(description="Credit usage rate.", default=None)
+    currency: str | None = Field(description="Credit currency.", default=None)
 
 
 class CreditModel(_models.DefaultModel):
@@ -71,15 +74,21 @@ class CreditModel(_models.DefaultModel):
     since in represents an actual Cherry Servers team credit resource state.
 
     Attributes:
-        account (cherry.teams.CreditDetailsModel): Account credit details.
-        promo (cherry.teams.CreditDetailsModel): Promotional credit details.
-        resources (cherry.teams.ResourcesModel): Resources credit details.
+        account (cherry.teams.CreditDetailsModel | None): Account credit details.
+        promo (cherry.teams.CreditDetailsModel | None): Promotional credit details.
+        resources (cherry.teams.ResourcesModel | None): Resources credit details.
 
     """
 
-    account: CreditDetailsModel = Field(description="Account credit details.")
-    promo: CreditDetailsModel = Field(description="Promotional credit details.")
-    resources: ResourcesModel = Field(description="Resources credit details.")
+    account: CreditDetailsModel | None = Field(
+        description="Account credit details.", default=None
+    )
+    promo: CreditDetailsModel | None = Field(
+        description="Promotional credit details.", default=None
+    )
+    resources: ResourcesModel | None = Field(
+        description="Resources credit details.", default=None
+    )
 
 
 class VatModel(_models.DefaultModel):
@@ -89,15 +98,17 @@ class VatModel(_models.DefaultModel):
     since it represents an actual Cherry Servers team VAT resource state.
 
     Attributes:
-        amount (int): VAT rate.
-        number (str): Amount of paid VAT.
-        valid (bool): Whether VAT has been applied.
+        amount (int | None): VAT rate.
+        number (str | None): Amount of paid VAT.
+        valid (bool | None): Whether VAT has been applied.
 
     """
 
-    amount: int = Field(description="VAT rate.")
-    number: str = Field(description="Amount of paid VAT.")
-    valid: bool = Field(description="Whether VAT has been applied.")
+    amount: int | None = Field(description="VAT rate.", default=None)
+    number: str | None = Field(description="Amount of paid VAT.", default=None)
+    valid: bool | None = Field(
+        description="Whether VAT has been applied.", default=None
+    )
 
 
 class BillingModel(_models.DefaultModel):
@@ -107,7 +118,7 @@ class BillingModel(_models.DefaultModel):
     since it represents an actual Cherry Servers team billing resource state.
 
     Attributes:
-        type (str): Billing type: `personal` or `business`.
+        type (str | None): Billing type: `personal` or `business`.
         company_name (str | None): Company name, if applicable.
         company_code (str | None): Company code, if applicable.
         first_name (str | None): First name, if applicable.
@@ -116,12 +127,14 @@ class BillingModel(_models.DefaultModel):
         address_2 (str | None): Last address line, if applicable.
         country_iso_2 (str | None): Country code, if applicable.
         city (str | None): City, if applicable.
-        vat (cherry.teams.VatModel): VAT data.
-        currency (str): Currency type.
+        vat (cherry.teams.VatModel | None): VAT data.
+        currency (str | None): Currency type.
 
     """
 
-    type: str = Field(description="Billing type: `personal` or `business`.")
+    type: str | None = Field(
+        description="Billing type: `personal` or `business`.", default=None
+    )
     company_name: str | None = Field(
         description="Company name, if applicable.", default=None
     )
@@ -142,8 +155,8 @@ class BillingModel(_models.DefaultModel):
         description="Country code, if applicable.", default=None
     )
     city: str | None = Field(description="City, if applicable.", default=None)
-    vat: VatModel = Field(description="VAT data.")
-    currency: str = Field(description="Currency type.")
+    vat: VatModel | None = Field(description="VAT data.", default=None)
+    currency: str | None = Field(description="Currency type.", default=None)
 
 
 class TeamModel(_models.DefaultModel):
@@ -154,18 +167,18 @@ class TeamModel(_models.DefaultModel):
 
     Attributes:
         id (int): Team ID.
-        name (str): Team name.
-        credit (cherry.teams.CreditModel): Team credit data.
-        billing (cherry.teams.BillingModel): Team billing data.
-        href (str): Team href.
+        name (str | None): Team name.
+        credit (cherry.teams.CreditModel | None): Team credit data.
+        billing (cherry.teams.BillingModel | None): Team billing data.
+        href (str | None): Team href.
 
     """
 
     id: int = Field(description="Team ID.")
-    name: str = Field(description="Team name.")
-    credit: CreditModel = Field(description="Team credit data.")
-    billing: BillingModel = Field(description="Team billing data.")
-    href: str = Field(description="Team href.")
+    name: str | None = Field(description="Team name.", default=None)
+    credit: CreditModel | None = Field(description="Team credit data.", default=None)
+    billing: BillingModel | None = Field(description="Team billing data.", default=None)
+    href: str | None = Field(description="Team href.", default=None)
 
 
 class CreationRequest(_models.CherryRequestSchema):
