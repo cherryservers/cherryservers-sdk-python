@@ -2,17 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
-from cherry import _models
-
-if TYPE_CHECKING:
-    from cherry import _client
+from cherry import _base
 
 
-class RegionBGPModel(_models.DefaultModel):
+class RegionBGPModel(_base.ResourceModel):
     """Cherry Servers region BPG model.
 
     This model is frozen by default,
@@ -28,7 +23,7 @@ class RegionBGPModel(_models.DefaultModel):
     asn: int = Field(description="Region ASN.")
 
 
-class RegionModel(_models.DefaultModel):
+class RegionModel(_base.ResourceModel):
     """Cherry Servers region model.
 
     This model is frozen by default,
@@ -54,26 +49,7 @@ class RegionModel(_models.DefaultModel):
     href: str = Field(description="Region href.")
 
 
-class Region:
-    """Cherry Servers region resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`RegionClient`.
-
-    Attributes:
-        model (RegionModel): Cherry Servers region model.
-            This is a Pydantic model that contains region data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: RegionClient, model: RegionModel) -> None:
-        """Initialize a Cherry Servers region resource."""
-        self._client = client
-        self.model = model
-
-
-class RegionClient:
+class RegionClient(_base.ResourceClient):
     """Cherry Servers region client.
 
     Manage Cherry Servers region resources.
@@ -93,10 +69,6 @@ class RegionClient:
 
     """
 
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers region client."""
-        self._api_client = api_client
-
     def get_by_id(self, region_id: int) -> Region:
         """Retrieve a region by ID."""
         response = self._api_client.get(f"regions/{region_id}", None, 5)
@@ -112,3 +84,11 @@ class RegionClient:
             regions.append(Region(self, region_model))
 
         return regions
+
+
+class Region(_base.Resource[RegionClient, RegionModel]):
+    """Cherry Servers region resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`RegionClient`.
+    """
