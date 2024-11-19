@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models
+from cherry import _base
 
 
-class ProjectBGPModel(_models.DefaultModel):
+class ProjectBGPModel(_base.ResourceModel):
     """Cherry Servers project BGP model.
 
     This model is frozen by default,
@@ -23,7 +23,7 @@ class ProjectBGPModel(_models.DefaultModel):
     local_asn: int = Field(description="Local ASN of the project.")
 
 
-class ProjectModel(_models.DefaultModel):
+class ProjectModel(_base.ResourceModel):
     """Cherry Servers project model.
 
     This model is frozen by default,
@@ -43,7 +43,7 @@ class ProjectModel(_models.DefaultModel):
     href: str = Field(description="Project href.")
 
 
-class CreationRequest(_models.CherryRequestSchema):
+class CreationRequest(_base.RequestSchema):
     """Cherry Servers project creation request schema.
 
     Attributes:
@@ -59,7 +59,7 @@ class CreationRequest(_models.CherryRequestSchema):
     )
 
 
-class UpdateRequest(_models.CherryRequestSchema):
+class UpdateRequest(_base.RequestSchema):
     """Cherry Servers project update request schema.
 
     Attributes:
@@ -74,35 +74,7 @@ class UpdateRequest(_models.CherryRequestSchema):
     )
 
 
-class Project:
-    """Cherry Servers project resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`ProjectClient`.
-
-    Attributes:
-        model (ProjectModel): Cherry Servers project model.
-            This is a Pydantic model that contains project data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: ProjectClient, model: ProjectModel) -> None:
-        """Initialize a Cherry Servers project resource."""
-        self._client = client
-        self.model = model
-
-    def delete(self) -> None:
-        """Delete Cherry Servers project resource."""
-        self._client.delete(self.model.id)
-
-    def update(self, update_schema: UpdateRequest) -> None:
-        """Update Cherry Servers project resource."""
-        updated = self._client.update(self.model.id, update_schema)
-        self.model = updated.model
-
-
-class ProjectClient:
+class ProjectClient(_base.ResourceClient):
     """Cherry Servers project client.
 
     Manage Cherry Servers project resources.
@@ -134,10 +106,6 @@ class ProjectClient:
             project.delete()
 
     """
-
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers project client."""
-        self._api_client = api_client
 
     def get_by_id(self, project_id: int) -> Project:
         """Retrieve a project by ID."""
@@ -176,3 +144,20 @@ class ProjectClient:
             f"projects/{project_id}", update_schema, None, 5
         )
         return self.get_by_id(response.json()["id"])
+
+
+class Project(_base.Resource[ProjectClient, ProjectModel]):
+    """Cherry Servers project resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`ProjectClient`.
+    """
+
+    def delete(self) -> None:
+        """Delete Cherry Servers project resource."""
+        self._client.delete(self._model.id)
+
+    def update(self, update_schema: UpdateRequest) -> None:
+        """Update Cherry Servers project resource."""
+        updated = self._client.update(self._model.id, update_schema)
+        self._model = updated._model  # noqa: SLF001
