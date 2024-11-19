@@ -27,16 +27,17 @@ class AttachedServerModel(_base.ResourceModel):
 
     Attributes:
         id (int): Server ID. Non-existent server will have value `0`.
-        href (str): Server href.
-        hostname (str): Server hostname.
+        href (str | None): Server href.
+        hostname (str | None): Server hostname.
          Can be used to identify servers in most contexts.
 
     """
 
     id: int = Field(description="Server ID.")
-    href: str = Field(description="Server href.")
-    hostname: str = Field(
-        description="Server hostname. Can be used to identify servers in most contexts."
+    href: str | None = Field(description="Server href.", default=None)
+    hostname: str | None = Field(
+        description="Server hostname. Can be used to identify servers in most contexts.",
+        default=None,
     )
 
 
@@ -48,35 +49,42 @@ class IPModel(_base.ResourceModel):
 
     Attributes:
         id (int): IP address ID.
-        address (str): IP address.
-        address_family (str): IP address family, such as 4 or 6.
-        cidr (str): IP address CIDR.
+        address (str | None): IP address.
+        address_family (str | None): IP address family, such as 4 or 6.
+        cidr (str | None): IP address CIDR.
         gateway (str | None): IP address gateway address, if applicable.
-        type (str): IP address type, such as `floating-ip` or `primary-ip`.
-        region (cherry.regions.RegionModel): IP address region.
+        type (str | None): IP address type, such as `floating-ip` or `primary-ip`.
+        region (cherry.regions.RegionModel | None): IP address region.
         routed_to (cherry.ips.IPModel | None):
          IP address that this address is routed, if applicable.
         targeted_to (cherry.ips.AttachedServerModel | None):
          Server that this address is targeted to, if applicable.
-        project (cherry.projects.ProjectModel):
+        project (cherry.projects.ProjectModel | None):
          The project that the IP address belongs to.
         ptr_record (str | None): IP address PTR record, if applicable.
         a_record (str | None): IP address A record, if applicable.
-        tags (dict[str, str]): IP address user-defined tags.
-        ddos_scrubbing (bool): Whether DDoS scrubbing is enabled for the IP address.
-        href (str): IP address href.
+        tags (dict[str, str] | None): IP address user-defined tags.
+        ddos_scrubbing (bool | None):
+         Whether DDoS scrubbing is enabled for the IP address.
+        href (str | None): IP address href.
 
     """
 
     id: str = Field(description="IP address ID.")
-    address: str = Field(description="IP address.")
-    address_family: int = Field(description="IP address family, such as 4 or 6.")
-    cidr: str = Field(description="IP address CIDR.")
+    address: str | None = Field(description="IP address.", default=None)
+    address_family: int | None = Field(
+        description="IP address family, such as 4 or 6.", default=None
+    )
+    cidr: str | None = Field(description="IP address CIDR.", default=None)
     gateway: str | None = Field(
         description="IP address gateway address, if applicable.", default=None
     )
-    type: str = Field(description="IP address type, such as floating-ip or primary-ip.")
-    region: regions.RegionModel = Field(description="IP address region.")
+    type: str | None = Field(
+        description="IP address type, such as floating-ip or primary-ip.", default=None
+    )
+    region: regions.RegionModel | None = Field(
+        description="IP address region.", default=None
+    )
     routed_to: IPModel | None = Field(
         description="IP address that this address is routed to, if applicable.",
         default=None,
@@ -86,8 +94,8 @@ class IPModel(_base.ResourceModel):
         default=None,
     )
 
-    project: projects.ProjectModel = Field(
-        description=" Project that the IP address belongs to."
+    project: projects.ProjectModel | None = Field(
+        description=" Project that the IP address belongs to.", default=None
     )
     ptr_record: str | None = Field(
         description="IP address PTR record, if applicable.", default=None
@@ -95,11 +103,14 @@ class IPModel(_base.ResourceModel):
     a_record: str | None = Field(
         description="IP address A record, if applicable.", default=None
     )
-    tags: dict[str, str] = Field(description="IP address user-defined tags.")
-    ddos_scrubbing: bool = Field(
-        description="Whether DDoS scrubbing is enabled for the IP address."
+    tags: dict[str, str] | None = Field(
+        description="IP address user-defined tags.", default=None
     )
-    href: str = Field(description="IP address href.")
+    ddos_scrubbing: bool | None = Field(
+        description="Whether DDoS scrubbing is enabled for the IP address.",
+        default=None,
+    )
+    href: str | None = Field(description="IP address href.", default=None)
 
 
 class CreationRequest(_base.RequestSchema):
