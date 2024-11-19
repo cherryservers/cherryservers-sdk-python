@@ -16,14 +16,16 @@ class AvailableRegionsModel(regions.RegionModel):
     Inherits all attributes of :class:`cherry.regions.RegionModel`.
 
     Attributes:
-        stock_qty (int): The number servers in stock.
-        spot_qty (int): The number of servers as spot instances in stock.
+        stock_qty (int | None): The number servers in stock.
+        spot_qty (int | None): The number of servers as spot instances in stock.
 
     """
 
-    stock_qty: int = Field(description="The number servers in stock.")
-    spot_qty: int = Field(
-        description="The number of servers as spot instances in stock."
+    stock_qty: int | None = Field(
+        description="The number servers in stock.", default=None
+    )
+    spot_qty: int | None = Field(
+        description="The number of servers as spot instances in stock.", default=None
     )
 
 
@@ -34,11 +36,11 @@ class BandwidthModel(_base.ResourceModel):
     since it represents an actual Cherry Servers plan specs bandwidth resource state.
 
     Attributes:
-        name (str): Bandwidth name.
+        name (str | None): Bandwidth name.
 
     """
 
-    name: str = Field(description="Bandwidth name.")
+    name: str | None = Field(description="Bandwidth name.", default=None)
 
 
 class NicsModel(_base.ResourceModel):
@@ -49,11 +51,11 @@ class NicsModel(_base.ResourceModel):
     network interface controllers state.
 
     Attributes:
-        name (str): NICS name.
+        name (str | None): NICS name.
 
     """
 
-    name: str = Field(description="NICS name.")
+    name: str | None = Field(description="NICS name.", default=None)
 
 
 class RaidModel(_base.ResourceModel):
@@ -64,11 +66,11 @@ class RaidModel(_base.ResourceModel):
     RAID resource state.
 
     Attributes:
-        name (str): RAID name.
+        name (str | None): RAID name.
 
     """
 
-    name: str = Field(description="RAID name.")
+    name: str | None = Field(description="RAID name.", default=None)
 
 
 class StorageModel(_base.ResourceModel):
@@ -79,17 +81,23 @@ class StorageModel(_base.ResourceModel):
     storage resource state.
 
     Attributes:
-        name (str): Storage device name.
-        count (int): The number of storage devices.
-        size (float): The size of the storage devices.
-        unit (str): Storage device size measurement unit.
+        name (str | None): Storage device name.
+        count (int | None): The number of storage devices.
+        size (float | None): The size of the storage devices.
+        unit (str | None): Storage device size measurement unit.
 
     """
 
-    name: str = Field(description="Storage device name.")
-    count: int = Field(description="The number of storage devices.")
-    size: float = Field(description="The size of the storage devices.")
-    unit: str = Field(description="Storage device size measurement unit.")
+    name: str | None = Field(description="Storage device name.", default=None)
+    count: int | None = Field(
+        description="The number of storage devices.", default=None
+    )
+    size: float | None = Field(
+        description="The size of the storage devices.", default=None
+    )
+    unit: str | None = Field(
+        description="Storage device size measurement unit.", default=None
+    )
 
 
 class MemoryModel(_base.ResourceModel):
@@ -100,17 +108,21 @@ class MemoryModel(_base.ResourceModel):
     memory resource state.
 
     Attributes:
-        name (str): Memory device name.
-        count (int): The number of memory devices.
-        total (int): The total capacity of the memory devices.
-        unit (str): Memory device size measurement unit.
+        name (str | None): Memory device name.
+        count (int | None): The number of memory devices.
+        total (int | None): The total capacity of the memory devices.
+        unit (str | None): Memory device size measurement unit.
 
     """
 
-    name: str = Field(description="Storage device name.")
-    count: int = Field(description="The number of memory devices.")
-    total: int = Field(description="The total capacity of the memory devices.")
-    unit: str = Field(description="Memory device size measurement unit.")
+    name: str | None = Field(description="Storage device name.", default=None)
+    count: int | None = Field(description="The number of memory devices.", default=None)
+    total: int | None = Field(
+        description="The total capacity of the memory devices.", default=None
+    )
+    unit: str | None = Field(
+        description="Memory device size measurement unit.", default=None
+    )
 
 
 class CPUModel(_base.ResourceModel):
@@ -121,19 +133,23 @@ class CPUModel(_base.ResourceModel):
     CPU resource state.
 
     Attributes:
-        name (str): CPU device name.
-        count (int): The number of CPU devices.
-        cores (int): The number of CPU cores.
-        frequency (float): The frequency of the CPU cores.
-        unit (str): CPU core frequency measurement unit.
+        name (str | None): CPU device name.
+        count (int | None): The number of CPU devices.
+        cores (int | None): The number of CPU cores.
+        frequency (float | None): The frequency of the CPU cores.
+        unit (str | None): CPU core frequency measurement unit.
 
     """
 
-    name: str = Field(description="CPU device name.")
-    count: int = Field(description="The number of CPU devices.")
-    cores: int = Field(description="The number of CPU cores.")
-    frequency: float = Field(description="The frequency of the CPU cores.")
-    unit: str = Field(description="CPU core frequency measurement unit.")
+    name: str | None = Field(description="CPU device name.", default=None)
+    count: int | None = Field(description="The number of CPU devices.", default=None)
+    cores: int | None = Field(description="The number of CPU cores.", default=None)
+    frequency: float | None = Field(
+        description="The frequency of the CPU cores.", default=None
+    )
+    unit: str | None = Field(
+        description="CPU core frequency measurement unit.", default=None
+    )
 
 
 class SpecsModel(_base.ResourceModel):
@@ -143,20 +159,22 @@ class SpecsModel(_base.ResourceModel):
     since it represents an actual Cherry Servers plan specs resource state.
 
     Attributes:
-        cpus (cherry.plans.CPUModel): CPU device data.
-        memory (cherry.plans.MemoryModel): Memory device data.
-        storage (list[cherry.plans.StorageModel]): Storage device data.
+        cpus (cherry.plans.CPUModel | None): CPU device data.
+        memory (cherry.plans.MemoryModel | None): Memory device data.
+        storage (list[cherry.plans.StorageModel] | None): Storage device data.
         raid (cherry.plans.RaidModel | None): RAID data.
-        nics (cherry.plans.NicsModel): NICS device data.
+        nics (cherry.plans.NicsModel | None): NICS device data.
         bandwidth (cherry.plans.BandwidthModel | None): Bandwidth data.
 
     """
 
-    cpus: CPUModel = Field(description="CPU device data.")
-    memory: MemoryModel = Field(description="Memory device data.")
-    storage: list[StorageModel] = Field(description="Storage device data.")
+    cpus: CPUModel | None = Field(description="CPU device data.", default=None)
+    memory: MemoryModel | None = Field(description="Memory device data.", default=None)
+    storage: list[StorageModel] | None = Field(
+        description="Storage device data.", default=None
+    )
     raid: RaidModel | None = Field(description="RAID data.", default=None)
-    nics: NicsModel = Field(description="NICS device data.")
+    nics: NicsModel | None = Field(description="NICS device data.", default=None)
     bandwidth: BandwidthModel | None = Field(
         description="Bandwidth data.", default=None
     )
@@ -169,17 +187,17 @@ class PricingModel(_base.ResourceModel):
     since it represents an actual Cherry Servers pricing resource state.
 
     Attributes:
-        price (float): Price.
-        taxed (bool): Whether tax is applied.
-        currency (str): Currency type.
-        unit (str): Time unit type.
+        price (float | None): Price.
+        taxed (bool | None): Whether tax is applied.
+        currency (str | None): Currency type.
+        unit (str | None): Time unit type.
 
     """
 
-    price: float = Field(description="Price.")
-    taxed: bool = Field(description="Whether tax is applied.")
-    currency: str = Field(description=" Currency type.")
-    unit: str = Field(description="Time unit type.")
+    price: float | None = Field(description="Price.", default=None)
+    taxed: bool | None = Field(description="Whether tax is applied.", default=None)
+    currency: str | None = Field(description=" Currency type.", default=None)
+    unit: str | None = Field(description="Time unit type.", default=None)
 
 
 class PlanModel(_base.ResourceModel):
@@ -190,24 +208,26 @@ class PlanModel(_base.ResourceModel):
 
     Attributes:
         id (int): Plan ID.
-        name (str): Plan full name.
-        slug (str): Plan name slug.
+        name (str | None): Plan full name.
+        slug (str | None): Plan name slug.
         type (str | None): Plan type, such as `baremetal` or `premium-vds`.
         specs (cherry.plans.SpecsModel | None): Plan specs.
-        pricing (list[cherry.plans.PricingModel]): Plan pricing.
+        pricing (list[cherry.plans.PricingModel] | None): Plan pricing.
         available_regions (list[cherry.plans.AvailableRegionsModel] | None):
         Available regions for the plan.
 
     """
 
     id: int = Field(description="Plan ID.")
-    name: str = Field(description="Plan full name.")
-    slug: str = Field(description="Plan name slug.")
+    name: str | None = Field(description="Plan full name.", default=None)
+    slug: str | None = Field(description="Plan name slug.", default=None)
     type: str | None = Field(
         description="Plan type, such as `baremetal` or `premium-vds`.", default=None
     )
     specs: SpecsModel | None = Field(description="Plan specs.", default=None)
-    pricing: list[PricingModel] = Field(description="Plan pricing.")
+    pricing: list[PricingModel] | None = Field(
+        description="Plan pricing.", default=None
+    )
     available_regions: list[AvailableRegionsModel] | None = Field(
         description="Available regions for the plan.", default=None
     )
