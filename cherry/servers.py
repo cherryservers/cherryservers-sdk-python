@@ -152,7 +152,7 @@ class ServerModel(_base.ResourceModel):
         state (str | None): Server state.
         status (str | None): Server status.
         bgp (cherry.servers.ServerBGPModel | None): BGP data.
-        plan (cherry.plans.PlanModel): Plan data.
+        plan (cherry.plans.PlanModel | None): Plan data.
         pricing (cherry.plans.PricingModel | None): Pricing data.
         ssh_keys (list[cherry.sshkeys.SSHKeyModel] | None): SSH key data.
         tags (dict[str, str] | None): User-defined server tags.
@@ -166,16 +166,16 @@ class ServerModel(_base.ResourceModel):
     """
 
     id: int = Field(description="Server ID.")
-    name: str = Field(
+    name: str | None = Field(
         description="Server name. Typically corresponds to plan name.", default=None
     )
-    href: str = Field(description="Server href.", default=None)
+    href: str | None = Field(description="Server href.", default=None)
     bmc: ServerBMCModel | None = Field(
         description="Server BMC credential data. Only for baremetal servers."
         "Scrubbed at 24 hours after creation.",
         default=None,
     )
-    hostname: str = Field(
+    hostname: str | None = Field(
         description="Server hostname. Can be used to identify servers in most contexts.",
         default=None,
     )
@@ -197,7 +197,7 @@ class ServerModel(_base.ResourceModel):
     state: str | None = Field(description="Server state.", default=None)
     status: str | None = Field(description="Server status.", default=None)
     bgp: ServerBGPModel | None = Field(description="BGP data.", default=None)
-    plan: PlanModel = Field(description="Plan data.")
+    plan: PlanModel | None = Field(description="Plan data.", default=None)
     pricing: PricingModel | None = Field(description="Pricing data.", default=None)
     ssh_keys: list[SSHKeyModel] | None = Field(
         description="SSH key data.", default=None
@@ -493,7 +493,7 @@ class ServerClient(_base.ResourceClient):
         """
         server = self.get_by_id(server_id)
 
-        if server._model.plan.type != "baremetal":  # noqa: SLF001
+        if server._model.plan is not None and server._model.plan.type != "baremetal":  # noqa: SLF001
             raise NotBaremetalError
 
         response = self._api_client.post(
@@ -537,7 +537,7 @@ class ServerClient(_base.ResourceClient):
         """
         server = self.get_by_id(server_id)
 
-        if server._model.plan.type != "baremetal":  # noqa: SLF001
+        if server._model.plan is not None and server._model.plan.type != "baremetal":  # noqa: SLF001
             raise NotBaremetalError
 
         response = self._api_client.post(
