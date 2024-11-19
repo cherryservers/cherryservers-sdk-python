@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 import pytest
 import requests
 
@@ -12,13 +10,6 @@ import cherry
 
 class TestProject:
     """Test Project functionality."""
-
-    @pytest.fixture(scope="class")
-    def team_id(self) -> int:
-        """Get a pre-initialized Cherry Servers team."""
-        team_id = os.environ.get("CHERRY_TEST_TEAM_ID")
-        assert team_id, "CHERRY_TEST_TEAM_ID environment variable is not set"
-        return int(team_id)
 
     @pytest.fixture(scope="class")
     def project(
