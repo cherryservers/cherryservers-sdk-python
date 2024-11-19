@@ -14,13 +14,15 @@ class ProjectBGPModel(_base.ResourceModel):
     since it represents an actual Cherry Servers project BGP resource state.
 
     Attributes:
-        enabled (bool): Whether BGP is enabled for the project.
-        local_asn (int): Local ASN of the project.
+        enabled (bool | None): Whether BGP is enabled for the project.
+        local_asn (int | None): Local ASN of the project.
 
     """
 
-    enabled: bool = Field(description="Whether BGP is enabled for the project.")
-    local_asn: int = Field(description="Local ASN of the project.")
+    enabled: bool | None = Field(
+        description="Whether BGP is enabled for the project.", default=None
+    )
+    local_asn: int | None = Field(description="Local ASN of the project.", default=None)
 
 
 class ProjectModel(_base.ResourceModel):
@@ -31,16 +33,16 @@ class ProjectModel(_base.ResourceModel):
 
     Attributes:
         id (int): Project ID.
-        name (str): Project name.
-        bgp (cherry.projects.ProjectBGPModel): Project BGP.
-        href (str): Project href.
+        name (str | None): Project name.
+        bgp (cherry.projects.ProjectBGPModel | None): Project BGP.
+        href (str | None): Project href.
 
     """
 
     id: int = Field(description="Project ID.")
-    name: str = Field(description="Project name.")
-    bgp: ProjectBGPModel = Field(description="Project BGP.")
-    href: str = Field(description="Project href.")
+    name: str | None = Field(description="Project name.", default=None)
+    bgp: ProjectBGPModel | None = Field(description="Project BGP.", default=None)
+    href: str | None = Field(description="Project href.", default=None)
 
 
 class CreationRequest(_base.RequestSchema):
