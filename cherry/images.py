@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base
+from cherry import _base, plans
 
 
 class ImageModel(_base.ResourceModel):
@@ -17,12 +17,16 @@ class ImageModel(_base.ResourceModel):
         id(int): ID of the image.
         name(str | None): Full name of the image.
         slug(str | None): Slug of the image name.
+        pricing(list[cherry.plans.PricingModel] | None): Image pricing data.
 
     """
 
     id: int = Field(description="ID of the image.")
     name: str | None = Field(description="Full name of the image.", default=None)
     slug: str | None = Field(description="Slug of the image name.", default=None)
+    pricing: list[plans.PricingModel] | None = Field(
+        description="Image pricing data.", default=None
+    )
 
 
 class ImageClient(_base.ResourceClient):
