@@ -14,13 +14,13 @@ class RegionBGPModel(_base.ResourceModel):
     since it represents an actual Cherry Servers region BGP resource state.
 
     Attributes:
-        hosts (list[str]): Host IP addresses.
-        asn (int): Region ASN.
+        hosts (list[str] | None): Host IP addresses.
+        asn (int | None): Region ASN.
 
     """
 
-    hosts: list[str] = Field(description="Host IP addresses.")
-    asn: int = Field(description="Region ASN.")
+    hosts: list[str] | None = Field(description="Host IP addresses.", default=None)
+    asn: int | None = Field(description="Region ASN.", default=None)
 
 
 class RegionModel(_base.ResourceModel):
@@ -30,23 +30,25 @@ class RegionModel(_base.ResourceModel):
     since it represents an actual Cherry Servers region resource state.
 
     Attributes:
-        id (int): ID of the region.
-        name (str): Name of the region.
-        slug (str): Slug of the regions name.
-        region_iso_2 (str): Region ISO 2 country code.
-        bgp (cherry.regions.RegionBGPModel): Region BGP.
-        location (str): Region server location.
-        href (str): Region href.
+        id (int | None): ID of the region.
+        name (str | None): Name of the region.
+        slug (str | None): Slug of the regions name.
+        region_iso_2 (str | None): Region ISO 2 country code.
+        bgp (cherry.regions.RegionBGPModel | None): Region BGP.
+        location (str | None): Region server location.
+        href (str | None): Region href.
 
     """
 
-    id: int = Field(description="ID of the region.")
-    name: str = Field(description="Name of the region.")
-    slug: str = Field(description="Slug of the regions name.")
-    region_iso_2: str = Field(description="Region ISO 2 country code.")
-    bgp: RegionBGPModel = Field(description="Region BPG.")
-    location: str = Field(description="Region server location.")
-    href: str = Field(description="Region href.")
+    id: int | None = Field(description="ID of the region.", default=None)
+    name: str | None = Field(description="Name of the region.", default=None)
+    slug: str | None = Field(description="Slug of the regions name.", default=None)
+    region_iso_2: str | None = Field(
+        description="Region ISO 2 country code.", default=None
+    )
+    bgp: RegionBGPModel | None = Field(description="Region BPG.", default=None)
+    location: str | None = Field(description="Region server location.", default=None)
+    href: str | None = Field(description="Region href.", default=None)
 
 
 class RegionClient(_base.ResourceClient):
