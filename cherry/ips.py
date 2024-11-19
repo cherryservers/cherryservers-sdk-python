@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, projects, regions
+from cherry import _base, projects, regions
 
 
 class AddressAttachedError(Exception):
@@ -15,7 +15,7 @@ class AddressAttachedError(Exception):
         super().__init__(msg)
 
 
-class AttachedServerModel(_models.DefaultModel):
+class AttachedServerModel(_base.ResourceModel):
     """Cherry Servers attached server model.
 
     This model is frozen by default,
@@ -40,7 +40,7 @@ class AttachedServerModel(_models.DefaultModel):
     )
 
 
-class IPModel(_models.DefaultModel):
+class IPModel(_base.ResourceModel):
     """Cherry Servers IP address model.
 
     This model is frozen by default,
@@ -102,7 +102,7 @@ class IPModel(_models.DefaultModel):
     href: str = Field(description="IP address href.")
 
 
-class CreationRequest(_models.CherryRequestSchema):
+class CreationRequest(_base.RequestSchema):
     """Cherry Servers IP address creation request schema.
 
     Attributes:
@@ -145,7 +145,7 @@ class CreationRequest(_models.CherryRequestSchema):
     )
 
 
-class UpdateRequest(_models.CherryRequestSchema):
+class UpdateRequest(_base.RequestSchema):
     """Cherry Servers IP address update request schema.
 
     Attributes:
@@ -180,38 +180,7 @@ class UpdateRequest(_models.CherryRequestSchema):
     )
 
 
-class IP:
-    """Cherry Servers IP address resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`IPClient`.
-
-    Attributes:
-        model (IPModel): Cherry Servers IP address model.
-            This is a Pydantic model that contains IP address data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: IPClient, model: IPModel) -> None:
-        """Initialize a Cherry Servers IP address resource."""
-        self._client = client
-        self.model = model
-
-    def delete(self) -> None:
-        """Delete Cherry Servers IP address resource."""
-        if self.model.routed_to:
-            msg = "Attached IP address cannot be deleted."
-            raise AddressAttachedError(msg)
-        self._client.delete(self.model.id)
-
-    def update(self, update_schema: UpdateRequest) -> None:
-        """Update Cherry Servers IP address resource."""
-        updated = self._client.update(self.model.id, update_schema)
-        self.model = updated.model
-
-
-class IPClient:
+class IPClient(_base.ResourceClient):
     """Cherry Servers IP address client.
 
     Manage Cherry Servers IP address resources.
@@ -252,10 +221,6 @@ class IPClient:
 
     """
 
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers IP address client."""
-        self._api_client = api_client
-
     def get_by_id(self, ip_id: str) -> IP:
         """Retrieve a IP address by ID."""
         response = self._api_client.get(
@@ -295,3 +260,23 @@ class IPClient:
         """Update IP address by ID."""
         response = self._api_client.put(f"ips/{ip_id}", update_schema, None, 30)
         return self.get_by_id(response.json()["id"])
+
+
+class IP(_base.Resource[IPClient, IPModel]):
+    """Cherry Servers IP address resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`IPClient`.
+    """
+
+    def delete(self) -> None:
+        """Delete Cherry Servers IP address resource."""
+        if self._model.routed_to:
+            msg = "Attached IP address cannot be deleted."
+            raise AddressAttachedError(msg)
+        self._client.delete(self._model.id)
+
+    def update(self, update_schema: UpdateRequest) -> None:
+        """Update Cherry Servers IP address resource."""
+        updated = self._client.update(self._model.id, update_schema)
+        self._model = updated._model  # noqa: SLF001
