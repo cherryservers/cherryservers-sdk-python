@@ -30,7 +30,7 @@ class RegionModel(_base.ResourceModel):
     since it represents an actual Cherry Servers region resource state.
 
     Attributes:
-        id (int | None): ID of the region.
+        id (int): ID of the region.
         name (str | None): Name of the region.
         slug (str | None): Slug of the regions name.
         region_iso_2 (str | None): Region ISO 2 country code.
@@ -40,7 +40,7 @@ class RegionModel(_base.ResourceModel):
 
     """
 
-    id: int | None = Field(description="ID of the region.", default=None)
+    id: int = Field(description="ID of the region.")
     name: str | None = Field(description="Name of the region.", default=None)
     slug: str | None = Field(description="Slug of the regions name.", default=None)
     region_iso_2: str | None = Field(
