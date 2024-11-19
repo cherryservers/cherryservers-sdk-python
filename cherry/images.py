@@ -2,17 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
-from cherry import _models
-
-if TYPE_CHECKING:
-    from cherry import _client
+from cherry import _base
 
 
-class ImageModel(_models.DefaultModel):
+class ImageModel(_base.ResourceModel):
     """Cherry Servers image model.
 
     This model is frozen by default,
@@ -30,26 +25,7 @@ class ImageModel(_models.DefaultModel):
     slug: str = Field(description="Slug of the image name.")
 
 
-class Image:
-    """Cherry Servers image resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`ImageClient`.
-
-    Attributes:
-        model (ImageModel): Cherry Servers image model.
-            This is a Pydantic model that contains image data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: ImageClient, model: ImageModel) -> None:
-        """Initialize a Cherry Servers image resource."""
-        self._client = client
-        self.model = model
-
-
-class ImageClient:
+class ImageClient(_base.ResourceClient):
     """Cherry Servers image client.
 
     Manage Cherry Servers image resources. This class should typically be initialized by
@@ -65,10 +41,6 @@ class ImageClient:
 
     """
 
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers image client."""
-        self._api_client = api_client
-
     def get_by_plan(self, plan_slug: str) -> list[Image]:
         """Retrieve a list of available OSes for a server plan."""
         response = self._api_client.get(f"plans/{plan_slug}/images", None, 5)
@@ -78,3 +50,11 @@ class ImageClient:
             images.append(Image(self, image_model))
 
         return images
+
+
+class Image(_base.Resource[ImageClient, ImageModel]):
+    """Cherry Servers image resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`ImageClient`.
+    """
