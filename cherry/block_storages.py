@@ -4,9 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models
-from cherry.ips import AttachedServerModel
-from cherry.regions import RegionModel
+from cherry import _client, _models, ips, regions
 
 
 class BlockStorageModel(_models.DefaultModel):
@@ -38,7 +36,7 @@ class BlockStorageModel(_models.DefaultModel):
     size: int = Field(description="EBS size.")
     allow_edit_size: bool = Field(description="Whether size can be edited.")
     unit: str = Field(description="Size measurement unit.")
-    attached_to: AttachedServerModel | None = Field(
+    attached_to: ips.AttachedServerModel | None = Field(
         description="EBS attached server model.", default=None
     )
     vlan_id: str | None = Field(description="EBS VLAN ID.", default=None)
@@ -47,7 +45,7 @@ class BlockStorageModel(_models.DefaultModel):
     discovery_ip: str | None = Field(
         description="EBS discovery IP address.", default=None
     )
-    region: RegionModel = Field(description="Region data.")
+    region: regions.RegionModel = Field(description="Region data.")
 
 
 class CreationRequest(_models.CherryRequestSchema):
