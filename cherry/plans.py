@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, regions
+from cherry import _base, regions
 
 
 class AvailableRegionsModel(regions.RegionModel):
@@ -27,7 +27,7 @@ class AvailableRegionsModel(regions.RegionModel):
     )
 
 
-class BandwidthModel(_models.DefaultModel):
+class BandwidthModel(_base.ResourceModel):
     """Cherry Servers plan specs bandwidth model.
 
     This model is frozen by default,
@@ -41,7 +41,7 @@ class BandwidthModel(_models.DefaultModel):
     name: str = Field(description="Bandwidth name.")
 
 
-class NicsModel(_models.DefaultModel):
+class NicsModel(_base.ResourceModel):
     """Cherry Servers plan specs network interface controllers model.
 
     This model is frozen by default,
@@ -56,7 +56,7 @@ class NicsModel(_models.DefaultModel):
     name: str = Field(description="NICS name.")
 
 
-class RaidModel(_models.DefaultModel):
+class RaidModel(_base.ResourceModel):
     """Cherry Servers plan specs RAID model.
 
     This model is frozen by default,
@@ -71,7 +71,7 @@ class RaidModel(_models.DefaultModel):
     name: str = Field(description="RAID name.")
 
 
-class StorageModel(_models.DefaultModel):
+class StorageModel(_base.ResourceModel):
     """Cherry Servers plan specs storage model.
 
     This model is frozen by default,
@@ -92,7 +92,7 @@ class StorageModel(_models.DefaultModel):
     unit: str = Field(description="Storage device size measurement unit.")
 
 
-class MemoryModel(_models.DefaultModel):
+class MemoryModel(_base.ResourceModel):
     """Cherry Servers plan specs memory model.
 
     This model is frozen by default,
@@ -113,7 +113,7 @@ class MemoryModel(_models.DefaultModel):
     unit: str = Field(description="Memory device size measurement unit.")
 
 
-class CPUModel(_models.DefaultModel):
+class CPUModel(_base.ResourceModel):
     """Cherry Servers plan specs CPU model.
 
     This model is frozen by default,
@@ -136,7 +136,7 @@ class CPUModel(_models.DefaultModel):
     unit: str = Field(description="CPU core frequency measurement unit.")
 
 
-class SpecsModel(_models.DefaultModel):
+class SpecsModel(_base.ResourceModel):
     """Cherry Servers plan specs model.
 
     This model is frozen by default,
@@ -162,7 +162,7 @@ class SpecsModel(_models.DefaultModel):
     )
 
 
-class PricingModel(_models.DefaultModel):
+class PricingModel(_base.ResourceModel):
     """Cherry Servers pricing model.
 
     This model is frozen by default,
@@ -182,7 +182,7 @@ class PricingModel(_models.DefaultModel):
     unit: str = Field(description="Time unit type.")
 
 
-class PlanModel(_models.DefaultModel):
+class PlanModel(_base.ResourceModel):
     """Cherry Servers plan model.
 
     This model is frozen by default,
@@ -213,26 +213,7 @@ class PlanModel(_models.DefaultModel):
     )
 
 
-class Plan:
-    """Cherry Servers server plan resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`PlanClient`.
-
-    Attributes:
-        model (PlanModel): Cherry Servers server plan model.
-            This is a Pydantic model that contains plan data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: PlanClient, model: PlanModel) -> None:
-        """Initialize a Cherry Servers plan resource."""
-        self._client = client
-        self.model = model
-
-
-class PlanClient:
+class PlanClient(_base.ResourceClient):
     """Cherry Servers server plan client.
 
     Manage Cherry Servers plan resources.
@@ -251,10 +232,6 @@ class PlanClient:
             plan = facade.plans.get_by_id_or_slug("premium_vds_2")
 
     """
-
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers plan client."""
-        self._api_client = api_client
 
     def get_by_id_or_slug(self, plan_id_or_slug: int | str) -> Plan:
         """Retrieve a plan by ID or slug."""
@@ -279,3 +256,11 @@ class PlanClient:
             plans.append(Plan(self, plan_model))
 
         return plans
+
+
+class Plan(_base.Resource[PlanClient, PlanModel]):
+    """Cherry Servers server plan resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`PlanClient`.
+    """
