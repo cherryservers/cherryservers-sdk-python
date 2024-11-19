@@ -15,27 +15,29 @@ class BlockStorageModel(_base.ResourceModel):
 
     Attributes:
         id (int): EBS ID.
-        name (str): EBS name.
-        href (str): EBS href.
-        size (int): EBS size.
-        allow_edit_size (bool): Whether size can be edited.
-        unit (str): Size measurement unit.
+        name (str | None): EBS name.
+        href (str | None): EBS href.
+        size (int | None): EBS size.
+        allow_edit_size (bool | None): Whether size can be edited.
+        unit (str | None): Size measurement unit.
         attached_to (cherry.ips.AttachedServerModel | None):
          EBS attached server data.
         vlan_id (str | None): EBS VLAN ID.
         vlan_ip (str | None): EBS VLAN IP address.
         initiator (str | None): EBS initiator.
         discovery_ip (str | None): EBS discovery IP address.
-        region (cherry.regions.RegionModel): Region data.
+        region (cherry.regions.RegionModel | None): Region data.
 
     """
 
     id: int = Field(description="EBS ID.")
-    name: str = Field(description="EBS name.")
-    href: str = Field(description="EBS href.")
-    size: int = Field(description="EBS size.")
-    allow_edit_size: bool = Field(description="Whether size can be edited.")
-    unit: str = Field(description="Size measurement unit.")
+    name: str | None = Field(description="EBS name.", default=None)
+    href: str | None = Field(description="EBS href.", default=None)
+    size: int | None = Field(description="EBS size.", default=None)
+    allow_edit_size: bool | None = Field(
+        description="Whether size can be edited.", default=None
+    )
+    unit: str | None = Field(description="Size measurement unit.", default=None)
     attached_to: ips.AttachedServerModel | None = Field(
         description="EBS attached server model.", default=None
     )
@@ -45,7 +47,7 @@ class BlockStorageModel(_base.ResourceModel):
     discovery_ip: str | None = Field(
         description="EBS discovery IP address.", default=None
     )
-    region: regions.RegionModel = Field(description="Region data.")
+    region: regions.RegionModel | None = Field(description="Region data.", default=None)
 
 
 class CreationRequest(_base.RequestSchema):
