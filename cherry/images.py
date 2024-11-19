@@ -15,14 +15,14 @@ class ImageModel(_base.ResourceModel):
 
     Attributes:
         id(int): ID of the image.
-        name(str): Full name of the image.
-        slug(str): Slug of the image name.
+        name(str | None): Full name of the image.
+        slug(str | None): Slug of the image name.
 
     """
 
     id: int = Field(description="ID of the image.")
-    name: str = Field(description="Full name of the image.")
-    slug: str = Field(description="Slug of the image name.")
+    name: str | None = Field(description="Full name of the image.", default=None)
+    slug: str | None = Field(description="Slug of the image name.", default=None)
 
 
 class ImageClient(_base.ResourceClient):
