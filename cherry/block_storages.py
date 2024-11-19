@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models, ips, regions
+from cherry import _base, ips, regions
 
 
-class BlockStorageModel(_models.DefaultModel):
+class BlockStorageModel(_base.ResourceModel):
     """Cherry Servers Elastic Block Storage model.
 
     This model is frozen by default,
@@ -48,7 +48,7 @@ class BlockStorageModel(_models.DefaultModel):
     region: regions.RegionModel = Field(description="Region data.")
 
 
-class CreationRequest(_models.CherryRequestSchema):
+class CreationRequest(_base.RequestSchema):
     """Cherry Servers block storage creation request schema.
 
     Attributes:
@@ -65,7 +65,7 @@ class CreationRequest(_models.CherryRequestSchema):
     )
 
 
-class UpdateRequest(_models.CherryRequestSchema):
+class UpdateRequest(_base.RequestSchema):
     """Cherry Servers block storage update request schema.
 
     Attributes:
@@ -83,7 +83,7 @@ class UpdateRequest(_models.CherryRequestSchema):
     )
 
 
-class AttachRequest(_models.CherryRequestSchema):
+class AttachRequest(_base.RequestSchema):
     """Cherry Servers block storage server attachment request schema.
 
     Attributes:
@@ -96,53 +96,7 @@ class AttachRequest(_models.CherryRequestSchema):
     )
 
 
-class BlockStorage:
-    """Cherry Servers block storage resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`BlockStorageClient`.
-
-    Attributes:
-        model (BlockStorageModel): Cherry Servers elastic block storage model.
-            This is a Pydantic model that contains block storage data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: BlockStorageClient, model: BlockStorageModel) -> None:
-        """Initialize a Cherry Servers block storage resource."""
-        self._client = client
-        self.model = model
-
-    def delete(self) -> None:
-        """Delete Cherry Servers block storage resource."""
-        self._client.delete(self.model.id)
-
-    def update(self, update_schema: UpdateRequest) -> None:
-        """Update Cherry Servers block storage resource.
-
-        WARNING: increasing storage size will generate a new block storage ID
-        and make the old one invalid, making this resource obsolete.
-        You will then need to create a new instance of :class:`BlockStorage`
-        to perform further operations.
-        """
-        self._client.update(self.model.id, update_schema)
-
-    def attach(self, attach_schema: AttachRequest) -> None:
-        """Attach Cherry Servers block storage resource to server.
-
-        Block storage volumes can only be attached to baremetal servers.
-        """
-        attached = self._client.attach(self.model.id, attach_schema)
-        self.model = attached.model
-
-    def detach(self) -> None:
-        """Detach Cherry Servers block storage resource from server."""
-        detached = self._client.detach(self.model.id)
-        self.model = detached.model
-
-
-class BlockStorageClient:
+class BlockStorageClient(_base.ResourceClient):
     """Cherry Servers block storage client.
 
     Manage Cherry Servers block storage resources.
@@ -185,10 +139,6 @@ class BlockStorageClient:
             storage.delete()
 
     """
-
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers block storage client."""
-        self._api_client = api_client
 
     def get_by_id(self, storage_id: int) -> BlockStorage:
         """Retrieve a block storage by ID."""
@@ -258,3 +208,38 @@ class BlockStorageClient:
         self._api_client.delete(f"storages/{storage_id}/attachments", None, 10)
 
         return self.get_by_id(storage_id)
+
+
+class BlockStorage(_base.Resource[BlockStorageClient, BlockStorageModel]):
+    """Cherry Servers block storage resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`BlockStorageClient`.
+    """
+
+    def delete(self) -> None:
+        """Delete Cherry Servers block storage resource."""
+        self._client.delete(self._model.id)
+
+    def update(self, update_schema: UpdateRequest) -> None:
+        """Update Cherry Servers block storage resource.
+
+        WARNING: increasing storage size will generate a new block storage ID
+        and make the old one invalid, making this resource obsolete.
+        You will then need to create a new instance of :class:`BlockStorage`
+        to perform further operations.
+        """
+        self._client.update(self._model.id, update_schema)
+
+    def attach(self, attach_schema: AttachRequest) -> None:
+        """Attach Cherry Servers block storage resource to server.
+
+        Block storage volumes can only be attached to baremetal servers.
+        """
+        attached = self._client.attach(self._model.id, attach_schema)
+        self._model = attached.get_model_copy()
+
+    def detach(self) -> None:
+        """Detach Cherry Servers block storage resource from server."""
+        detached = self._client.detach(self._model.id)
+        self._model = detached.get_model_copy()
