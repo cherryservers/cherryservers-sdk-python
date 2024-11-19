@@ -2,19 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
-from cherry import _base
-
-if TYPE_CHECKING:
-    from cherry.block_storages import BlockStorageModel
-    from cherry.ips import IPModel
-    from cherry.plans import PlanModel, PricingModel
-    from cherry.projects import ProjectModel
-    from cherry.regions import RegionModel
-    from cherry.sshkeys import SSHKeyModel
+from cherry import _base, block_storages, ips, plans, projects, regions, sshkeys
 
 
 class NotBaremetalError(Exception):
@@ -193,19 +183,21 @@ class ServerModel(_base.ResourceModel):
     spot_instance: bool | None = Field(
         description="Whether the server belongs the spot market.", default=None
     )
-    region: RegionModel | None = Field(description="Region data.", default=None)
+    region: regions.RegionModel | None = Field(description="Region data.", default=None)
     state: str | None = Field(description="Server state.", default=None)
     status: str | None = Field(description="Server status.", default=None)
     bgp: ServerBGPModel | None = Field(description="BGP data.", default=None)
-    plan: PlanModel | None = Field(description="Plan data.", default=None)
-    pricing: PricingModel | None = Field(description="Pricing data.", default=None)
-    ssh_keys: list[SSHKeyModel] | None = Field(
+    plan: plans.PlanModel | None = Field(description="Plan data.", default=None)
+    pricing: plans.PricingModel | None = Field(
+        description="Pricing data.", default=None
+    )
+    ssh_keys: list[sshkeys.SSHKeyModel] | None = Field(
         description="SSH key data.", default=None
     )
-    ip_addresses: list[IPModel] | None = Field(
+    ip_addresses: list[ips.IPModel] | None = Field(
         description="Server IP address data.", default=None
     )
-    storage: BlockStorageModel | None = Field(
+    storage: block_storages.BlockStorageModel | None = Field(
         description="Block storage data.", default=None
     )
     tags: dict[str, str] | None = Field(
@@ -218,7 +210,9 @@ class ServerModel(_base.ResourceModel):
     traffic_used_bytes: int | None = Field(
         description="Server traffic usage.", default=None
     )
-    project: ProjectModel | None = Field(description="Project data.", default=None)
+    project: projects.ProjectModel | None = Field(
+        description="Project data.", default=None
+    )
 
 
 class CreationRequest(_base.RequestSchema):
