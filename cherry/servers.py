@@ -12,7 +12,7 @@ class NotBaremetalError(Exception):
 
     def __init__(self) -> None:
         """Initialize error."""
-        super().__init__("Only baremetal servers can enter rescue mode.")
+        super().__init__("This operation can only be performed on bare-metal servers.")
 
 
 class ServerBGPRouteModel(_base.ResourceModel):
