@@ -64,8 +64,6 @@ class IPModel(_base.ResourceModel):
         ptr_record (str | None): IP address PTR record, if applicable.
         a_record (str | None): IP address A record, if applicable.
         tags (dict[str, str] | None): IP address user-defined tags.
-        ddos_scrubbing (bool | None):
-         Whether DDoS scrubbing is enabled for the IP address.
         href (str | None): IP address href.
 
     """
@@ -106,10 +104,6 @@ class IPModel(_base.ResourceModel):
     tags: dict[str, str] | None = Field(
         description="IP address user-defined tags.", default=None
     )
-    ddos_scrubbing: bool | None = Field(
-        description="Whether DDoS scrubbing is enabled for the IP address.",
-        default=None,
-    )
     href: str | None = Field(description="IP address href.", default=None)
 
 
@@ -126,9 +120,6 @@ class CreationRequest(_base.RequestSchema):
          Mutually exclusive with `routed_to`.
         ptr_record (str | None): IP address PTR record.
         a_record (str | None): IP address A record.
-        ddos_scrubbing (bool):
-         Whether DDoS scrubbing should be enabled for this IP address.
-         Disabled by default.
         tags (dict[str, str] | None): User-defined IP address tags.
 
     """
@@ -146,11 +137,6 @@ class CreationRequest(_base.RequestSchema):
     )
     ptr_record: str | None = Field(description="IP address PTR record.", default=None)
     a_record: str | None = Field(description="IP address A record.", default=None)
-    ddos_scrubbing: bool = Field(
-        description="Whether DDoS scrubbing should be enabled for this IP address."
-        "Disabled by default.",
-        default=False,
-    )
     tags: dict[str, str] | None = Field(
         description="User-defined IP address tags.", default=None
     )

@@ -31,7 +31,6 @@ class TestIP:
             targeted_to=vps_model.id,
             ptr_record="python-sdk-test",
             a_record="python-sdk-test",
-            ddos_scrubbing=False,
             tags={"env": "test"},
         )
 
@@ -44,7 +43,6 @@ class TestIP:
             assert ip_model.targeted_to.id == vps_model.id
         assert ip_model.ptr_record == "python-sdk-test."
         assert ip_model.a_record == "python-sdk-test.cloud.cherryservers.net."
-        assert ip_model.ddos_scrubbing is False
         assert ip_model.tags == {"env": "test"}
 
         detach_req = cherry.ips.UpdateRequest(targeted_to=0)
