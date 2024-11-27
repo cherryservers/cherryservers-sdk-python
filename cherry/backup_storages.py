@@ -16,22 +16,26 @@ class BackupStoragePlanModel(_base.ResourceModel):
 
     Attributes:
         id (int): Plan ID.
-        name (str): Plan full name.
-        slug (str): Plan name slug.
-        size_gigabytes (int): Plan size in GB.
-        pricing (list[cherry.plans.PricingModel]): Plan pricing data.
-        regions (list[cherry.regions.RegionModel]): Plan region data.
-        href (str): Plan href.
+        name (str | None): Plan full name.
+        slug (str | None): Plan name slug.
+        size_gigabytes (int | None): Plan size in GB.
+        pricing (list[cherry.plans.PricingModel] | None): Plan pricing data.
+        regions (list[cherry.regions.RegionModel] | None): Plan region data.
+        href (str | None): Plan href.
 
     """
 
     id: int = Field(description="Plan ID.")
-    name: str = Field(description="Plan full name.")
-    slug: str = Field(description="Plan name slug.")
-    size_gigabytes: int = Field(description="Plan size in GB.")
-    pricing: list[plans.PricingModel] = Field(description="Plan pricing data.")
-    regions: list[regions_module.RegionModel] = Field(description="Plan region data.")
-    href: str = Field(description="Plan href.")
+    name: str | None = Field(description="Plan full name.", default=None)
+    slug: str | None = Field(description="Plan name slug.", default=None)
+    size_gigabytes: int | None = Field(description="Plan size in GB.", default=None)
+    pricing: list[plans.PricingModel] | None = Field(
+        description="Plan pricing data.", default=None
+    )
+    regions: list[regions_module.RegionModel] | None = Field(
+        description="Plan region data.", default=None
+    )
+    href: str | None = Field(description="Plan href.", default=None)
 
 
 class BackupMethodModel(_base.ResourceModel):
@@ -41,19 +45,19 @@ class BackupMethodModel(_base.ResourceModel):
     since it represents an actual Cherry Servers backup method.
 
     Attributes:
-        name (str): Name of the backup method.
+        name (str | None): Name of the backup method.
         username (str | None): Username for the backup method.
         password (str | None): Password for the backup method.
         port (int | None): Port for the backup method.
         host (str | None): Host for the backup method.
         ssh_key (str | None): SSH key for the backup method.
-        whitelist (list[str]): Whitelist for the backup method.
-        enabled (bool): Whether the backup method is enabled.
-        processing (bool): Whether the backup method is processing.
+        whitelist (list[str] | None): Whitelist for the backup method.
+        enabled (bool | None): Whether the backup method is enabled.
+        processing (bool | None): Whether the backup method is processing.
 
     """
 
-    name: str = Field(description="Name of the backup method.")
+    name: str | None = Field(description="Name of the backup method.", default=None)
     username: str | None = Field(
         description="Username for the backup method.", default=None
     )
@@ -65,9 +69,15 @@ class BackupMethodModel(_base.ResourceModel):
     ssh_key: str | None = Field(
         description="SSH key for the backup method.", default=None
     )
-    whitelist: list[str] = Field(description="Whitelist for the backup method.")
-    enabled: bool = Field(description="Whether the backup method is enabled.")
-    processing: bool = Field(description="Whether the backup method is processing.")
+    whitelist: list[str] | None = Field(
+        description="Whitelist for the backup method.", default=None
+    )
+    enabled: bool | None = Field(
+        description="Whether the backup method is enabled.", default=None
+    )
+    processing: bool | None = Field(
+        description="Whether the backup method is processing.", default=None
+    )
 
 
 class RuleMethodModel(_base.ResourceModel):
@@ -77,17 +87,25 @@ class RuleMethodModel(_base.ResourceModel):
     since it represents an actual Cherry Server backup rule method.
 
     Attributes:
-        borg (bool): Whether BORG is enabled for the rule.
-        ftp (bool): Whether FTP is enabled for the rule.
-        nfs (bool): Whether NFS is enabled for the rule.
-        smb (bool): Whether SMB is enabled for the rule.
+        borg (bool | None): Whether BORG is enabled for the rule.
+        ftp (bool | None): Whether FTP is enabled for the rule.
+        nfs (bool | None): Whether NFS is enabled for the rule.
+        smb (bool | None): Whether SMB is enabled for the rule.
 
     """
 
-    borg: bool = Field(description="Whether BORG is enabled for the rule.")
-    ftp: bool = Field(description="Whether FTP is enabled for the rule.")
-    nfs: bool = Field(description="Whether NFS is enabled for the rule.")
-    smb: bool = Field(description="Whether SMB is enabled for the rule.")
+    borg: bool | None = Field(
+        description="Whether BORG is enabled for the rule.", default=None
+    )
+    ftp: bool | None = Field(
+        description="Whether FTP is enabled for the rule.", default=None
+    )
+    nfs: bool | None = Field(
+        description="Whether NFS is enabled for the rule.", default=None
+    )
+    smb: bool | None = Field(
+        description="Whether SMB is enabled for the rule.", default=None
+    )
 
 
 class RuleModel(_base.ResourceModel):
@@ -97,13 +115,13 @@ class RuleModel(_base.ResourceModel):
     since it represents an actual Cherry Servers backup rule.
 
     Attributes:
-        ip (cherry.ips.IPModel): Rule IP address.
-        methods (RuleMethodModel): Rule methods.
+        ip (cherry.ips.IPModel | None): Rule IP address.
+        methods (RuleMethodModel | None): Rule methods.
 
     """
 
-    ip: ips.IPModel = Field(description="Rule IP address.")
-    methods: RuleMethodModel = Field(description="Rule methods.")
+    ip: ips.IPModel | None = Field(description="Rule IP address.", default=None)
+    methods: RuleMethodModel | None = Field(description="Rule methods.", default=None)
 
 
 class BackupStorageModel(_base.ResourceModel):
@@ -114,43 +132,55 @@ class BackupStorageModel(_base.ResourceModel):
 
     Attributes:
         id (int): Backup storage ID.
-        status (str): Backup storage status.
-        state (str): Backup storage state.
+        status (str | None): Backup storage status.
+        state (str | None): Backup storage state.
         private_ip (str | None): Backup storage private IP.
         public_ip (str | None): Backup storage public IP.
-        size_gigabytes (int): Backup storage total size in GB.
-        used_gigabytes (int): Backup storage used size in GB.
+        size_gigabytes (int | None): Backup storage total size in GB.
+        used_gigabytes (int | None): Backup storage used size in GB.
          attached_to (cherry.servers.AttachedServerModel | None):
         The server to which to storage is attached to.
-        methods (list[BackupMethodModel]): Backup methods.
-        available_addresses (list[cherry.ips.IPModel]): Available addresses.
-        rules (list[RuleModel]): Backup rules.
-        plan (cherry.plans.PlanModel): Backup plan.
-        pricing (cherry.plans.PricingModel): Backup pricing.
-        region (cherry.regions.RegionModel): Backup region.
-        href (str): Backup href.
+        methods (list[BackupMethodModel] | None): Backup methods.
+        available_addresses (list[cherry.ips.IPModel] | None): Available addresses.
+        rules (list[RuleModel] | None): Backup rules.
+        plan (cherry.plans.PlanModel | None): Backup plan.
+        pricing (cherry.plans.PricingModel | None): Backup pricing.
+        region (cherry.regions.RegionModel | None): Backup region.
+        href (str | None): Backup href.
 
     """
 
     id: int = Field(description="Backup storage ID.")
-    status: str = Field(description="Backup storage status.")
-    state: str = Field(description="Backup storage state.")
+    status: str | None = Field(description="Backup storage status.", default=None)
+    state: str | None = Field(description="Backup storage state.", default=None)
     private_ip: str | None = Field(
         description="Backup storage private IP.", default=None
     )
     public_ip: str | None = Field(description="Backup storage public IP.", default=None)
-    size_gigabytes: int = Field(description="Backup storage total size in GB.")
-    used_gigabytes: int = Field(description="Backup storage used size in GB.")
+    size_gigabytes: int | None = Field(
+        description="Backup storage total size in GB.", default=None
+    )
+    used_gigabytes: int | None = Field(
+        description="Backup storage used size in GB.", default=None
+    )
     attached_to: ips.AttachedServerModel | None = Field(
         description="Server to which the storage is attached to.", default=None
     )
-    methods: list[BackupMethodModel] = Field(description="Backup methods.")
-    available_addresses: list[ips.IPModel] = Field(description="Available addresses.")
-    rules: list[RuleModel] = Field(description="Backup rules.")
-    plan: plans.PlanModel = Field(description="Backup plan.")
-    pricing: plans.PricingModel = Field(description="Backup pricing.")
-    region: regions_module.RegionModel = Field(description="Backup region.")
-    href: str = Field(description="Backup href.")
+    methods: list[BackupMethodModel] | None = Field(
+        description="Backup methods.", default=None
+    )
+    available_addresses: list[ips.IPModel] | None = Field(
+        description="Available addresses.", default=None
+    )
+    rules: list[RuleModel] | None = Field(description="Backup rules.", default=None)
+    plan: plans.PlanModel | None = Field(description="Backup plan.", default=None)
+    pricing: plans.PricingModel | None = Field(
+        description="Backup pricing.", default=None
+    )
+    region: regions_module.RegionModel | None = Field(
+        description="Backup region.", default=None
+    )
+    href: str | None = Field(description="Backup href.", default=None)
 
 
 class CreationRequest(_base.RequestSchema):
