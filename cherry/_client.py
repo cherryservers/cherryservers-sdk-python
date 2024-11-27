@@ -26,6 +26,7 @@ class CherryApiClient:
         self._api_endpoint_base = api_endpoint_base
         self._requests_session = requests.Session()
         self._headers = self._get_headers(user_agent_suffix)
+        self._requests_session.headers.update(self._headers)
 
     def _get_headers(self, user_agent_suffix: str) -> dict[str, str]:
         return {
@@ -45,36 +46,33 @@ class CherryApiClient:
         r = None
         if method == "GET":
             r = self._requests_session.get(
-                url, params=params, timeout=timeout, headers=self._headers
+                url, params=params, timeout=timeout, allow_redirects=False
             )
+            # We need this to avoid dropping authentication headers, when redirect
+            # uses HTTP, since that will be considered a different domain.
+            if r.status_code in (301, 302):
+                redirect_url = r.headers.get("Location")
+                if redirect_url is not None:
+                    r = self._send_request(
+                        "GET", redirect_url, params=params, timeout=timeout
+                    )
         if method == "POST":
             r = self._requests_session.post(
                 url,
                 params=params,
                 timeout=timeout,
-                headers=self._headers,
                 data=data,
             )
         if method == "PUT":
             r = self._requests_session.put(
-                url,
-                params=params,
-                timeout=timeout,
-                headers=self._headers,
-                data=data,
+                url, params=params, timeout=timeout, data=data
             )
         if method == "PATCH":
             r = self._requests_session.patch(
-                url,
-                params=params,
-                timeout=timeout,
-                headers=self._headers,
-                data=data,
+                url, params=params, timeout=timeout, data=data
             )
         if method == "DELETE":
-            r = self._requests_session.delete(
-                url, params=params, timeout=timeout, headers=self._headers
-            )
+            r = self._requests_session.delete(url, params=params, timeout=timeout)
         if isinstance(r, requests.Response):
             try:
                 r.raise_for_status()
