@@ -4,13 +4,11 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _client, _models
-from cherry.ips import AttachedServerModel, IPModel
-from cherry.plans import PlanModel, PricingModel
-from cherry.regions import RegionModel
+from cherry import _base, ips, plans
+from cherry import regions as regions_module
 
 
-class BackupStoragePlanModel(_models.DefaultModel):
+class BackupStoragePlanModel(_base.ResourceModel):
     """Cherry Server backup storage plan model.
 
     This model is frozen by default,
@@ -31,12 +29,12 @@ class BackupStoragePlanModel(_models.DefaultModel):
     name: str = Field(description="Plan full name.")
     slug: str = Field(description="Plan name slug.")
     size_gigabytes: int = Field(description="Plan size in GB.")
-    pricing: list[PricingModel] = Field(description="Plan pricing data.")
-    regions: list[RegionModel] = Field(description="Plan region data.")
+    pricing: list[plans.PricingModel] = Field(description="Plan pricing data.")
+    regions: list[regions_module.RegionModel] = Field(description="Plan region data.")
     href: str = Field(description="Plan href.")
 
 
-class BackupMethodModel(_models.DefaultModel):
+class BackupMethodModel(_base.ResourceModel):
     """Cherry Servers backup method model.
 
     This model is frozen by default,
@@ -72,7 +70,7 @@ class BackupMethodModel(_models.DefaultModel):
     processing: bool = Field(description="Whether the backup method is processing.")
 
 
-class RuleMethodModel(_models.DefaultModel):
+class RuleMethodModel(_base.ResourceModel):
     """Cherry Server backup rule method model.
 
     This model is frozen by default,
@@ -92,7 +90,7 @@ class RuleMethodModel(_models.DefaultModel):
     smb: bool = Field(description="Whether SMB is enabled for the rule.")
 
 
-class RuleModel(_models.DefaultModel):
+class RuleModel(_base.ResourceModel):
     """Cherry Servers backup rule model.
 
     This model is frozen by default,
@@ -104,11 +102,11 @@ class RuleModel(_models.DefaultModel):
 
     """
 
-    ip: IPModel = Field(description="Rule IP address.")
+    ip: ips.IPModel = Field(description="Rule IP address.")
     methods: RuleMethodModel = Field(description="Rule methods.")
 
 
-class BackupStorageModel(_models.DefaultModel):
+class BackupStorageModel(_base.ResourceModel):
     """Cherry Servers backup storage model.
 
     This model is frozen by default,
@@ -143,19 +141,19 @@ class BackupStorageModel(_models.DefaultModel):
     public_ip: str | None = Field(description="Backup storage public IP.", default=None)
     size_gigabytes: int = Field(description="Backup storage total size in GB.")
     used_gigabytes: int = Field(description="Backup storage used size in GB.")
-    attached_to: AttachedServerModel | None = Field(
+    attached_to: ips.AttachedServerModel | None = Field(
         description="Server to which the storage is attached to.", default=None
     )
     methods: list[BackupMethodModel] = Field(description="Backup methods.")
-    available_addresses: list[IPModel] = Field(description="Available addresses.")
+    available_addresses: list[ips.IPModel] = Field(description="Available addresses.")
     rules: list[RuleModel] = Field(description="Backup rules.")
-    plan: PlanModel = Field(description="Backup plan.")
-    pricing: PricingModel = Field(description="Backup pricing.")
-    region: RegionModel = Field(description="Backup region.")
+    plan: plans.PlanModel = Field(description="Backup plan.")
+    pricing: plans.PricingModel = Field(description="Backup pricing.")
+    region: regions_module.RegionModel = Field(description="Backup region.")
     href: str = Field(description="Backup href.")
 
 
-class CreationRequest(_models.CherryRequestSchema):
+class CreationRequest(_base.RequestSchema):
     """Cherry Servers backup storage creation request schema.
 
     Attributes:
@@ -172,7 +170,7 @@ class CreationRequest(_models.CherryRequestSchema):
     )
 
 
-class UpdateRequest(_models.CherryRequestSchema):
+class UpdateRequest(_base.RequestSchema):
     """Cherry Servers backup storage update request schema.
 
     Attributes:
@@ -191,7 +189,7 @@ class UpdateRequest(_models.CherryRequestSchema):
     )
 
 
-class UpdateAccessMethodsRequest(_models.CherryRequestSchema):
+class UpdateAccessMethodsRequest(_base.RequestSchema):
     """Cherry Servers backup storage update access methods request schema.
 
     Attributes:
@@ -212,46 +210,7 @@ class UpdateAccessMethodsRequest(_models.CherryRequestSchema):
     )
 
 
-class BackupStorage:
-    """Cherry Servers backup storage resource.
-
-    This class represents an existing Cherry Servers resource
-    and should only be initialized by :class:`BackupStorageClient`.
-
-    Attributes:
-        model (BackupStorageModel): Cherry Servers backup storage model.
-            This is a Pydantic model that contains backup storage data.
-            A standard dictionary can be extracted with ``model.model_dump()``.
-
-    """
-
-    def __init__(self, client: BackupStorageClient, model: BackupStorageModel) -> None:
-        """Initialize a Cherry Servers backup storage resource."""
-        self._client = client
-        self.model = model
-
-    def delete(self) -> None:
-        """Delete Cherry Servers backup storage resource."""
-        self._client.delete(self.model.id)
-
-    def update(self, update_schema: UpdateRequest) -> None:
-        """Update Cherry Servers backup storage resource."""
-        updated = self._client.update(self.model.id, update_schema)
-        self.model = updated.model
-
-    def update_access_method(
-        self,
-        update_schema: UpdateAccessMethodsRequest,
-        method_name: str,
-    ) -> None:
-        """Update Cherry Servers backup storage access method."""
-        updated = self._client.update_access_method(
-            self.model.id, method_name, update_schema
-        )
-        self.model = updated.model
-
-
-class BackupStorageClient:
+class BackupStorageClient(_base.ResourceClient):
     """Cherry Servers backup storage client.
 
     Manage Cherry Servers backup storage resources.
@@ -304,17 +263,15 @@ class BackupStorageClient:
 
     """
 
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
-        """Initialize a Cherry Servers backup storage client."""
-        self._api_client = api_client
-
     def get_by_id(self, storage_id: int) -> BackupStorage:
         """Retrieve a backup storage."""
         response = self._api_client.get(
             f"backup-storages/{storage_id}",
             {
-                "fields": "available_addresses,ip,region,project,href,targeted_to,hostname,id,bgp,status,state,"
-                "private_ip,public_ip,size_gigabytes,used_gigabytes,methods,rules,plan,pricing,name,"
+                "fields": "available_addresses,ip,region,project,href,"
+                "targeted_to,hostname,id,bgp,status,state,"
+                "private_ip,public_ip,size_gigabytes,"
+                "used_gigabytes,methods,rules,plan,pricing,name,"
                 "whitelist,enabled,processing"
             },
             10,
@@ -327,8 +284,10 @@ class BackupStorageClient:
         response = self._api_client.get(
             f"projects/{project_id}/backup-storages",
             {
-                "fields": "available_addresses,ip,region,project,href,targeted_to,hostname,id,bgp,status,state,"
-                "private_ip,public_ip,size_gigabytes,used_gigabytes,methods,rules,plan,pricing,name,"
+                "fields": "available_addresses,ip,region,project,"
+                "href,targeted_to,hostname,id,bgp,status,state,"
+                "private_ip,public_ip,size_gigabytes,used_gigabytes,"
+                "methods,rules,plan,pricing,name,"
                 "whitelist,enabled,processing"
             },
             10,
@@ -393,3 +352,31 @@ class BackupStorageClient:
         )
 
         return self.get_by_id(storage_id)
+
+
+class BackupStorage(_base.Resource[BackupStorageClient, BackupStorageModel]):
+    """Cherry Servers backup storage resource.
+
+    This class represents an existing Cherry Servers resource
+    and should only be initialized by :class:`BackupStorageClient`.
+    """
+
+    def delete(self) -> None:
+        """Delete Cherry Servers backup storage resource."""
+        self._client.delete(self._model.id)
+
+    def update(self, update_schema: UpdateRequest) -> None:
+        """Update Cherry Servers backup storage resource."""
+        updated = self._client.update(self._model.id, update_schema)
+        self._model = updated.get_model_copy()
+
+    def update_access_method(
+        self,
+        update_schema: UpdateAccessMethodsRequest,
+        method_name: str,
+    ) -> None:
+        """Update Cherry Servers backup storage access method."""
+        updated = self._client.update_access_method(
+            self._model.id, method_name, update_schema
+        )
+        self._model = updated.get_model_copy()
