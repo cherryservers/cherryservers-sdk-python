@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import time
+
 from pydantic import Field
 
 from cherry import _base, ips, regions
@@ -185,13 +187,17 @@ class BlockStorageClient(_base.ResourceClient):
         self,
         storage_id: int,
         update_schema: UpdateRequest,
-    ) -> None:
+    ) -> BlockStorage:
         """Update block storage.
 
-        Increasing storage size will generate a new block storage ID
-        and make the old one invalid.
+        WARNING: increasing storage size will change its ID!
         """
-        self._api_client.put(f"storages/{storage_id}", update_schema, None, 30)
+        response = self._api_client.put(
+            f"storages/{storage_id}", update_schema, None, 30
+        )
+        # We need to wait for backend.
+        time.sleep(3)
+        return self.get_by_id(response.json()["id"])
 
     def attach(
         self,
@@ -226,12 +232,10 @@ class BlockStorage(_base.Resource[BlockStorageClient, BlockStorageModel]):
     def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers block storage resource.
 
-        WARNING: increasing storage size will generate a new block storage ID
-        and make the old one invalid, making this resource obsolete.
-        You will then need to create a new instance of :class:`BlockStorage`
-        to perform further operations.
+        WARNING: increasing storage size will change its ID!
         """
-        self._client.update(self._model.id, update_schema)
+        updated = self._client.update(self._model.id, update_schema)
+        self._model = updated.get_model_copy()
 
     def attach(self, attach_schema: AttachRequest) -> None:
         """Attach Cherry Servers block storage resource to server.
