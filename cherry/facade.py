@@ -40,15 +40,15 @@ class CherryApiFacade:
 
     """
 
-    def __init__(self, token: str, user_agent_suffix: str = "") -> None:
+    def __init__(self, token: str, user_agent_prefix: str = "") -> None:
         """Create a new :class:`CherryApiFacade` instance.
 
         :param str token: Cherry Servers API token. Can be created at https://portal.cherryservers.com/settings/api-keys.
-        :param str user_agent_suffix:
+        :param str user_agent_prefix:
          User-Agent suffix that will be added to the header. Empty by default.
         """
         self._api_client = _client.CherryApiClient(
-            token=token, user_agent_suffix=user_agent_suffix
+            token=token, user_agent_prefix=user_agent_prefix
         )
 
         self.users = users.UserClient(self._api_client)

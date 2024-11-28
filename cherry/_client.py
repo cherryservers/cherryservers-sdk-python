@@ -20,12 +20,12 @@ class CherryApiClient:
         self,
         token: str,
         api_endpoint_base: str = "https://api.cherryservers.com/v1/",
-        user_agent_suffix: str = "",
+        user_agent_prefix: str = "",
     ) -> None:
         self._token = token
         self._api_endpoint_base = api_endpoint_base
         self._requests_session = requests.Session()
-        self._headers = self._get_headers(user_agent_suffix)
+        self._headers = self._get_headers(user_agent_prefix)
         self._requests_session.headers.update(self._headers)
 
     def _get_headers(self, user_agent_suffix: str) -> dict[str, str]:
