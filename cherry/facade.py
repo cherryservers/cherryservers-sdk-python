@@ -46,6 +46,20 @@ class CherryApiFacade:
         :param str token: Cherry Servers API token. Can be created at https://portal.cherryservers.com/settings/api-keys.
         :param str user_agent_prefix:
          User-Agent suffix that will be added to the header. Empty by default.
+
+        Example:
+            .. code-block:: python
+
+                # Instantiate the facade.
+                token = environ["CHERRY_AUTH_TOKEN"]
+                facade = cherry.facade.CherryApiFacade(token)
+
+                # Order a VPS.
+
+                creation_req = (cherry.servers.
+                CreationRequest(region="eu_nord_1", plan="cloud_vps_1"))
+                server = facade.servers.create(creation_req, project_id=217727)
+
         """
         self._api_client = _client.CherryApiClient(
             token=token, user_agent_prefix=user_agent_prefix
