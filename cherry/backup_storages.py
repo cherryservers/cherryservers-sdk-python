@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, ips, plans
+from cherry import _base, _deployable, ips, plans
 from cherry import regions as regions_module
 
 
@@ -345,11 +345,18 @@ class BackupStorageClient(_base.ResourceClient):
         self,
         creation_schema: CreationRequest,
         server_id: int,
+        *,
+        wait_for_active: bool = True,
     ) -> BackupStorage:
         """Create a backup storage."""
         response = self._api_client.post(
             f"servers/{server_id}/backup-storages", creation_schema, None, 30
         )
+        backup_storage = BackupStorage(
+            self, BackupStorageModel.model_validate(response.json())
+        )
+        if wait_for_active:
+            _deployable.wait_for_deployment(backup_storage, 720)
         return self.get_by_id(response.json()["id"])
 
     def delete(self, storage_id: int) -> None:
@@ -360,11 +367,18 @@ class BackupStorageClient(_base.ResourceClient):
         self,
         storage_id: int,
         update_schema: UpdateRequest,
+        *,
+        wait_for_active: bool = True,
     ) -> BackupStorage:
         """Update backup storage."""
         response = self._api_client.put(
             f"backup-storages/{storage_id}", update_schema, None, 30
         )
+        backup_storage = BackupStorage(
+            self, BackupStorageModel.model_validate(response.json())
+        )
+        if wait_for_active:
+            _deployable.wait_for_deployment(backup_storage, 720)
         return self.get_by_id(response.json()["id"])
 
     def update_access_method(
@@ -384,7 +398,10 @@ class BackupStorageClient(_base.ResourceClient):
         return self.get_by_id(storage_id)
 
 
-class BackupStorage(_base.Resource[BackupStorageClient, BackupStorageModel]):
+class BackupStorage(
+    _base.Resource[BackupStorageClient, BackupStorageModel],
+    _deployable.DeployableResource,
+):
     """Cherry Servers backup storage resource.
 
     This class represents an existing Cherry Servers resource
@@ -410,3 +427,7 @@ class BackupStorage(_base.Resource[BackupStorageClient, BackupStorageModel]):
             self._model.id, method_name, update_schema
         )
         self._model = updated.get_model_copy()
+
+    def refresh(self) -> None:
+        """Refresh the resource."""
+        self._model = self._client.get_by_id(self._model.id).get_model_copy()
