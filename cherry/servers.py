@@ -401,7 +401,7 @@ class ServerClient(_base.ResourceClient):
             # List all project servers.
             print("List of all project servers:")
             for server in facade.servers.get_by_project(123456):
-                print(server.get_model_copy())
+                print(server.get_model())
 
             # Create a server.
             creation_req = cherry.servers.CreationRequest(

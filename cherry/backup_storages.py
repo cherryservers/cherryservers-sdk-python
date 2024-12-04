@@ -258,13 +258,11 @@ class BackupStorageClient(_base.ResourceClient):
 
             # List all project storages.
             for storage in facade.backup_storages.list_by_project(123456):
-                print(storage.model)
+                print(storage.get_model())
 
             # List available storage plans.
-            print("List of available backup storage plans:")
             for plan_model in facade.backup_storages.list_backup_plans():
                 print(plan_model)
-            print("______________________________")
 
             # Create a storage.
             creation_req = cherry.backup_storages.CreationRequest(

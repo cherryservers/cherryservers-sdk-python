@@ -114,7 +114,7 @@ class BlockStorageClient(_base.ResourceClient):
             # List all project storages.
             print("List of all project storages:")
             for storage in facade.block_storages.list_by_project(123456):
-                print(storage.model)
+                print(storage.get_model())
 
             # Create a storage.
             creation_req = cherry.block_storages.CreationRequest(
