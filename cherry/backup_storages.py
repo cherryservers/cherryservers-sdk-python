@@ -132,7 +132,7 @@ class BackupStorageModel(_base.ResourceModel):
 
     Attributes:
         id (int): Backup storage ID.
-        status (str | None): Backup storage status.
+        status (str): Backup storage status.
         state (str | None): Backup storage state.
         private_ip (str | None): Backup storage private IP.
         public_ip (str | None): Backup storage public IP.
@@ -151,7 +151,7 @@ class BackupStorageModel(_base.ResourceModel):
     """
 
     id: int = Field(description="Backup storage ID.")
-    status: str | None = Field(description="Backup storage status.", default=None)
+    status: str = Field(description="Backup storage status.")
     state: str | None = Field(description="Backup storage state.", default=None)
     private_ip: str | None = Field(
         description="Backup storage private IP.", default=None
@@ -356,7 +356,9 @@ class BackupStorageClient(_base.ResourceClient):
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
-            _backoff.wait_for_deployment(backup_storage, 720)
+            _backoff.wait_for_resource_condition(
+                backup_storage, 720, lambda: backup_storage.get_status() != "deployed"
+            )
         return self.get_by_id(response.json()["id"])
 
     def delete(self, storage_id: int) -> None:
@@ -378,7 +380,9 @@ class BackupStorageClient(_base.ResourceClient):
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
-            _backoff.wait_for_deployment(backup_storage, 720)
+            _backoff.wait_for_resource_condition(
+                backup_storage, 720, lambda: backup_storage.get_status() != "deployed"
+            )
         return self.get_by_id(response.json()["id"])
 
     def update_access_method(
@@ -400,7 +404,7 @@ class BackupStorageClient(_base.ResourceClient):
 
 class BackupStorage(
     _base.Resource[BackupStorageClient, BackupStorageModel],
-    _backoff.DeployableResource,
+    _backoff.RefreshableResource,
 ):
     """Cherry Servers backup storage resource.
 
@@ -431,6 +435,10 @@ class BackupStorage(
     def refresh(self) -> None:
         """Refresh the resource."""
         self._model = self._client.get_by_id(self._model.id).get_model_copy()
+
+    def get_status(self) -> str:
+        """Get backup storage status."""
+        return self._model.status
 
     def get_id(self) -> int:
         """Get resource ID."""
