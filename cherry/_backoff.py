@@ -2,12 +2,20 @@ from __future__ import annotations
 
 import abc
 import time
+import typing
 from random import uniform
 from typing import Protocol
 
 
 class DeploymentTimeoutError(Exception):
     """Deployment timeout occurred."""
+
+    def __init__(self, msg: str) -> None:
+        super().__init__(f"{msg}")
+
+
+class ResourceTimeoutError(Exception):
+    """Resource timeout occurred."""
 
     def __init__(self, msg: str) -> None:
         super().__init__(f"{msg}")
@@ -24,6 +32,13 @@ class DeployableResource(abc.ABC):
 
     @abc.abstractmethod
     def get_model_copy(self) -> ResourceModelWithStatus: ...
+
+    @abc.abstractmethod
+    def refresh(self) -> None: ...
+
+
+class RefreshableResource(abc.ABC):
+    """A resource that is deployable."""
 
     @abc.abstractmethod
     def refresh(self) -> None: ...
@@ -50,6 +65,30 @@ def wait_for_deployment(
         time.sleep(delay)
         resource.refresh()
         model_copy = resource.get_model_copy()
+        retries += 1
+
+
+def wait_for_resource_condition(
+    resource: RefreshableResource,
+    timeout: float,
+    condition: typing.Callable[[], bool],
+) -> None:
+    """Refresh resource until condition is met.
+
+    :param RefreshableResource resource: Resource to wait for.
+    :param float timeout: Timeout in seconds.
+    :param typing.Callable[[], bool] condition: Condition to wait for.
+
+    :raises ResourceTimeoutError: If timeout occurs.
+    """
+    retries = 0
+    while not condition():
+        delay = _get_exponential_delay(retries)
+        if delay > timeout:
+            msg = f"timeout waiting for {resource.__class__.__name__} to deploy"
+            raise ResourceTimeoutError(msg)
+        time.sleep(delay)
+        resource.refresh()
         retries += 1
 
 

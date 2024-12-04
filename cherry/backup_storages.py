@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, _deployable, ips, plans
+from cherry import _backoff, _base, ips, plans
 from cherry import regions as regions_module
 
 
@@ -304,7 +304,7 @@ class BackupStorageClient(_base.ResourceClient):
                 "used_gigabytes,methods,rules,plan,pricing,name,"
                 "whitelist,enabled,processing"
             },
-            10,
+            20,
         )
         storage_model = BackupStorageModel.model_validate(response.json())
         return BackupStorage(self, storage_model)
@@ -356,7 +356,7 @@ class BackupStorageClient(_base.ResourceClient):
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
-            _deployable.wait_for_deployment(backup_storage, 720)
+            _backoff.wait_for_deployment(backup_storage, 720)
         return self.get_by_id(response.json()["id"])
 
     def delete(self, storage_id: int) -> None:
@@ -378,7 +378,7 @@ class BackupStorageClient(_base.ResourceClient):
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
-            _deployable.wait_for_deployment(backup_storage, 720)
+            _backoff.wait_for_deployment(backup_storage, 720)
         return self.get_by_id(response.json()["id"])
 
     def update_access_method(
@@ -400,7 +400,7 @@ class BackupStorageClient(_base.ResourceClient):
 
 class BackupStorage(
     _base.Resource[BackupStorageClient, BackupStorageModel],
-    _deployable.DeployableResource,
+    _backoff.DeployableResource,
 ):
     """Cherry Servers backup storage resource.
 
