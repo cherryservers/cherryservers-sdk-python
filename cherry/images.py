@@ -62,3 +62,7 @@ class Image(_base.Resource[ImageClient, ImageModel]):
     This class represents an existing Cherry Servers resource
     and should only be initialized by :class:`ImageClient`.
     """
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id

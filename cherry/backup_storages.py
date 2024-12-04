@@ -431,3 +431,7 @@ class BackupStorage(
     def refresh(self) -> None:
         """Refresh the resource."""
         self._model = self._client.get_by_id(self._model.id).get_model_copy()
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id

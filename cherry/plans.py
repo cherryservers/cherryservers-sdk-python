@@ -284,3 +284,7 @@ class Plan(_base.Resource[PlanClient, PlanModel]):
     This class represents an existing Cherry Servers resource
     and should only be initialized by :class:`PlanClient`.
     """
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id

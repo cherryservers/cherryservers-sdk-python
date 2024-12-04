@@ -94,3 +94,7 @@ class Region(_base.Resource[RegionClient, RegionModel]):
     This class represents an existing Cherry Servers resource
     and should only be initialized by :class:`RegionClient`.
     """
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id

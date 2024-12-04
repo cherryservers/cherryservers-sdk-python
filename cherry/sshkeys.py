@@ -144,3 +144,7 @@ class SSHKey(_base.Resource[SSHKeyClient, SSHKeyModel]):
         """Update Cherry Servers SSH key resource."""
         updated = self._client.update(self._model.id, update_schema)
         self._model = updated._model  # noqa: SLF001
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id

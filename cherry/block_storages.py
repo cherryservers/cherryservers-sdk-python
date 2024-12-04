@@ -249,3 +249,7 @@ class BlockStorage(_base.Resource[BlockStorageClient, BlockStorageModel]):
         """Detach Cherry Servers block storage resource from server."""
         detached = self._client.detach(self._model.id)
         self._model = detached.get_model_copy()
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id

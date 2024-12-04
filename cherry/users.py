@@ -82,3 +82,7 @@ class User(_base.Resource[UserClient, UserModel]):
     This class represents an existing Cherry Servers resource
     and should only be initialized by :class:`UserClient`.
     """
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id

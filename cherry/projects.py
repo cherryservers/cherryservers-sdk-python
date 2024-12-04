@@ -163,3 +163,7 @@ class Project(_base.Resource[ProjectClient, ProjectModel]):
         """Update Cherry Servers project resource."""
         updated = self._client.update(self._model.id, update_schema)
         self._model = updated._model  # noqa: SLF001
+
+    def get_id(self) -> int:
+        """Get resource ID."""
+        return self._model.id
