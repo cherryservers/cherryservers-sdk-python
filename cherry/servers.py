@@ -147,7 +147,6 @@ class ServerModel(_base.ResourceModel):
          Server BMC credential data. Only for baremetal servers.
          Scrubbed at 24 hours after creation.
         hostname (str | None): Server hostname.
-        Can be used to identify servers in most contexts.
         password (str | None): Server user password. Scrubbed 24 hours after creation.
         username (str | None): Server user username. Scrubbed 24 hours after creation.
          deployed_image (cherry.servers.ServerDeployedImageModel | None): OS image data.
@@ -180,7 +179,7 @@ class ServerModel(_base.ResourceModel):
         default=None,
     )
     hostname: str | None = Field(
-        description="Server hostname. Can be used to identify servers in most contexts.",
+        description="Server hostname.",
         default=None,
     )
     password: str | None = Field(
@@ -238,7 +237,6 @@ class CreationRequest(_base.RequestSchema):
         os_partition_size (int | None): OS partition size.
         region (str): Region slug. Required.
         hostname (str | None): Server hostname.
-         Can be used to identify servers in most contexts.
         ssh_keys (Set[int] | None): IDs of SSH keys that will be added to the server.
         ip_addresses (Set[str] | None):
          IDs of extra IP addresses that will be attached to the server.
@@ -258,8 +256,7 @@ class CreationRequest(_base.RequestSchema):
     )
     region: str = Field(description="Region slug. Required.")
     hostname: str | None = Field(
-        description="Server hostname."
-        "Can be used to identify servers in most contexts.",
+        description="Server hostname.",
         default=None,
     )
     ssh_keys: set[int] | None = Field(
