@@ -1,3 +1,5 @@
+"""Wait for resource conditions functionality."""
+
 from __future__ import annotations
 
 import abc
@@ -17,7 +19,8 @@ class RefreshableResource(abc.ABC):
     """A resource that is deployable."""
 
     @abc.abstractmethod
-    def refresh(self) -> None: ...
+    def refresh(self) -> None:
+        """Refresh the resource with actual state."""
 
 
 def wait_for_resource_condition(

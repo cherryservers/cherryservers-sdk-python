@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 from pydantic import Field
 
 from cherry import (
-    _backoff,
     _base,
+    _resource_wait,
     block_storages,
     ips,
     plans,
@@ -427,7 +427,7 @@ class ServerClient(_base.ResourceClient):
     ) -> Server:
         resp_json = response.json()
         server = Server(self, ServerModel.model_validate(resp_json))
-        _backoff.wait_for_resource_condition(
+        _resource_wait.wait_for_resource_condition(
             server, timeout, lambda: server.get_status() == target_status
         )
         return server
@@ -605,7 +605,9 @@ class ServerClient(_base.ResourceClient):
         return self.get_by_id(response.json()["id"])
 
 
-class Server(_base.Resource[ServerClient, ServerModel], _backoff.RefreshableResource):
+class Server(
+    _base.Resource[ServerClient, ServerModel], _resource_wait.RefreshableResource
+):
     """Cherry Servers Server resource.
 
     This class represents an existing Cherry Servers resource

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _backoff, _base, ips, plans
+from cherry import _base, _resource_wait, ips, plans
 from cherry import regions as regions_module
 
 
@@ -356,7 +356,7 @@ class BackupStorageClient(_base.ResourceClient):
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
-            _backoff.wait_for_resource_condition(
+            _resource_wait.wait_for_resource_condition(
                 backup_storage, 720, lambda: backup_storage.get_status() != "deployed"
             )
         return self.get_by_id(response.json()["id"])
@@ -380,7 +380,7 @@ class BackupStorageClient(_base.ResourceClient):
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
-            _backoff.wait_for_resource_condition(
+            _resource_wait.wait_for_resource_condition(
                 backup_storage, 720, lambda: backup_storage.get_status() != "deployed"
             )
         return self.get_by_id(response.json()["id"])
@@ -404,7 +404,7 @@ class BackupStorageClient(_base.ResourceClient):
 
 class BackupStorage(
     _base.Resource[BackupStorageClient, BackupStorageModel],
-    _backoff.RefreshableResource,
+    _resource_wait.RefreshableResource,
 ):
     """Cherry Servers backup storage resource.
 
