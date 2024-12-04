@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import requests
 
-from cherry import _version
-
-if TYPE_CHECKING:
-    from cherry import _models
+from cherry import _base, _version
 
 
 class InvalidMethodError(Exception):
@@ -91,7 +88,7 @@ class CherryApiClient:
     def post(
         self,
         path: str,
-        data: _models.CherryRequestSchema,
+        data: _base.RequestSchema,
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:
@@ -106,7 +103,7 @@ class CherryApiClient:
     def put(
         self,
         path: str,
-        data: _models.CherryRequestSchema,
+        data: _base.RequestSchema,
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:
@@ -121,7 +118,7 @@ class CherryApiClient:
     def patch(
         self,
         path: str,
-        data: _models.CherryRequestSchema,
+        data: _base.RequestSchema,
         params: dict[str, Any] | None = None,
         timeout: int = 10,
     ) -> requests.Response:

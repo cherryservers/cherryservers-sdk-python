@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# pylint: disable=useless-import-alias
 from cherry import (
     backup_storages as backup_storages,
 )

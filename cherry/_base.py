@@ -6,8 +6,6 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 
-from cherry import _models
-
 if TYPE_CHECKING:
     from cherry import _client
 
@@ -39,5 +37,5 @@ class Resource[C: ResourceClient, T: ResourceModel](abc.ABC):  # noqa: B024
         return copy.deepcopy(self._model)
 
 
-class RequestSchema(_models.CherryRequestSchema, BaseModel, abc.ABC):
+class RequestSchema(BaseModel, abc.ABC):
     """Cherry Servers base API request schema."""
