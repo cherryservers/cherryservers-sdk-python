@@ -17,9 +17,9 @@ if TYPE_CHECKING:
 @pytest.fixture(scope="package")
 def facade() -> cherry.facade.CherryApiFacade:
     """Initialize Cherry API facade."""
-    token = os.environ.get("CHERRY_AUTH_KEY")
-    assert token, "CHERRY_AUTH_KEY environment variable is not set"
-    return cherry.facade.CherryApiFacade(token=token, user_agent_suffix="test")
+    token = os.environ.get("CHERRY_TEST_API_KEY")
+    assert token, "CHERRY_TEST_API_KEY environment variable is not set"
+    return cherry.facade.CherryApiFacade(token=token, user_agent_prefix="test")
 
 
 @pytest.fixture(scope="package")
@@ -58,3 +58,26 @@ def vps(
         vps = facade.servers.get_by_id(vps.get_model_copy().id)
     yield vps
     vps.delete()
+
+
+@pytest.fixture(scope="package")
+def baremetal_server(facade: cherry.facade.CherryApiFacade) -> cherry.servers.Server:
+    """Retrieve a pre-built bare-metal server."""
+    server_id = os.environ.get("CHERRY_TEST_BAREMETAL_SERVER_ID")
+    assert server_id, "CHERRY_TEST_BAREMETAL_SERVER_ID environment variable is not set"
+
+    return facade.servers.get_by_id(int(server_id))
+
+
+@pytest.fixture(scope="package")
+def sshkey(facade: cherry.facade.CherryApiFacade) -> Generator[cherry.sshkeys.SSHKey]:
+    """Initialize a Cherry servers SSH key."""
+    sshkey = facade.sshkeys.create(
+        cherry.sshkeys.CreationRequest(
+            label="python-sdk-server-test",
+            key="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBYe+GfesnLP06tfLOJWLFnGIJNpgrzLYE2VZhcmrFy0 example@gmail.com",
+        )
+    )
+
+    yield sshkey
+    sshkey.delete()

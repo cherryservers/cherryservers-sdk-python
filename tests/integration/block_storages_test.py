@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-
 import pytest
 import requests
 
@@ -12,18 +10,6 @@ import cherry
 
 class TestBlockStorage:
     """Test Block Storage functionality."""
-
-    @pytest.fixture(scope="class")
-    def baremetal_server(
-        self, facade: cherry.facade.CherryApiFacade
-    ) -> cherry.servers.Server:
-        """Retrieve a pre-built bare-metal server."""
-        server_id = os.environ.get("CHERRY_TEST_BAREMETAL_SERVER_ID")
-        assert (
-            server_id
-        ), "CHERRY_TEST_BAREMETAL_SERVER_ID environment variable is not set"
-
-        return facade.servers.get_by_id(int(server_id))
 
     @pytest.fixture(scope="class")
     def project_id(self, baremetal_server: cherry.servers.Server) -> int:
