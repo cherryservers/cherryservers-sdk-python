@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import time
-
 from pydantic import Field
 
-from cherry import _base, ips, regions
+from cherry import _base, _resource_wait, ips, regions
 
 
 class BlockStorageModel(_base.ResourceModel):
@@ -19,7 +17,7 @@ class BlockStorageModel(_base.ResourceModel):
         id (int): EBS ID.
         name (str | None): EBS name.
         href (str | None): EBS href.
-        size (int | None): EBS size.
+        size (int): EBS size.
         allow_edit_size (bool | None): Whether size can be edited.
         unit (str | None): Size measurement unit.
         attached_to (cherry.ips.AttachedServerModel | None):
@@ -35,7 +33,7 @@ class BlockStorageModel(_base.ResourceModel):
     id: int = Field(description="EBS ID.")
     name: str | None = Field(description="EBS name.", default=None)
     href: str | None = Field(description="EBS href.", default=None)
-    size: int | None = Field(description="EBS size.", default=None)
+    size: int = Field(description="EBS size.")
     allow_edit_size: bool | None = Field(
         description="Whether size can be edited.", default=None
     )
@@ -195,8 +193,11 @@ class BlockStorageClient(_base.ResourceClient):
         response = self._api_client.put(
             f"storages/{storage_id}", update_schema, None, 30
         )
+        storage = BlockStorage(self, BlockStorageModel.model_validate(response.json()))
         # We need to wait for backend.
-        time.sleep(3)
+        _resource_wait.wait_for_resource_condition(
+            storage, 20, lambda: storage.get_size() == update_schema.size
+        )
         return self.get_by_id(response.json()["id"])
 
     def attach(
@@ -218,7 +219,10 @@ class BlockStorageClient(_base.ResourceClient):
         return self.get_by_id(storage_id)
 
 
-class BlockStorage(_base.Resource[BlockStorageClient, BlockStorageModel]):
+class BlockStorage(
+    _base.Resource[BlockStorageClient, BlockStorageModel],
+    _resource_wait.RefreshableResource,
+):
     """Cherry Servers block storage resource.
 
     This class represents an existing Cherry Servers resource
@@ -253,3 +257,11 @@ class BlockStorage(_base.Resource[BlockStorageClient, BlockStorageModel]):
     def get_id(self) -> int:
         """Get resource ID."""
         return self._model.id
+
+    def get_size(self) -> int:
+        """Get block storage size."""
+        return self._model.size
+
+    def refresh(self) -> None:
+        """Refresh Cherry Servers block storage resource."""
+        self._model = self._client.get_by_id(self._model.id).get_model_copy()

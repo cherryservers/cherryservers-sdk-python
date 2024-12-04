@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import os
-import time
 from typing import TYPE_CHECKING
 
 import pytest
@@ -53,9 +52,6 @@ def vps(
     )
 
     vps = facade.servers.create(creation_req, project.get_model_copy().id)
-    while vps.get_model_copy().state != "active":
-        time.sleep(10)
-        vps = facade.servers.get_by_id(vps.get_model_copy().id)
     yield vps
     vps.delete()
 
