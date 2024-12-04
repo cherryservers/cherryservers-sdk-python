@@ -2,9 +2,23 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pydantic import Field
 
-from cherry import _base, block_storages, ips, plans, projects, regions, sshkeys
+from cherry import (
+    _backoff,
+    _base,
+    block_storages,
+    ips,
+    plans,
+    projects,
+    regions,
+    sshkeys,
+)
+
+if TYPE_CHECKING:
+    from requests import Response
 
 
 class NotBaremetalError(Exception):
@@ -406,6 +420,18 @@ class ServerClient(_base.ResourceClient):
 
     """
 
+    DEPLOYMENT_TIMEOUT = 1440
+
+    def _wait_for_status(
+        self, response: Response, target_status: str, timeout: float
+    ) -> Server:
+        resp_json = response.json()
+        server = Server(self, ServerModel.model_validate(resp_json))
+        _backoff.wait_for_resource_condition(
+            server, timeout, lambda: server.get_status() == target_status
+        )
+        return server
+
     def get_by_id(self, server_id: int) -> Server:
         """Retrieve a server by ID."""
         response = self._api_client.get(
@@ -430,23 +456,35 @@ class ServerClient(_base.ResourceClient):
 
         return servers
 
-    def create(self, creation_schema: CreationRequest, project_id: int) -> Server:
+    def create(
+        self,
+        creation_schema: CreationRequest,
+        project_id: int,
+        *,
+        wait_for_active: bool = True,
+    ) -> Server:
         """Create a new server."""
         response = self._api_client.post(
             f"projects/{project_id}/servers", creation_schema, None, 30
         )
+        if wait_for_active:
+            return self._wait_for_status(response, "deployed", self.DEPLOYMENT_TIMEOUT)
         return self.get_by_id(response.json()["id"])
 
     def delete(self, server_id: int) -> None:
         """Delete server by ID."""
         self._api_client.delete(f"servers/{server_id}", None, 20)
 
-    def update(self, server_id: int, update_schema: UpdateRequest) -> Server:
+    def update(
+        self,
+        server_id: int,
+        update_schema: UpdateRequest,
+    ) -> Server:
         """Update server by ID."""
         response = self._api_client.put(f"servers/{server_id}", update_schema, None, 30)
         return self.get_by_id(response.json()["id"])
 
-    def power_off(self, server_id: int) -> Server:
+    def power_off(self, server_id: int, *, wait_for_active: bool = True) -> Server:
         """Power off server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
@@ -454,9 +492,11 @@ class ServerClient(_base.ResourceClient):
             None,
             30,
         )
+        if wait_for_active:
+            return self._wait_for_status(response, "deployed", 120)
         return self.get_by_id(response.json()["id"])
 
-    def power_on(self, server_id: int) -> Server:
+    def power_on(self, server_id: int, *, wait_for_active: bool = True) -> Server:
         """Power on server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
@@ -464,9 +504,11 @@ class ServerClient(_base.ResourceClient):
             None,
             30,
         )
+        if wait_for_active:
+            return self._wait_for_status(response, "deployed", 300)
         return self.get_by_id(response.json()["id"])
 
-    def reboot(self, server_id: int) -> Server:
+    def reboot(self, server_id: int, *, wait_for_active: bool = True) -> Server:
         """Reboot server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
@@ -474,12 +516,16 @@ class ServerClient(_base.ResourceClient):
             None,
             30,
         )
+        if wait_for_active:
+            return self._wait_for_status(response, "deployed", 420)
         return self.get_by_id(response.json()["id"])
 
     def enter_rescue_mode(
         self,
         server_id: int,
         rescue_mode_schema: EnterRescueModeRequest,
+        *,
+        wait_for_active: bool = True,
     ) -> Server:
         """Put server into rescue mode.
 
@@ -497,9 +543,13 @@ class ServerClient(_base.ResourceClient):
             30,
         )
 
+        if wait_for_active:
+            return self._wait_for_status(response, "rescue mode", 720)
         return self.get_by_id(response.json()["id"])
 
-    def exit_rescue_mode(self, server_id: int) -> Server:
+    def exit_rescue_mode(
+        self, server_id: int, *, wait_for_active: bool = True
+    ) -> Server:
         """Put server out of rescue mode."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
@@ -508,9 +558,17 @@ class ServerClient(_base.ResourceClient):
             30,
         )
 
+        if wait_for_active:
+            return self._wait_for_status(response, "deployed", 720)
         return self.get_by_id(response.json()["id"])
 
-    def rebuild(self, server_id: int, rebuild_schema: RebuildRequest) -> Server:
+    def rebuild(
+        self,
+        server_id: int,
+        rebuild_schema: RebuildRequest,
+        *,
+        wait_for_active: bool = True,
+    ) -> Server:
         """Rebuild server.
 
         WARNING: this a destructive action that will delete all of your data.
@@ -521,7 +579,8 @@ class ServerClient(_base.ResourceClient):
             None,
             30,
         )
-
+        if wait_for_active:
+            return self._wait_for_status(response, "deployed", self.DEPLOYMENT_TIMEOUT)
         return self.get_by_id(response.json()["id"])
 
     def reset_bmc_password(self, server_id: int) -> Server:
@@ -544,7 +603,7 @@ class ServerClient(_base.ResourceClient):
         return self.get_by_id(response.json()["id"])
 
 
-class Server(_base.Resource[ServerClient, ServerModel]):
+class Server(_base.Resource[ServerClient, ServerModel], _backoff.RefreshableResource):
     """Cherry Servers Server resource.
 
     This class represents an existing Cherry Servers resource
@@ -603,3 +662,27 @@ class Server(_base.Resource[ServerClient, ServerModel]):
         """
         serv = self._client.reset_bmc_password(self._model.id)
         self._model = serv._model  # noqa: SLF001
+
+    def refresh(self) -> None:
+        """Refresh the server.
+
+        Refreshes server model to match the actual state.
+        """
+        self._model = self._client.get_by_id(self._model.id).get_model_copy()
+
+    def get_status(self) -> str:
+        """Get server status."""
+        return self._model.status
+
+    def get_plan_slug(self) -> str:
+        """Get server plan slug.
+
+        :returns str: Server plan slug. If non-existent, returns an empty string.
+        """
+        if self._model.plan is not None and self._model.plan.slug is not None:
+            return self._model.plan.slug
+        return ""
+
+    def get_id(self) -> int:
+        """Get server ID."""
+        return self._model.id
