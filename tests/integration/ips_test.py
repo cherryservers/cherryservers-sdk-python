@@ -16,7 +16,7 @@ class TestIP:
     ) -> cherry.ips.IP:
         """Initialize a Cherry Servers IP."""
         creation_req = cherry.ips.CreationRequest(region="eu_nord_1")
-        return facade.ips.create(creation_req, project.get_model_copy().id)
+        return facade.ips.create(creation_req, project.get_model().id)
 
     def test_create_full_params(
         self,
@@ -25,7 +25,7 @@ class TestIP:
         facade: cherry.facade.CherryApiFacade,
     ) -> None:
         """Test IP creation with all optional parameters."""
-        vps_model = vps.get_model_copy()
+        vps_model = vps.get_model()
         creation_req = cherry.ips.CreationRequest(
             region="eu_nord_1",
             targeted_to=vps_model.id,
@@ -34,8 +34,8 @@ class TestIP:
             tags={"env": "test"},
         )
 
-        ip = facade.ips.create(creation_req, project.get_model_copy().id)
-        ip_model = ip.get_model_copy()
+        ip = facade.ips.create(creation_req, project.get_model().id)
+        ip_model = ip.get_model()
 
         if ip_model.region is not None:
             assert ip_model.region.slug == "eu_nord_1"
@@ -53,10 +53,10 @@ class TestIP:
         self, ip: cherry.ips.IP, facade: cherry.facade.CherryApiFacade
     ) -> None:
         """Test getting a single IP by ID."""
-        ip_model = ip.get_model_copy()
+        ip_model = ip.get_model()
         retrieved_ip = facade.ips.get_by_id(ip_model.id)
 
-        retrieved_model = retrieved_ip.get_model_copy()
+        retrieved_model = retrieved_ip.get_model()
 
         assert ip_model.id == retrieved_model.id
         assert ip_model.address == retrieved_model.address
@@ -68,10 +68,10 @@ class TestIP:
         ip: cherry.ips.IP,
     ) -> None:
         """Test getting IPs by project."""
-        ips = facade.ips.get_by_project(project.get_model_copy().id)
+        ips = facade.ips.get_by_project(project.get_model().id)
 
-        retrieved_ip_models = [ip.get_model_copy() for ip in ips]
-        fixture_ip_model = ip.get_model_copy()
+        retrieved_ip_models = [ip.get_model() for ip in ips]
+        fixture_ip_model = ip.get_model()
 
         assert any(
             ip_model.id == fixture_ip_model.id
@@ -81,7 +81,7 @@ class TestIP:
 
     def test_update(self, ip: cherry.ips.IP, vps: cherry.servers.Server) -> None:
         """Test updating an IP."""
-        vps_model = vps.get_model_copy()
+        vps_model = vps.get_model()
         vps_public_ip_id = None
         assert vps_model.ip_addresses is not None, "no IPs assigned to VPS fixture."
         for vps_ip in vps_model.ip_addresses:
@@ -100,7 +100,7 @@ class TestIP:
 
         ip.update(update_req)
 
-        updated_ip_model = ip.get_model_copy()
+        updated_ip_model = ip.get_model()
 
         assert updated_ip_model.ptr_record == "python-sdk-test-upd."
         assert (

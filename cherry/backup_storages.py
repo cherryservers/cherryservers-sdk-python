@@ -257,10 +257,8 @@ class BackupStorageClient(_base.ResourceClient):
             storage = facade.backup_storages.get_by_id(123456)
 
             # List all project storages.
-            print("List of all project storages:")
             for storage in facade.backup_storages.list_by_project(123456):
                 print(storage.model)
-            print("______________________________")
 
             # List available storage plans.
             print("List of available backup storage plans:")
@@ -419,7 +417,7 @@ class BackupStorage(
     def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers backup storage resource."""
         updated = self._client.update(self._model.id, update_schema)
-        self._model = updated.get_model_copy()
+        self._model = updated.get_model()
 
     def update_access_method(
         self,
@@ -430,11 +428,11 @@ class BackupStorage(
         updated = self._client.update_access_method(
             self._model.id, method_name, update_schema
         )
-        self._model = updated.get_model_copy()
+        self._model = updated.get_model()
 
     def refresh(self) -> None:
         """Refresh the resource."""
-        self._model = self._client.get_by_id(self._model.id).get_model_copy()
+        self._model = self._client.get_by_id(self._model.id).get_model()
 
     def get_status(self) -> str:
         """Get backup storage status."""

@@ -14,7 +14,7 @@ class TestBlockStorage:
     @pytest.fixture(scope="class")
     def project_id(self, baremetal_server: cherry.servers.Server) -> int:
         """Baremetal server project ID."""
-        baremetal_server_model = baremetal_server.get_model_copy()
+        baremetal_server_model = baremetal_server.get_model()
         assert baremetal_server_model.project is not None
 
         return baremetal_server_model.project.id
@@ -34,10 +34,10 @@ class TestBlockStorage:
         facade: cherry.facade.CherryApiFacade,
     ) -> None:
         """Test getting a single block storage volume by ID."""
-        storage_model = storage.get_model_copy()
+        storage_model = storage.get_model()
         retrieved_storage = facade.block_storages.get_by_id(storage_model.id)
 
-        retrieved_model = retrieved_storage.get_model_copy()
+        retrieved_model = retrieved_storage.get_model()
 
         assert storage_model.id == retrieved_model.id
         assert storage_model.name == retrieved_model.name
@@ -51,8 +51,8 @@ class TestBlockStorage:
         """Test listing block storage volumes by project."""
         storages = facade.block_storages.list_by_project(project_id)
 
-        retrieved_storage_models = [storage.get_model_copy() for storage in storages]
-        fixture_storage_model = storage.get_model_copy()
+        retrieved_storage_models = [storage.get_model() for storage in storages]
+        fixture_storage_model = storage.get_model()
 
         assert any(
             storage_model.id == fixture_storage_model.id
@@ -66,17 +66,17 @@ class TestBlockStorage:
         baremetal_server: cherry.servers.Server,
     ) -> None:
         """Test storage volume attachment to server.."""
-        server_model = baremetal_server.get_model_copy()
+        server_model = baremetal_server.get_model()
 
         storage.attach(cherry.block_storages.AttachRequest(attach_to=server_model.id))
-        storage_model = storage.get_model_copy()
+        storage_model = storage.get_model()
 
         assert storage_model.attached_to is not None
         assert storage_model.attached_to.id == server_model.id
 
         storage.detach()
 
-        assert storage.get_model_copy().attached_to is None
+        assert storage.get_model().attached_to is None
 
     def test_resize(
         self,
@@ -86,7 +86,7 @@ class TestBlockStorage:
         updated_size = 2
         storage.update(cherry.block_storages.UpdateRequest(size=updated_size))
 
-        assert storage.get_model_copy().size == updated_size
+        assert storage.get_model().size == updated_size
 
     def test_delete(
         self,
@@ -97,4 +97,4 @@ class TestBlockStorage:
         storage.delete()
 
         with pytest.raises(requests.exceptions.HTTPError):
-            facade.block_storages.get_by_id(storage.get_model_copy().id)
+            facade.block_storages.get_by_id(storage.get_model().id)

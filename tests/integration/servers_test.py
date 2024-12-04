@@ -66,7 +66,7 @@ class TestServer:
             plan="cloud_vps_1",
         )
         server = facade.servers.create(creation_req, project.get_id())
-        server_model = server.get_model_copy()
+        server_model = server.get_model()
 
         if server_model.region:
             assert server_model.region.slug == creation_req.region
@@ -92,13 +92,13 @@ class TestServer:
             "IHBhdGg6IC9oZWxsb193b3JsZC50eHQKICAgIGNvbnRlbnQ"
             "6IHwKICAgICAgSGVsbG8gV29ybGQKCnJ1bmNtZDoKICAt"
             "IGVjaG8gIkZpbGUgY3JlYXRlZCBzdWNjZXNzZnVsbHkhIgoK",
-            ssh_keys={sshkey.get_model_copy().id},
+            ssh_keys={sshkey.get_model().id},
             ip_addresses={fip.get_id()},
             tags={"env": "test"},
         )
 
         server = facade.servers.create(creation_req, project.get_id())
-        server_model = server.get_model_copy()
+        server_model = server.get_model()
 
         if server_model.region is not None:
             assert server_model.region.slug == creation_req.region
@@ -108,7 +108,7 @@ class TestServer:
             assert server_model.deployed_image.slug == creation_req.image
         assert server_model.hostname == creation_req.hostname
         if server_model.ssh_keys is not None:
-            assert server_model.ssh_keys[0].id == sshkey.get_model_copy().id
+            assert server_model.ssh_keys[0].id == sshkey.get_model().id
         assert server_model.tags == creation_req.tags
 
         server.delete()
@@ -117,9 +117,9 @@ class TestServer:
         self, server: cherry.servers.Server, facade: cherry.facade.CherryApiFacade
     ) -> None:
         """Test getting a single server by ID."""
-        server_model = server.get_model_copy()
+        server_model = server.get_model()
         retrieved_server = facade.servers.get_by_id(server_model.id)
-        retrieved_server_model = retrieved_server.get_model_copy()
+        retrieved_server_model = retrieved_server.get_model()
 
         assert server_model.plan is not None
         assert retrieved_server_model.plan is not None
@@ -140,9 +140,9 @@ class TestServer:
         servers = facade.servers.get_by_project(project.get_id())
 
         retrieved_server_models = [
-            retrieved_server.get_model_copy() for retrieved_server in servers
+            retrieved_server.get_model() for retrieved_server in servers
         ]
-        fixture_server_model = server.get_model_copy()
+        fixture_server_model = server.get_model()
 
         assert any(
             server_model.id == fixture_server_model.id
@@ -157,7 +157,7 @@ class TestServer:
             tags={"env": "test-upd"},
         )
         server.update(update_req)
-        server_model = server.get_model_copy()
+        server_model = server.get_model()
 
         assert server_model.name == update_req.name
         assert server_model.tags == update_req.tags
@@ -201,18 +201,18 @@ class TestServer:
             "IHBhdGg6IC9oZWxsb193b3JsZC50eHQKICAgIGNvbnRlbnQ"
             "6IHwKICAgICAgSGVsbG8gV29ybGQKCnJ1bmNtZDoKICAt"
             "IGVjaG8gIkZpbGUgY3JlYXRlZCBzdWNjZXNzZnVsbHkhIgoK",
-            ssh_keys={sshkey.get_model_copy().id},
+            ssh_keys={sshkey.get_model().id},
             password=_generate_password(16),
         )
         server.rebuild(rebuild_req)
 
-        server_model = server.get_model_copy()
+        server_model = server.get_model()
 
         assert server_model.hostname == rebuild_req.hostname
         assert server_model.deployed_image is not None
         assert server_model.deployed_image.slug == rebuild_req.image
         assert server_model.ssh_keys is not None
-        assert server_model.ssh_keys[0].id == sshkey.get_model_copy().id
+        assert server_model.ssh_keys[0].id == sshkey.get_model().id
 
     def test_delete(
         self, server: cherry.servers.Server, facade: cherry.facade.CherryApiFacade

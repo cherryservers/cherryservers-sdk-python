@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import abc
-import copy
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
@@ -28,13 +27,12 @@ class Resource[C: ResourceClient, T: ResourceModel](abc.ABC):  # noqa: B024
         self._model = model
         self._client = client
 
-    def get_model_copy(self) -> T:
-        """Get resource model copy.
+    def get_model(self) -> T:
+        """Get resource model.
 
-        Returns a deep copy of the resource model.
-        Use this if you need read access to resource model fields.
+        This model is frozen, since it represents actual resource state.
         """
-        return copy.deepcopy(self._model)
+        return self._model
 
 
 class RequestSchema(BaseModel, abc.ABC):

@@ -241,7 +241,7 @@ class BlockStorage(
         WARNING: increasing storage size will change its ID!
         """
         updated = self._client.update(self._model.id, update_schema)
-        self._model = updated.get_model_copy()
+        self._model = updated.get_model()
 
     def attach(self, attach_schema: AttachRequest) -> None:
         """Attach Cherry Servers block storage resource to server.
@@ -249,12 +249,12 @@ class BlockStorage(
         Block storage volumes can only be attached to baremetal servers.
         """
         attached = self._client.attach(self._model.id, attach_schema)
-        self._model = attached.get_model_copy()
+        self._model = attached.get_model()
 
     def detach(self) -> None:
         """Detach Cherry Servers block storage resource from server."""
         detached = self._client.detach(self._model.id)
-        self._model = detached.get_model_copy()
+        self._model = detached.get_model()
 
     def get_id(self) -> int:
         """Get resource ID."""
@@ -266,4 +266,4 @@ class BlockStorage(
 
     def refresh(self) -> None:
         """Refresh Cherry Servers block storage resource."""
-        self._model = self._client.get_by_id(self._model.id).get_model_copy()
+        self._model = self._client.get_by_id(self._model.id).get_model()

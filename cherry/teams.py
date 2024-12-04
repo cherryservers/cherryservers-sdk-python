@@ -299,7 +299,7 @@ class Team(_base.Resource[TeamClient, TeamModel]):
     def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers team resource."""
         updated = self._client.update(self._model.id, update_schema)
-        self._model = updated.get_model_copy()
+        self._model = updated.get_model()
 
     def get_id(self) -> int:
         """Get resource ID."""

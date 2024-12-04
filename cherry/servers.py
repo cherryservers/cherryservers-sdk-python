@@ -532,7 +532,7 @@ class ServerClient(_base.ResourceClient):
         Only for baremetal servers!
         """
         server = self.get_by_id(server_id)
-        server_model = server.get_model_copy()
+        server_model = server.get_model()
 
         if server_model.plan is not None and server_model.plan.type != "baremetal":
             raise NotBaremetalError
@@ -590,7 +590,7 @@ class ServerClient(_base.ResourceClient):
         Only for baremetal servers!
         """
         server = self.get_by_id(server_id)
-        server_model = server.get_model_copy()
+        server_model = server.get_model()
 
         if server_model.plan is not None and server_model.plan.type != "baremetal":
             raise NotBaremetalError
@@ -617,7 +617,7 @@ class Server(
     def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers server resource."""
         updated = self._client.update(self._model.id, update_schema)
-        self._model = updated.get_model_copy()
+        self._model = updated.get_model()
 
     def delete(self) -> None:
         """Delete Cherry Servers server resource."""
@@ -626,17 +626,17 @@ class Server(
     def power_off(self) -> None:
         """Power off Cherry Servers server."""
         serv = self._client.power_off(self._model.id)
-        self._model = serv.get_model_copy()
+        self._model = serv.get_model()
 
     def power_on(self) -> None:
         """Power on Cherry Servers server."""
         serv = self._client.power_on(self._model.id)
-        self._model = serv.get_model_copy()
+        self._model = serv.get_model()
 
     def reboot(self) -> None:
         """Reboot a Cherry Servers server."""
         serv = self._client.reboot(self._model.id)
-        self._model = serv.get_model_copy()
+        self._model = serv.get_model()
 
     def enter_rescue_mode(self, rescue_mode_schema: EnterRescueModeRequest) -> None:
         """Put a Cherry Servers server into rescue mode.
@@ -644,12 +644,12 @@ class Server(
         Only for baremetal servers!
         """
         serv = self._client.enter_rescue_mode(self._model.id, rescue_mode_schema)
-        self._model = serv.get_model_copy()
+        self._model = serv.get_model()
 
     def exit_rescue_mode(self) -> None:
         """Put a Cherry Servers server out of rescue mode."""
         serv = self._client.exit_rescue_mode(self._model.id)
-        self._model = serv.get_model_copy()
+        self._model = serv.get_model()
 
     def rebuild(self, rebuild_schema: RebuildRequest) -> None:
         """Rebuild a Cherry Servers server.
@@ -657,7 +657,7 @@ class Server(
         WARNING: this a destructive action that will delete all of your data!
         """
         serv = self._client.rebuild(self._model.id, rebuild_schema)
-        self._model = serv.get_model_copy()
+        self._model = serv.get_model()
 
     def reset_bmc_password(self) -> None:
         """Reset server BMC password.
@@ -665,14 +665,14 @@ class Server(
         Only for baremetal servers!
         """
         serv = self._client.reset_bmc_password(self._model.id)
-        self._model = serv.get_model_copy()
+        self._model = serv.get_model()
 
     def refresh(self) -> None:
         """Refresh the server.
 
         Refreshes server model to match the actual state.
         """
-        self._model = self._client.get_by_id(self._model.id).get_model_copy()
+        self._model = self._client.get_by_id(self._model.id).get_model()
 
     def get_status(self) -> str:
         """Get server status."""

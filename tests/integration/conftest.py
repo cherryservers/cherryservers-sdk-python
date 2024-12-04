@@ -51,7 +51,7 @@ def vps(
         region="eu_nord_1", plan="cloud_vps_1"
     )
 
-    vps = facade.servers.create(creation_req, project.get_model_copy().id)
+    vps = facade.servers.create(creation_req, project.get_model().id)
     yield vps
     vps.delete()
 

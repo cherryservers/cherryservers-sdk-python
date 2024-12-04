@@ -276,7 +276,7 @@ class IP(_base.Resource[IPClient, IPModel]):
     def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers IP address resource."""
         updated = self._client.update(self._model.id, update_schema)
-        self._model = updated.get_model_copy()
+        self._model = updated.get_model()
 
     def get_id(self) -> str:
         """Get resource ID."""

@@ -21,4 +21,4 @@ class TestPlan:
         """Test getting a plan by ID or slug."""
         plan = facade.plans.get_by_id_or_slug("cloud_vps_1")
 
-        assert plan.get_model_copy().slug == "cloud_vps_1"
+        assert plan.get_model().slug == "cloud_vps_1"

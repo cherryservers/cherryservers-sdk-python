@@ -15,7 +15,7 @@ class TestImage:
         """Test getting a list of images by plan slug."""
         images = facade.images.get_by_plan("cloud_vps_1")
 
-        retrieved_image_models = [image.get_model_copy() for image in images]
+        retrieved_image_models = [image.get_model() for image in images]
 
         assert any(
             image_model.slug == "debian_12_64bit"

@@ -15,7 +15,7 @@ class TestRegion:
         """Test getting all regions."""
         retrieved_regions = facade.regions.get_all()
         retrieved_region_models = [
-            region_model.get_model_copy() for region_model in retrieved_regions
+            region_model.get_model() for region_model in retrieved_regions
         ]
 
         assert any(
@@ -27,4 +27,4 @@ class TestRegion:
         """Test getting a region by id."""
         region = facade.regions.get_by_id(1)
 
-        assert region.get_model_copy().slug == "eu_nord_1"
+        assert region.get_model().slug == "eu_nord_1"

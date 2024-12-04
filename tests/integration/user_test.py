@@ -15,10 +15,10 @@ class TestUser:
         """Test getting current user."""
         user = facade.users.get_current_user()
 
-        assert user.get_model_copy().id
+        assert user.get_model().id
 
     def test_get_by_id(self, facade: cherry.facade.CherryApiFacade) -> None:
         """Test getting user by id."""
         user = facade.users.get_current_user()
 
-        facade.users.get_by_id(user.get_model_copy().id)
+        facade.users.get_by_id(user.get_model().id)
