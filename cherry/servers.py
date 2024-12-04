@@ -140,7 +140,7 @@ class ServerModel(_base.ResourceModel):
         spot_instance (bool | None): Whether the server belongs the spot market.
         region (cherry.regions.RegionModel | None): Region data.
         state (str | None): Server state.
-        status (str | None): Server status.
+        status (str): Server status.
         bgp (cherry.servers.ServerBGPModel | None): BGP data.
         plan (cherry.plans.PlanModel | None): Plan data.
         pricing (cherry.plans.PricingModel | None): Pricing data.
@@ -185,7 +185,7 @@ class ServerModel(_base.ResourceModel):
     )
     region: regions.RegionModel | None = Field(description="Region data.", default=None)
     state: str | None = Field(description="Server state.", default=None)
-    status: str | None = Field(description="Server status.", default=None)
+    status: str = Field(description="Server status.")
     bgp: ServerBGPModel | None = Field(description="BGP data.", default=None)
     plan: plans.PlanModel | None = Field(description="Plan data.", default=None)
     pricing: plans.PricingModel | None = Field(
@@ -342,7 +342,7 @@ class RebuildRequest(_base.RequestSchema):
     """Cherry Servers server rebuild request schema.
 
     Attributes:
-        image (str | None): Image slug.
+        image (str): Image slug.
         hostname (str): Server hostname. Required.
         password (str): Server root user password. Required
         ssh_keys (Set[int] | None):
@@ -354,7 +354,7 @@ class RebuildRequest(_base.RequestSchema):
     """
 
     type: str = "rebuild"
-    image: str | None = Field(description="Image slug.", default=None)
+    image: str = Field(description="Image slug.")
     hostname: str = Field(description="Server hostname.")
     password: str = Field(description="Server root user password.")
     ssh_keys: set[int] | None = Field(
