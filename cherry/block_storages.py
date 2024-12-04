@@ -227,6 +227,8 @@ class BlockStorage(
 
     This class represents an existing Cherry Servers resource
     and should only be initialized by :class:`BlockStorageClient`.
+    Additional configuration is required. Refer to
+    https://docs.cherryservers.com/knowledge/elastic-block-storage-linux.
     """
 
     def delete(self) -> None:
