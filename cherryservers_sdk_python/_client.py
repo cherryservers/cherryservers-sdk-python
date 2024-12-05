@@ -31,9 +31,9 @@ class CherryApiClient:
         self._headers = self._get_headers(user_agent_prefix)
         self._requests_session.headers.update(self._headers)
 
-    def _get_headers(self, user_agent_suffix: str) -> dict[str, str]:
+    def _get_headers(self, user_agent_prefix: str) -> dict[str, str]:
         return {
-            "User-Agent": f"{user_agent_suffix}/cherryservers_sdk_python-python/"
+            "User-Agent": f"{user_agent_prefix}/cherryservers_sdk_python-python/"
             f"{_version.__version__} {requests.__name__}/{requests.__version__}",
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self._token}",

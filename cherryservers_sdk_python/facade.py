@@ -46,7 +46,7 @@ class CherryApiFacade:
         :param str token: Cherry Servers API token.
             Can be created at https://portal.cherryservers.com/settings/api-keys.
         :param str user_agent_prefix:
-            User-Agent suffix that will be added to the header. Empty by default.
+            User-Agent prefix that will be added to the header. Empty by default.
 
         Example:
             .. code-block:: python
