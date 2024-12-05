@@ -1,5 +1,10 @@
 Images
 =========
 
-.. automodule:: cherry.images
+.. autoclass:: cherry.images.Image
+    :members:
+
+.. autoclass:: cherry.images.ImageModel
+
+.. autoclass:: cherry.images.ImageClient
     :members:

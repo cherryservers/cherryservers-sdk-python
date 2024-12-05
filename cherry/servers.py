@@ -149,7 +149,7 @@ class ServerModel(_base.ResourceModel):
         hostname (str | None): Server hostname.
         password (str | None): Server user password. Scrubbed 24 hours after creation.
         username (str | None): Server user username. Scrubbed 24 hours after creation.
-         deployed_image (cherry.servers.ServerDeployedImageModel | None): OS image data.
+        deployed_image (cherry.servers.ServerDeployedImageModel | None): OS image data.
         spot_instance (bool | None): Whether the server belongs the spot market.
         region (cherry.regions.RegionModel | None): Region data.
         state (str | None): Server state.

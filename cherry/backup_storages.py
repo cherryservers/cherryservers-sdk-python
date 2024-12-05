@@ -138,8 +138,8 @@ class BackupStorageModel(_base.ResourceModel):
         public_ip (str | None): Backup storage public IP.
         size_gigabytes (int | None): Backup storage total size in GB.
         used_gigabytes (int | None): Backup storage used size in GB.
-         attached_to (cherry.servers.AttachedServerModel | None):
-        The server to which to storage is attached to.
+        attached_to (cherry.ips.AttachedServerModel | None):
+         The server to which to storage is attached to.
         methods (list[BackupMethodModel] | None): Backup methods.
         available_addresses (list[cherry.ips.IPModel] | None): Available addresses.
         rules (list[RuleModel] | None): Backup rules.

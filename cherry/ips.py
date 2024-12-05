@@ -29,14 +29,13 @@ class AttachedServerModel(_base.ResourceModel):
         id (int): Server ID. Non-existent server will have value `0`.
         href (str | None): Server href.
         hostname (str | None): Server hostname.
-         Can be used to identify servers in most contexts.
 
     """
 
     id: int = Field(description="Server ID.")
     href: str | None = Field(description="Server href.", default=None)
     hostname: str | None = Field(
-        description="Server hostname. Can be used to identify servers in most contexts.",
+        description="Server hostname",
         default=None,
     )
 

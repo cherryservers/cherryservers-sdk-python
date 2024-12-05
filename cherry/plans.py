@@ -214,7 +214,7 @@ class PlanModel(_base.ResourceModel):
         specs (cherry.plans.SpecsModel | None): Plan specs.
         pricing (list[cherry.plans.PricingModel] | None): Plan pricing.
         available_regions (list[cherry.plans.AvailableRegionsModel] | None):
-        Available regions for the plan.
+         Available regions for the plan.
 
     """
 

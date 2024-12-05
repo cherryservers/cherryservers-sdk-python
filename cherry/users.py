@@ -22,7 +22,7 @@ class UserModel(_base.ResourceModel):
         phone(str | None): Phone number of the user.
         security_phone(str | None): Security phone number of the user.
         security_phone_verified(bool | None):
-        Whether user security phone number is verified.
+         Whether user security phone number is verified.
         href(str | None): Href URL of the user.
 
     """

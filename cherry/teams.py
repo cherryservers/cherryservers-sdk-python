@@ -41,7 +41,7 @@ class ResourcesModel(_base.ResourceModel):
     Attributes:
         pricing (cherry.plans.PricingModel | None): Team resource pricing data.
         remaining (cherry.teams.RemainingTimeModel | None):
-        Team resource remaining time data.
+         Team resource remaining time data.
 
     """
 
