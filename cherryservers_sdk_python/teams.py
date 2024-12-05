@@ -2,14 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 
-from cherryservers_sdk_python import _base
-
-if TYPE_CHECKING:
-    from cherryservers_sdk_python.plans import PricingModel
+from cherryservers_sdk_python import _base, plans
 
 
 class RemainingTimeModel(_base.ResourceModel):
@@ -46,7 +41,7 @@ class ResourcesModel(_base.ResourceModel):
 
     """
 
-    pricing: PricingModel | None = Field(
+    pricing: plans.PricingModel | None = Field(
         description="Team resource pricing data.", default=None
     )
     remaining: RemainingTimeModel | None = Field(
