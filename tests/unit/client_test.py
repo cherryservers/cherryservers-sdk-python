@@ -10,13 +10,13 @@ import pytest
 import requests
 from pydantic import Field
 
-from cherry import _client, _models, _version
+from cherry import _base, _client, _version
 
 if TYPE_CHECKING:
     from collections.abc import Generator
 
 
-class RequestSchema(_models.CherryRequestSchema):
+class RequestSchema(_base.RequestSchema):
     """Cherry Servers request schema for testing.."""
 
     data: str = Field(description="Test data.", default="my-test")
@@ -36,7 +36,7 @@ class TestCherryClient:
     @pytest.fixture
     def client(self) -> Generator[_client.CherryApiClient]:
         """Initialize default Cherry API client."""
-        client = _client.CherryApiClient("test_token", user_agent_suffix="test")
+        client = _client.CherryApiClient("test_token", user_agent_prefix="test")
         patcher = mock.patch.object(client, "_requests_session")
         patcher.start()
         yield client
