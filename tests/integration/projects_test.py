@@ -44,7 +44,7 @@ class TestProject:
         team_id: int,
     ) -> None:
         """Test getting all projects that belong to a team."""
-        retrieved_projects = facade.projects.get_by_team(team_id)
+        retrieved_projects = facade.projects.list_by_team(team_id)
         retrieved_project_models = [model.get_model() for model in retrieved_projects]
         project_model = project.get_model()
 

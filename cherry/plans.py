@@ -263,7 +263,7 @@ class PlanClient(_base.ResourceClient):
         plan_model = PlanModel.model_validate(response.json())
         return Plan(self, plan_model)
 
-    def get_by_team(self, team_id: int) -> list[Plan]:
+    def list_by_team(self, team_id: int) -> list[Plan]:
         """Get all plans that are available to a team."""
         response = self._api_client.get(
             f"teams/{team_id}/plans",

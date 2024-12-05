@@ -45,7 +45,7 @@ class ImageClient(_base.ResourceClient):
 
     """
 
-    def get_by_plan(self, plan_slug: str) -> list[Image]:
+    def list_by_plan(self, plan_slug: str) -> list[Image]:
         """Retrieve a list of available OSes for a server plan."""
         response = self._api_client.get(f"plans/{plan_slug}/images", None, 5)
         images: list[Image] = []

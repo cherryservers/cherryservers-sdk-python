@@ -13,7 +13,7 @@ class TestImage:
 
     def test_get_by_plan(self, facade: cherry.facade.CherryApiFacade) -> None:
         """Test getting a list of images by plan slug."""
-        images = facade.images.get_by_plan("cloud_vps_1")
+        images = facade.images.list_by_plan("cloud_vps_1")
 
         retrieved_image_models = [image.get_model() for image in images]
 

@@ -15,7 +15,7 @@ class TestPlan:
         self, facade: cherry.facade.CherryApiFacade, team_id: int
     ) -> None:
         """Test getting all plans available for a team."""
-        facade.plans.get_by_team(team_id)
+        facade.plans.list_by_team(team_id)
 
     def test_get_by_id_or_slug(self, facade: cherry.facade.CherryApiFacade) -> None:
         """Test getting a plan by ID or slug."""

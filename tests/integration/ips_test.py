@@ -68,7 +68,7 @@ class TestIP:
         ip: cherry.ips.IP,
     ) -> None:
         """Test getting IPs by project."""
-        ips = facade.ips.get_by_project(project.get_model().id)
+        ips = facade.ips.list_by_project(project.get_model().id)
 
         retrieved_ip_models = [ip.get_model() for ip in ips]
         fixture_ip_model = ip.get_model()

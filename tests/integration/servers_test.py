@@ -137,7 +137,7 @@ class TestServer:
         server: cherry.servers.Server,
     ) -> None:
         """Test getting a list of server that belong to a project."""
-        servers = facade.servers.get_by_project(project.get_id())
+        servers = facade.servers.list_by_project(project.get_id())
 
         retrieved_server_models = [
             retrieved_server.get_model() for retrieved_server in servers

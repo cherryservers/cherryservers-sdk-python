@@ -119,7 +119,7 @@ class ProjectClient(_base.ResourceClient):
         project_model = ProjectModel.model_validate(response.json())
         return Project(self, project_model)
 
-    def get_by_team(self, team_id: int) -> list[Project]:
+    def list_by_team(self, team_id: int) -> list[Project]:
         """Get all projects that belong to a team."""
         response = self._api_client.get(f"teams/{team_id}/projects", None, 5)
         projects: list[Project] = []

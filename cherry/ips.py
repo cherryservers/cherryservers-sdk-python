@@ -227,7 +227,7 @@ class IPClient(_base.ResourceClient):
         ip_model = IPModel.model_validate(response.json())
         return IP(self, ip_model)
 
-    def get_by_project(self, project_id: int) -> list[IP]:
+    def list_by_project(self, project_id: int) -> list[IP]:
         """Retrieve all IPs that belong to a specified project."""
         response = self._api_client.get(
             f"projects/{project_id}/ips",

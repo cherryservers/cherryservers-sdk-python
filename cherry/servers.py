@@ -439,7 +439,7 @@ class ServerClient(_base.ResourceClient):
         server_model = ServerModel.model_validate(response.json())
         return Server(self, server_model)
 
-    def get_by_project(self, project_id: int) -> list[Server]:
+    def list_by_project(self, project_id: int) -> list[Server]:
         """Retrieve all servers that belong to a specified project."""
         response = self._api_client.get(
             f"projects/{project_id}/servers",
