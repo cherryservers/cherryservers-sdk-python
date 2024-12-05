@@ -1,18 +1,20 @@
-"""Test cherry block_storages functionality."""
+"""Test cherryservers_sdk_python block_storages functionality."""
 
 from __future__ import annotations
 
 import pytest
 import requests
 
-import cherry
+import cherryservers_sdk_python
 
 
 class TestBlockStorage:
     """Test Block Storage functionality."""
 
     @pytest.fixture(scope="class")
-    def project_id(self, baremetal_server: cherry.servers.Server) -> int:
+    def project_id(
+        self, baremetal_server: cherryservers_sdk_python.servers.Server
+    ) -> int:
         """Baremetal server project ID."""
         baremetal_server_model = baremetal_server.get_model()
         assert baremetal_server_model.project is not None
@@ -21,17 +23,19 @@ class TestBlockStorage:
 
     @pytest.fixture(scope="class")
     def storage(
-        self, facade: cherry.facade.CherryApiFacade, project_id: int
-    ) -> cherry.block_storages.BlockStorage:
+        self, facade: cherryservers_sdk_python.facade.CherryApiFacade, project_id: int
+    ) -> cherryservers_sdk_python.block_storages.BlockStorage:
         """Initialize a Block Storage instance."""
-        creation_req = cherry.block_storages.CreationRequest(region="eu_nord_1", size=1)
+        creation_req = cherryservers_sdk_python.block_storages.CreationRequest(
+            region="eu_nord_1", size=1
+        )
 
         return facade.block_storages.create(creation_req, project_id=project_id)
 
     def test_get_by_id(
         self,
-        storage: cherry.block_storages.BlockStorage,
-        facade: cherry.facade.CherryApiFacade,
+        storage: cherryservers_sdk_python.block_storages.BlockStorage,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test getting a single block storage volume by ID."""
         storage_model = storage.get_model()
@@ -45,8 +49,8 @@ class TestBlockStorage:
     def test_list_by_project(
         self,
         project_id: int,
-        facade: cherry.facade.CherryApiFacade,
-        storage: cherry.block_storages.BlockStorage,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
+        storage: cherryservers_sdk_python.block_storages.BlockStorage,
     ) -> None:
         """Test listing block storage volumes by project."""
         storages = facade.block_storages.list_by_project(project_id)
@@ -62,13 +66,17 @@ class TestBlockStorage:
 
     def test_attachment(
         self,
-        storage: cherry.block_storages.BlockStorage,
-        baremetal_server: cherry.servers.Server,
+        storage: cherryservers_sdk_python.block_storages.BlockStorage,
+        baremetal_server: cherryservers_sdk_python.servers.Server,
     ) -> None:
         """Test storage volume attachment to server.."""
         server_model = baremetal_server.get_model()
 
-        storage.attach(cherry.block_storages.AttachRequest(attach_to=server_model.id))
+        storage.attach(
+            cherryservers_sdk_python.block_storages.AttachRequest(
+                attach_to=server_model.id
+            )
+        )
         storage_model = storage.get_model()
 
         assert storage_model.attached_to is not None
@@ -80,18 +88,20 @@ class TestBlockStorage:
 
     def test_resize(
         self,
-        storage: cherry.block_storages.BlockStorage,
+        storage: cherryservers_sdk_python.block_storages.BlockStorage,
     ) -> None:
         """Test storage volume resizing."""
         updated_size = 2
-        storage.update(cherry.block_storages.UpdateRequest(size=updated_size))
+        storage.update(
+            cherryservers_sdk_python.block_storages.UpdateRequest(size=updated_size)
+        )
 
         assert storage.get_model().size == updated_size
 
     def test_delete(
         self,
-        storage: cherry.block_storages.BlockStorage,
-        facade: cherry.facade.CherryApiFacade,
+        storage: cherryservers_sdk_python.block_storages.BlockStorage,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test deleting a block storage volume."""
         storage.delete()

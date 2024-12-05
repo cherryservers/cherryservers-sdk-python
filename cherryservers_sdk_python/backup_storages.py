@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, _resource_wait, ips, plans
-from cherry import regions as regions_module
+from cherryservers_sdk_python import _base, _resource_wait, ips, plans
+from cherryservers_sdk_python import regions as regions_module
 
 
 class BackupStoragePlanModel(_base.ResourceModel):
@@ -19,8 +19,10 @@ class BackupStoragePlanModel(_base.ResourceModel):
         name (str | None): Plan full name.
         slug (str | None): Plan name slug.
         size_gigabytes (int | None): Plan size in GB.
-        pricing (list[cherry.plans.PricingModel] | None): Plan pricing data.
-        regions (list[cherry.regions.RegionModel] | None): Plan region data.
+        pricing (list[cherryservers_sdk_python.plans.PricingModel] | None):
+         Plan pricing data.
+        regions (list[cherryservers_sdk_python.regions.RegionModel] | None):
+         Plan region data.
         href (str | None): Plan href.
 
     """
@@ -115,7 +117,7 @@ class RuleModel(_base.ResourceModel):
     since it represents an actual Cherry Servers backup rule.
 
     Attributes:
-        ip (cherry.ips.IPModel | None): Rule IP address.
+        ip (cherryservers_sdk_python.ips.IPModel | None): Rule IP address.
         methods (RuleMethodModel | None): Rule methods.
 
     """
@@ -138,14 +140,15 @@ class BackupStorageModel(_base.ResourceModel):
         public_ip (str | None): Backup storage public IP.
         size_gigabytes (int | None): Backup storage total size in GB.
         used_gigabytes (int | None): Backup storage used size in GB.
-        attached_to (cherry.ips.AttachedServerModel | None):
+        attached_to (cherryservers_sdk_python.ips.AttachedServerModel | None):
          The server to which to storage is attached to.
         methods (list[BackupMethodModel] | None): Backup methods.
-        available_addresses (list[cherry.ips.IPModel] | None): Available addresses.
+        available_addresses (list[cherryservers_sdk_python.ips.IPModel] | None):
+         Available addresses.
         rules (list[RuleModel] | None): Backup rules.
-        plan (cherry.plans.PlanModel | None): Backup plan.
-        pricing (cherry.plans.PricingModel | None): Backup pricing.
-        region (cherry.regions.RegionModel | None): Backup region.
+        plan (cherryservers_sdk_python.plans.PlanModel | None): Backup plan.
+        pricing (cherryservers_sdk_python.plans.PricingModel | None): Backup pricing.
+        region (cherryservers_sdk_python.regions.RegionModel | None): Backup region.
         href (str | None): Backup href.
 
     """
@@ -246,12 +249,12 @@ class BackupStorageClient(_base.ResourceClient):
     Manage Cherry Servers backup storage resources.
     This class should typically be initialized by
 
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Get storage by ID.
             storage = facade.backup_storages.get_by_id(123456)
@@ -265,20 +268,20 @@ class BackupStorageClient(_base.ResourceClient):
                 print(plan_model)
 
             # Create a storage.
-            creation_req = cherry.backup_storages.CreationRequest(
+            creation_req = cherryservers_sdk_python.backup_storages.CreationRequest(
                 region="eu_nord_1", slug="backup_50"
             )
             storage = facade.backup_storages.create(creation_req, server_id=123456)
 
             # Update storage.
             update_req = (
-                cherry.backup_storages.UpdateRequest(slug="backup_500")
+                cherryservers_sdk_python.backup_storages.UpdateRequest(slug="backup_500")
             )
             storage.update(update_req)
 
             # Update storage access method.
             update_access_req = (
-                cherry.backup_storages.UpdateAccessMethodsRequest(
+                cherryservers_sdk_python.backup_storages.UpdateAccessMethodsRequest(
                     enabled=False,
                 )
             )

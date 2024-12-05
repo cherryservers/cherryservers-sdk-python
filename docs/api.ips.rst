@@ -1,16 +1,16 @@
 IPs
 =========
 
-.. autoclass:: cherry.ips.IP
+.. autoclass:: cherryservers_sdk_python.ips.IP
     :members:
 
-.. autoclass:: cherry.ips.IPModel
+.. autoclass:: cherryservers_sdk_python.ips.IPModel
 
-.. autoclass:: cherry.ips.AttachedServerModel
+.. autoclass:: cherryservers_sdk_python.ips.AttachedServerModel
 
-.. autoclass:: cherry.ips.IPClient
+.. autoclass:: cherryservers_sdk_python.ips.IPClient
     :members:
 
-.. autoclass:: cherry.ips.CreationRequest
+.. autoclass:: cherryservers_sdk_python.ips.CreationRequest
 
-.. autoclass:: cherry.ips.UpdateRequest
+.. autoclass:: cherryservers_sdk_python.ips.UpdateRequest

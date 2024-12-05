@@ -1,17 +1,19 @@
-"""Test cherry images module functionality."""
+"""Test cherryservers_sdk_python images module functionality."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import cherry
+    import cherryservers_sdk_python
 
 
 class TestImage:
     """Test User functionality."""
 
-    def test_get_by_plan(self, facade: cherry.facade.CherryApiFacade) -> None:
+    def test_get_by_plan(
+        self, facade: cherryservers_sdk_python.facade.CherryApiFacade
+    ) -> None:
         """Test getting a list of images by plan slug."""
         images = facade.images.list_by_plan("cloud_vps_1")
 

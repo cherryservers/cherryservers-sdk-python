@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 
 from pydantic import Field
 
-from cherry import _base
+from cherryservers_sdk_python import _base
 
 if TYPE_CHECKING:
-    from cherry.plans import PricingModel
+    from cherryservers_sdk_python.plans import PricingModel
 
 
 class RemainingTimeModel(_base.ResourceModel):
@@ -39,8 +39,9 @@ class ResourcesModel(_base.ResourceModel):
     Here, resources refers to infrastructure objects that have a real cost.
 
     Attributes:
-        pricing (cherry.plans.PricingModel | None): Team resource pricing data.
-        remaining (cherry.teams.RemainingTimeModel | None):
+        pricing (cherryservers_sdk_python.plans.PricingModel | None):
+         Team resource pricing data.
+        remaining (cherryservers_sdk_python.teams.RemainingTimeModel | None):
          Team resource remaining time data.
 
     """
@@ -78,9 +79,12 @@ class CreditModel(_base.ResourceModel):
     since in represents an actual Cherry Servers team credit resource state.
 
     Attributes:
-        account (cherry.teams.CreditDetailsModel | None): Account credit details.
-        promo (cherry.teams.CreditDetailsModel | None): Promotional credit details.
-        resources (cherry.teams.ResourcesModel | None): Resources credit details.
+        account (cherryservers_sdk_python.teams.CreditDetailsModel | None):
+         Account credit details.
+        promo (cherryservers_sdk_python.teams.CreditDetailsModel | None):
+         Promotional credit details.
+        resources (cherryservers_sdk_python.teams.ResourcesModel | None):
+         Resources credit details.
 
     """
 
@@ -131,7 +135,7 @@ class BillingModel(_base.ResourceModel):
         address_2 (str | None): Last address line, if applicable.
         country_iso_2 (str | None): Country code, if applicable.
         city (str | None): City, if applicable.
-        vat (cherry.teams.VatModel | None): VAT data.
+        vat (cherryservers_sdk_python.teams.VatModel | None): VAT data.
         currency (str | None): Currency type.
 
     """
@@ -172,8 +176,8 @@ class TeamModel(_base.ResourceModel):
     Attributes:
         id (int): Team ID.
         name (str | None): Team name.
-        credit (cherry.teams.CreditModel | None): Team credit data.
-        billing (cherry.teams.BillingModel | None): Team billing data.
+        credit (cherryservers_sdk_python.teams.CreditModel | None): Team credit data.
+        billing (cherryservers_sdk_python.teams.BillingModel | None): Team billing data.
         href (str | None): Team href.
 
     """
@@ -222,7 +226,7 @@ class TeamClient(_base.ResourceClient):
 
     Manage Cherry Servers team resources.
     This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
@@ -234,13 +238,13 @@ class TeamClient(_base.ResourceClient):
             team = facade.teams.get_by_id(123456)
 
             # Create a team.
-            create_req = cherry.teams.CreationRequest(
+            create_req = cherryservers_sdk_python.teams.CreationRequest(
                 name="python-sdk-test", currency="EUR"
             )
             new_team = facade.teams.create(create_req)
 
             # Update team.
-            update_req = cherry.teams.UpdateRequest(
+            update_req = cherryservers_sdk_python.teams.UpdateRequest(
                 name="python-sdk-test-updated"
             )
             new_team.update(update_req)

@@ -1,26 +1,26 @@
 Teams
 =========
 
-.. autoclass:: cherry.teams.Team
+.. autoclass:: cherryservers_sdk_python.teams.Team
     :members:
 
-.. autoclass:: cherry.teams.RemainingTimeModel
+.. autoclass:: cherryservers_sdk_python.teams.RemainingTimeModel
 
-.. autoclass:: cherry.teams.ResourcesModel
+.. autoclass:: cherryservers_sdk_python.teams.ResourcesModel
 
-.. autoclass:: cherry.teams.CreditDetailsModel
+.. autoclass:: cherryservers_sdk_python.teams.CreditDetailsModel
 
-.. autoclass:: cherry.teams.CreditModel
+.. autoclass:: cherryservers_sdk_python.teams.CreditModel
 
-.. autoclass:: cherry.teams.VatModel
+.. autoclass:: cherryservers_sdk_python.teams.VatModel
 
-.. autoclass:: cherry.teams.BillingModel
+.. autoclass:: cherryservers_sdk_python.teams.BillingModel
 
-.. autoclass:: cherry.teams.TeamModel
+.. autoclass:: cherryservers_sdk_python.teams.TeamModel
 
-.. autoclass:: cherry.teams.TeamClient
+.. autoclass:: cherryservers_sdk_python.teams.TeamClient
     :members:
 
-.. autoclass:: cherry.teams.CreationRequest
+.. autoclass:: cherryservers_sdk_python.teams.CreationRequest
 
-.. autoclass:: cherry.teams.UpdateRequest
+.. autoclass:: cherryservers_sdk_python.teams.UpdateRequest

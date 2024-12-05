@@ -1,28 +1,28 @@
 Plans
 =========
 
-.. autoclass:: cherry.plans.Plan
+.. autoclass:: cherryservers_sdk_python.plans.Plan
     :members:
 
-.. autoclass:: cherry.plans.AvailableRegionsModel
+.. autoclass:: cherryservers_sdk_python.plans.AvailableRegionsModel
 
-.. autoclass:: cherry.plans.BandwidthModel
+.. autoclass:: cherryservers_sdk_python.plans.BandwidthModel
 
-.. autoclass:: cherry.plans.NicsModel
+.. autoclass:: cherryservers_sdk_python.plans.NicsModel
 
-.. autoclass:: cherry.plans.RaidModel
+.. autoclass:: cherryservers_sdk_python.plans.RaidModel
 
-.. autoclass:: cherry.plans.StorageModel
+.. autoclass:: cherryservers_sdk_python.plans.StorageModel
 
-.. autoclass:: cherry.plans.MemoryModel
+.. autoclass:: cherryservers_sdk_python.plans.MemoryModel
 
-.. autoclass:: cherry.plans.CPUModel
+.. autoclass:: cherryservers_sdk_python.plans.CPUModel
 
-.. autoclass:: cherry.plans.SpecsModel
+.. autoclass:: cherryservers_sdk_python.plans.SpecsModel
 
-.. autoclass:: cherry.plans.PricingModel
+.. autoclass:: cherryservers_sdk_python.plans.PricingModel
 
-.. autoclass:: cherry.plans.PlanModel
+.. autoclass:: cherryservers_sdk_python.plans.PlanModel
 
-.. autoclass:: cherry.plans.PlanClient
+.. autoclass:: cherryservers_sdk_python.plans.PlanClient
     :members:

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base
+from cherryservers_sdk_python import _base
 
 
 class UserModel(_base.ResourceModel):
@@ -48,12 +48,12 @@ class UserClient(_base.ResourceClient):
     """Cherry Servers user client.
 
     Manage Cherry Servers user resources. This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Retrieve by ID.
             user = facade.users.get_by_id(123456)

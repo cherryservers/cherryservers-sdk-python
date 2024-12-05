@@ -1,4 +1,4 @@
-"""Test cherry server functionality."""
+"""Test cherryservers_sdk_python server functionality."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 import pytest
 import requests
 
-import cherry
+import cherryservers_sdk_python
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -43,25 +43,29 @@ class TestServer:
 
     @pytest.fixture(scope="class")
     def fip(
-        self, facade: cherry.facade.CherryApiFacade, project: cherry.projects.Project
-    ) -> Generator[cherry.ips.IP]:
+        self,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
+        project: cherryservers_sdk_python.projects.Project,
+    ) -> Generator[cherryservers_sdk_python.ips.IP]:
         """Initialize a Cherry servers floating IP address."""
         fip = facade.ips.create(
-            cherry.ips.CreationRequest(
+            cherryservers_sdk_python.ips.CreationRequest(
                 region="eu_nord_1",
             ),
             project.get_id(),
         )
         yield fip
-        fip.update(cherry.ips.UpdateRequest(targeted_to=0))
+        fip.update(cherryservers_sdk_python.ips.UpdateRequest(targeted_to=0))
         fip.delete()
 
     @pytest.fixture(scope="class")
     def server(
-        self, facade: cherry.facade.CherryApiFacade, project: cherry.projects.Project
-    ) -> cherry.servers.Server:
+        self,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
+        project: cherryservers_sdk_python.projects.Project,
+    ) -> cherryservers_sdk_python.servers.Server:
         """Initialize a Cherry Servers server."""
-        creation_req = cherry.servers.CreationRequest(
+        creation_req = cherryservers_sdk_python.servers.CreationRequest(
             region="eu_nord_1",
             plan="cloud_vps_1",
         )
@@ -77,13 +81,13 @@ class TestServer:
 
     def test_create_with_full_params(
         self,
-        facade: cherry.facade.CherryApiFacade,
-        project: cherry.projects.Project,
-        sshkey: cherry.sshkeys.SSHKey,
-        fip: cherry.ips.IP,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
+        project: cherryservers_sdk_python.projects.Project,
+        sshkey: cherryservers_sdk_python.sshkeys.SSHKey,
+        fip: cherryservers_sdk_python.ips.IP,
     ) -> None:
         """Test creating a server with full params provided."""
-        creation_req = cherry.servers.CreationRequest(
+        creation_req = cherryservers_sdk_python.servers.CreationRequest(
             region="eu_nord_1",
             plan="cloud_vps_1",
             image="debian_12_64bit",
@@ -114,7 +118,9 @@ class TestServer:
         server.delete()
 
     def test_get_by_id(
-        self, server: cherry.servers.Server, facade: cherry.facade.CherryApiFacade
+        self,
+        server: cherryservers_sdk_python.servers.Server,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test getting a single server by ID."""
         server_model = server.get_model()
@@ -132,9 +138,9 @@ class TestServer:
 
     def test_get_by_project(
         self,
-        facade: cherry.facade.CherryApiFacade,
-        project: cherry.projects.Project,
-        server: cherry.servers.Server,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
+        project: cherryservers_sdk_python.projects.Project,
+        server: cherryservers_sdk_python.servers.Server,
     ) -> None:
         """Test getting a list of server that belong to a project."""
         servers = facade.servers.list_by_project(project.get_id())
@@ -149,9 +155,9 @@ class TestServer:
             for server_model in retrieved_server_models
         )
 
-    def test_update(self, server: cherry.servers.Server) -> None:
+    def test_update(self, server: cherryservers_sdk_python.servers.Server) -> None:
         """Test updating a server."""
-        update_req = cherry.servers.UpdateRequest(
+        update_req = cherryservers_sdk_python.servers.UpdateRequest(
             name="python-sdk-server-update-test",
             hostname="python-sdk-server-update-test",
             tags={"env": "test-upd"},
@@ -163,10 +169,14 @@ class TestServer:
         assert server_model.tags == update_req.tags
         assert server_model.hostname == update_req.hostname
 
-    def test_rescue_mode(self, baremetal_server: cherry.servers.Server) -> None:
+    def test_rescue_mode(
+        self, baremetal_server: cherryservers_sdk_python.servers.Server
+    ) -> None:
         """Test server rescue mode."""
         baremetal_server.enter_rescue_mode(
-            cherry.servers.EnterRescueModeRequest(password=_generate_password(16))
+            cherryservers_sdk_python.servers.EnterRescueModeRequest(
+                password=_generate_password(16)
+            )
         )
 
         assert baremetal_server.get_status() == "rescue mode"
@@ -175,7 +185,9 @@ class TestServer:
 
         assert baremetal_server.get_status() == "deployed"
 
-    def test_power_switch(self, baremetal_server: cherry.servers.Server) -> None:
+    def test_power_switch(
+        self, baremetal_server: cherryservers_sdk_python.servers.Server
+    ) -> None:
         """Test server power switch."""
         baremetal_server.power_off()
 
@@ -184,17 +196,21 @@ class TestServer:
         # There is currently no way to check if the server is powered off.
         assert baremetal_server.get_status() == "deployed"
 
-    def test_reboot(self, baremetal_server: cherry.servers.Server) -> None:
+    def test_reboot(
+        self, baremetal_server: cherryservers_sdk_python.servers.Server
+    ) -> None:
         """Test server reboot."""
         baremetal_server.reboot()
 
         assert baremetal_server.get_status() == "deployed"
 
     def test_rebuild(
-        self, server: cherry.servers.Server, sshkey: cherry.sshkeys.SSHKey
+        self,
+        server: cherryservers_sdk_python.servers.Server,
+        sshkey: cherryservers_sdk_python.sshkeys.SSHKey,
     ) -> None:
         """Test server rebuild."""
-        rebuild_req = cherry.servers.RebuildRequest(
+        rebuild_req = cherryservers_sdk_python.servers.RebuildRequest(
             hostname="python-sdk-server-rebuild-test",
             image="debian_12_64bit",
             user_data="I2Nsb3VkLWNvbmZpZwp3cml0ZV9maWxlczoKICAt"
@@ -215,7 +231,9 @@ class TestServer:
         assert server_model.ssh_keys[0].id == sshkey.get_model().id
 
     def test_delete(
-        self, server: cherry.servers.Server, facade: cherry.facade.CherryApiFacade
+        self,
+        server: cherryservers_sdk_python.servers.Server,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test deleting a server."""
         server.delete()

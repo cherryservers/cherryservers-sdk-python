@@ -1,16 +1,16 @@
 Projects
 =========
 
-.. autoclass:: cherry.projects.Project
+.. autoclass:: cherryservers_sdk_python.projects.Project
     :members:
 
-.. autoclass:: cherry.projects.ProjectModel
+.. autoclass:: cherryservers_sdk_python.projects.ProjectModel
 
-.. autoclass:: cherry.projects.ProjectBGPModel
+.. autoclass:: cherryservers_sdk_python.projects.ProjectBGPModel
 
-.. autoclass:: cherry.projects.ProjectClient
+.. autoclass:: cherryservers_sdk_python.projects.ProjectClient
     :members:
 
-.. autoclass:: cherry.projects.CreationRequest
+.. autoclass:: cherryservers_sdk_python.projects.CreationRequest
 
-.. autoclass:: cherry.projects.UpdateRequest
+.. autoclass:: cherryservers_sdk_python.projects.UpdateRequest

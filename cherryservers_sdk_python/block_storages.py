@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, _resource_wait, ips, regions
+from cherryservers_sdk_python import _base, _resource_wait, ips, regions
 
 
 class BlockStorageModel(_base.ResourceModel):
@@ -20,13 +20,13 @@ class BlockStorageModel(_base.ResourceModel):
         size (int): EBS size.
         allow_edit_size (bool | None): Whether size can be edited.
         unit (str | None): Size measurement unit.
-        attached_to (cherry.ips.AttachedServerModel | None):
+        attached_to (cherryservers_sdk_python.ips.AttachedServerModel | None):
          EBS attached server data.
         vlan_id (str | None): EBS VLAN ID.
         vlan_ip (str | None): EBS VLAN IP address.
         initiator (str | None): EBS initiator.
         discovery_ip (str | None): EBS discovery IP address.
-        region (cherry.regions.RegionModel | None): Region data.
+        region (cherryservers_sdk_python.regions.RegionModel | None): Region data.
 
     """
 
@@ -103,7 +103,7 @@ class BlockStorageClient(_base.ResourceClient):
 
     Manage Cherry Servers block storage resources.
     This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
@@ -117,19 +117,19 @@ class BlockStorageClient(_base.ResourceClient):
                 print(storage.get_model())
 
             # Create a storage.
-            creation_req = cherry.block_storages.CreationRequest(
+            creation_req = cherryservers_sdk_python.block_storages.CreationRequest(
                 region="eu_nord_1", size=1
             )
             storage = facade.block_storages.create(creation_req, project_id=123456)
 
             # Update storage.
-            update_req = cherry.block_storages.UpdateRequest(
+            update_req = cherryservers_sdk_python.block_storages.UpdateRequest(
                 description="updated", size=2
             )
             storage.update(update_req)
 
             # Attach storage.
-            attach_req = cherry.block_storages.AttachRequest(
+            attach_req = cherryservers_sdk_python.block_storages.AttachRequest(
                 attach_to=123456
             )
             storage.attach(attach_req)

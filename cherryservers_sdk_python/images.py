@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, plans
+from cherryservers_sdk_python import _base, plans
 
 
 class ImageModel(_base.ResourceModel):
@@ -17,7 +17,8 @@ class ImageModel(_base.ResourceModel):
         id(int): ID of the image.
         name(str | None): Full name of the image.
         slug(str | None): Slug of the image name.
-        pricing(list[cherry.plans.PricingModel] | None): Image pricing data.
+        pricing(list[cherryservers_sdk_python.plans.PricingModel] | None):
+         Image pricing data.
 
     """
 
@@ -33,12 +34,12 @@ class ImageClient(_base.ResourceClient):
     """Cherry Servers image client.
 
     Manage Cherry Servers image resources. This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Retrieve a list of available OSes for a server plan.
             images = facade.images.get_by_plan("cloud_vps_1")

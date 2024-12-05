@@ -1,10 +1,10 @@
 Images
 =========
 
-.. autoclass:: cherry.images.Image
+.. autoclass:: cherryservers_sdk_python.images.Image
     :members:
 
-.. autoclass:: cherry.images.ImageModel
+.. autoclass:: cherryservers_sdk_python.images.ImageModel
 
-.. autoclass:: cherry.images.ImageClient
+.. autoclass:: cherryservers_sdk_python.images.ImageClient
     :members:

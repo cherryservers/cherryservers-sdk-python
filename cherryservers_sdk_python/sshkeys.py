@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, users
+from cherryservers_sdk_python import _base, users
 
 
 class SSHKeyModel(_base.ResourceModel):
@@ -18,7 +18,7 @@ class SSHKeyModel(_base.ResourceModel):
         label (str | None): SSH key label.
         key (str | None): Public SSH key.
         fingerprint (str | None): SSH key fingerprint.
-        user (cherry.users.UserModel | None): SSH key user.
+        user (cherryservers_sdk_python.users.UserModel | None): SSH key user.
         updated (str | None): Timestamp of the last SSH key update.
         created (str | None): Timestamp of the SSH key creation.
         href (str | None): SSH key href.
@@ -70,21 +70,21 @@ class SSHKeyClient(_base.ResourceClient):
 
     Manage Cherry Servers SSH key resources.
     This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
             # Create SSH key.
-            facade = cherry.facade.CherryApiFacade(token="my-token")
-            req = cherry.sshkeys.CreationRequest(
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            req = cherryservers_sdk_python.sshkeys.CreationRequest(
                 label = "test",
                 key = "my-public-api-key"
             )
             sshkey = facade.sshkeys.create(req)
 
             # Update SSH key.
-            upd_req = cherry.sshkeys.UpdateRequest(
+            upd_req = cherryservers_sdk_python.sshkeys.UpdateRequest(
                 label = "test-updated"
             )
             sshkey.update(upd_req)

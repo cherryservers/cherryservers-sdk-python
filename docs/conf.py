@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import cherry
+import cherryservers_sdk_python
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.abspath(".."))
 project = "cherryservers-sdk-python"
 copyright = "2024, Cherry Servers UAB"
 author = "Martynas Deveikis"
-release = cherry.__version__
+release = cherryservers_sdk_python.__version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

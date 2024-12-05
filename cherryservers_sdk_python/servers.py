@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from pydantic import Field
 
-from cherry import (
+from cherryservers_sdk_python import (
     _base,
     _resource_wait,
     block_storages,
@@ -69,7 +69,8 @@ class ServerBGPModel(_base.ResourceModel):
         connected (int | None): BGP connections.
         limit (int | None): BGP limit.
         active (int | None): BGP active.
-        routes (list[cherry.servers.ServerBGPRouteModel] | None): BGP routes.
+        routes (list[cherryservers_sdk_python.servers.ServerBGPRouteModel] | None):
+         BGP routes.
         updated (str | None): Date of last update.
 
     """
@@ -143,30 +144,33 @@ class ServerModel(_base.ResourceModel):
         id (int): Server ID.
         name (str | None): Server name. Typically corresponds to plan name.
         href (str | None): Server href.
-        bmc (cherry.servers.ServerBMCModel | None):
+        bmc (cherryservers_sdk_python.servers.ServerBMCModel | None):
          Server BMC credential data. Only for baremetal servers.
          Scrubbed at 24 hours after creation.
         hostname (str | None): Server hostname.
         password (str | None): Server user password. Scrubbed 24 hours after creation.
         username (str | None): Server user username. Scrubbed 24 hours after creation.
-        deployed_image (cherry.servers.ServerDeployedImageModel | None): OS image data.
+        deployed_image (cherryservers_sdk_python.servers.ServerDeployedImageModel | None):
+         OS image data.
         spot_instance (bool | None): Whether the server belongs the spot market.
-        region (cherry.regions.RegionModel | None): Region data.
+        region (cherryservers_sdk_python.regions.RegionModel | None): Region data.
         state (str | None): Server state.
         status (str): Server status.
-        bgp (cherry.servers.ServerBGPModel | None): BGP data.
-        plan (cherry.plans.PlanModel | None): Plan data.
-        pricing (cherry.plans.PricingModel | None): Pricing data.
-        ssh_keys (list[cherry.sshkeys.SSHKeyModel] | None): SSH key data.
+        bgp (cherryservers_sdk_python.servers.ServerBGPModel | None): BGP data.
+        plan (cherryservers_sdk_python.plans.PlanModel | None): Plan data.
+        pricing (cherryservers_sdk_python.plans.PricingModel | None): Pricing data.
+        ssh_keys (list[cherryservers_sdk_python.sshkeys.SSHKeyModel] | None): SSH key data.
         tags (dict[str, str] | None): User-defined server tags.
         termination_date (str | None): Server termination date.
         created_at (str | None): Server deployment date.
         traffic_used_bytes (int | None): Server traffic usage.
-        project (cherry.projects.ProjectModel | None): Project data.
-        ip_addresses (list[cherry.ips.IPModel] | None): Server IP address data.
-        storage (cherry.block_storages.BlockStorageModel | None): Block storage data.
+        project (cherryservers_sdk_python.projects.ProjectModel | None): Project data.
+        ip_addresses (list[cherryservers_sdk_python.ips.IPModel] | None):
+         Server IP address data.
+        storage (cherryservers_sdk_python.block_storages.BlockStorageModel | None):
+         Block storage data.
 
-    """
+    """  # noqa: W505
 
     id: int = Field(description="Server ID.")
     name: str | None = Field(
@@ -385,12 +389,12 @@ class ServerClient(_base.ResourceClient):
 
     Manage Cherry Servers server resources.
     This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Get server by id.
             server = facade.servers.get_by_id(123456)
@@ -401,13 +405,13 @@ class ServerClient(_base.ResourceClient):
                 print(server.get_model())
 
             # Create a server.
-            creation_req = cherry.servers.CreationRequest(
+            creation_req = cherryservers_sdk_python.servers.CreationRequest(
                 region="eu_nord_1", plan="cloud_vps_1"
             )
             server = facade.servers.create(creation_req, project_id=217727)
 
             # Update server.
-            update_req = cherry.servers.UpdateRequest(
+            update_req = cherryservers_sdk_python.servers.UpdateRequest(
                 name="test", hostname="test", tags={"env": "test"}, bgp=True
             )
             server.update(update_req)

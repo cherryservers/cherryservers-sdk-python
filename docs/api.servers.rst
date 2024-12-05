@@ -1,26 +1,26 @@
 Servers
 =========
 
-.. autoclass:: cherry.servers.Server
+.. autoclass:: cherryservers_sdk_python.servers.Server
     :members:
 
-.. autoclass:: cherry.servers.ServerBGPRouteModel
+.. autoclass:: cherryservers_sdk_python.servers.ServerBGPRouteModel
 
-.. autoclass:: cherry.servers.ServerBGPModel
+.. autoclass:: cherryservers_sdk_python.servers.ServerBGPModel
 
-.. autoclass:: cherry.servers.ServerDeployedImageModel
+.. autoclass:: cherryservers_sdk_python.servers.ServerDeployedImageModel
 
-.. autoclass:: cherry.servers.ServerBMCModel
+.. autoclass:: cherryservers_sdk_python.servers.ServerBMCModel
 
-.. autoclass:: cherry.servers.ServerModel
+.. autoclass:: cherryservers_sdk_python.servers.ServerModel
 
-.. autoclass:: cherry.servers.ServerClient
+.. autoclass:: cherryservers_sdk_python.servers.ServerClient
     :members:
 
-.. autoclass:: cherry.servers.CreationRequest
+.. autoclass:: cherryservers_sdk_python.servers.CreationRequest
 
-.. autoclass:: cherry.servers.UpdateRequest
+.. autoclass:: cherryservers_sdk_python.servers.UpdateRequest
 
-.. autoclass:: cherry.servers.EnterRescueModeRequest
+.. autoclass:: cherryservers_sdk_python.servers.EnterRescueModeRequest
 
-.. autoclass:: cherry.servers.RebuildRequest
+.. autoclass:: cherryservers_sdk_python.servers.RebuildRequest

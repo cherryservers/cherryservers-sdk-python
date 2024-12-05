@@ -1,10 +1,10 @@
 Users
 ======
 
-.. autoclass:: cherry.users.User
+.. autoclass:: cherryservers_sdk_python.users.User
     :members:
 
-.. autoclass:: cherry.users.UserModel
+.. autoclass:: cherryservers_sdk_python.users.UserModel
 
-.. autoclass:: cherry.users.UserClient
+.. autoclass:: cherryservers_sdk_python.users.UserClient
     :members:

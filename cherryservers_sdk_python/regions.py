@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base
+from cherryservers_sdk_python import _base
 
 
 class RegionBGPModel(_base.ResourceModel):
@@ -34,7 +34,7 @@ class RegionModel(_base.ResourceModel):
         name (str | None): Name of the region.
         slug (str | None): Slug of the regions name.
         region_iso_2 (str | None): Region ISO 2 country code.
-        bgp (cherry.regions.RegionBGPModel | None): Region BGP.
+        bgp (cherryservers_sdk_python.regions.RegionBGPModel | None): Region BGP.
         location (str | None): Region server location.
         href (str | None): Region href.
 
@@ -56,12 +56,12 @@ class RegionClient(_base.ResourceClient):
 
     Manage Cherry Servers region resources.
     This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Retrieve by ID.
             region = facade.regions.get_by_id(1)

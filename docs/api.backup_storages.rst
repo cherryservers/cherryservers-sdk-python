@@ -1,24 +1,24 @@
 Backup storages
 ================
 
-.. autoclass:: cherry.backup_storages.BackupStorage
+.. autoclass:: cherryservers_sdk_python.backup_storages.BackupStorage
     :members:
 
-.. autoclass:: cherry.backup_storages.BackupStoragePlanModel
+.. autoclass:: cherryservers_sdk_python.backup_storages.BackupStoragePlanModel
 
-.. autoclass:: cherry.backup_storages.BackupMethodModel
+.. autoclass:: cherryservers_sdk_python.backup_storages.BackupMethodModel
 
-.. autoclass:: cherry.backup_storages.RuleMethodModel
+.. autoclass:: cherryservers_sdk_python.backup_storages.RuleMethodModel
 
-.. autoclass:: cherry.backup_storages.RuleModel
+.. autoclass:: cherryservers_sdk_python.backup_storages.RuleModel
 
-.. autoclass:: cherry.backup_storages.BackupStorageModel
+.. autoclass:: cherryservers_sdk_python.backup_storages.BackupStorageModel
 
-.. autoclass:: cherry.backup_storages.BackupStorageClient
+.. autoclass:: cherryservers_sdk_python.backup_storages.BackupStorageClient
     :members:
 
-.. autoclass:: cherry.backup_storages.CreationRequest
+.. autoclass:: cherryservers_sdk_python.backup_storages.CreationRequest
 
-.. autoclass:: cherry.backup_storages.UpdateRequest
+.. autoclass:: cherryservers_sdk_python.backup_storages.UpdateRequest
 
-.. autoclass:: cherry.backup_storages.UpdateAccessMethodsRequest
+.. autoclass:: cherryservers_sdk_python.backup_storages.UpdateAccessMethodsRequest

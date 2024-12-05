@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base
+from cherryservers_sdk_python import _base
 
 
 class ProjectBGPModel(_base.ResourceModel):
@@ -34,7 +34,7 @@ class ProjectModel(_base.ResourceModel):
     Attributes:
         id (int): Project ID.
         name (str | None): Project name.
-        bgp (cherry.projects.ProjectBGPModel | None): Project BGP.
+        bgp (cherryservers_sdk_python.projects.ProjectBGPModel | None): Project BGP.
         href (str | None): Project href.
 
     """
@@ -81,24 +81,24 @@ class ProjectClient(_base.ResourceClient):
 
     Manage Cherry Servers project resources.
     This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Retrieve a project.
             existing_project = facade.projects.get_by_id(123456)
 
             # Create project.
-            req = cherry.projects.CreationRequest(
+            req = cherryservers_sdk_python.projects.CreationRequest(
                 name = "my-project"
             )
             project = facade.projects.create(req, 123456)
 
             # Update project.
-            upd_req = cherry.projects.UpdateRequest(
+            upd_req = cherryservers_sdk_python.projects.UpdateRequest(
                 name = "my-project-updated",
                 bgp = True
             )

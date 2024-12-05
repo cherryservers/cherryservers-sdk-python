@@ -1,11 +1,11 @@
-"""Test cherry projects module functionality."""
+"""Test cherryservers_sdk_python projects module functionality."""
 
 from __future__ import annotations
 
 import pytest
 import requests
 
-import cherry
+import cherryservers_sdk_python
 
 
 class TestProject:
@@ -13,11 +13,11 @@ class TestProject:
 
     @pytest.fixture(scope="class")
     def project(
-        self, facade: cherry.facade.CherryApiFacade, team_id: int
-    ) -> cherry.projects.Project:
+        self, facade: cherryservers_sdk_python.facade.CherryApiFacade, team_id: int
+    ) -> cherryservers_sdk_python.projects.Project:
         """Initialize a Cherry Servers Project."""
-        creation_req = cherry.projects.CreationRequest(
-            name="cherry-python-sdk-project-test"
+        creation_req = cherryservers_sdk_python.projects.CreationRequest(
+            name="cherryservers-python-sdk-project-test"
         )
         project = facade.projects.create(creation_req, team_id=team_id)
 
@@ -28,7 +28,9 @@ class TestProject:
         return project
 
     def test_get_by_id(
-        self, project: cherry.projects.Project, facade: cherry.facade.CherryApiFacade
+        self,
+        project: cherryservers_sdk_python.projects.Project,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test getting a single project by ID."""
         project_model = project.get_model()
@@ -39,8 +41,8 @@ class TestProject:
 
     def test_get_by_team(
         self,
-        project: cherry.projects.Project,
-        facade: cherry.facade.CherryApiFacade,
+        project: cherryservers_sdk_python.projects.Project,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
         team_id: int,
     ) -> None:
         """Test getting all projects that belong to a team."""
@@ -53,10 +55,10 @@ class TestProject:
             for retrieved_project_model in retrieved_project_models
         )
 
-    def test_update(self, project: cherry.projects.Project) -> None:
+    def test_update(self, project: cherryservers_sdk_python.projects.Project) -> None:
         """Test updating a project."""
-        update_req = cherry.projects.UpdateRequest(
-            name="cherry-python-sdk-project-test-updated", bgp=True
+        update_req = cherryservers_sdk_python.projects.UpdateRequest(
+            name="cherryservers-python-sdk-project-test-updated", bgp=True
         )
         project.update(update_req)
 
@@ -65,7 +67,9 @@ class TestProject:
         assert updated_model.name == update_req.name
 
     def test_delete(
-        self, project: cherry.projects.Project, facade: cherry.facade.CherryApiFacade
+        self,
+        project: cherryservers_sdk_python.projects.Project,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test deleting a project."""
         project.delete()

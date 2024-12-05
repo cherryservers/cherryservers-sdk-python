@@ -1,12 +1,12 @@
 Regions
 =========
 
-.. autoclass:: cherry.regions.Region
+.. autoclass:: cherryservers_sdk_python.regions.Region
     :members:
 
-.. autoclass:: cherry.regions.RegionModel
+.. autoclass:: cherryservers_sdk_python.regions.RegionModel
 
-.. autoclass:: cherry.regions.RegionBGPModel
+.. autoclass:: cherryservers_sdk_python.regions.RegionBGPModel
 
-.. autoclass:: cherry.regions.RegionClient
+.. autoclass:: cherryservers_sdk_python.regions.RegionClient
     :members:

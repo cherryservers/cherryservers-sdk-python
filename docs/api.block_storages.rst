@@ -1,16 +1,16 @@
 Block storages
 ================
 
-.. autoclass:: cherry.block_storages.BlockStorage
+.. autoclass:: cherryservers_sdk_python.block_storages.BlockStorage
     :members:
 
-.. autoclass:: cherry.block_storages.BlockStorageModel
+.. autoclass:: cherryservers_sdk_python.block_storages.BlockStorageModel
 
-.. autoclass:: cherry.block_storages.BlockStorageClient
+.. autoclass:: cherryservers_sdk_python.block_storages.BlockStorageClient
     :members:
 
-.. autoclass:: cherry.block_storages.CreationRequest
+.. autoclass:: cherryservers_sdk_python.block_storages.CreationRequest
 
-.. autoclass:: cherry.block_storages.UpdateRequest
+.. autoclass:: cherryservers_sdk_python.block_storages.UpdateRequest
 
-.. autoclass:: cherry.block_storages.AttachRequest
+.. autoclass:: cherryservers_sdk_python.block_storages.AttachRequest

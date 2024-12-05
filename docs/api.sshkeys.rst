@@ -1,15 +1,15 @@
 SSH Keys
 =========
 
-.. autoclass:: cherry.sshkeys.SSHKey
+.. autoclass:: cherryservers_sdk_python.sshkeys.SSHKey
     :members:
     :inherited-members:
 
-.. autoclass:: cherry.sshkeys.SSHKeyModel
+.. autoclass:: cherryservers_sdk_python.sshkeys.SSHKeyModel
 
-.. autoclass:: cherry.sshkeys.SSHKeyClient
+.. autoclass:: cherryservers_sdk_python.sshkeys.SSHKeyClient
     :members:
 
-.. autoclass:: cherry.sshkeys.CreationRequest
+.. autoclass:: cherryservers_sdk_python.sshkeys.CreationRequest
 
-.. autoclass:: cherry.sshkeys.UpdateRequest
+.. autoclass:: cherryservers_sdk_python.sshkeys.UpdateRequest

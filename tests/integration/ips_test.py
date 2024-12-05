@@ -1,10 +1,10 @@
-"""Test cherry ips functionality."""
+"""Test cherryservers_sdk_python ips functionality."""
 
 from __future__ import annotations
 
 import pytest
 
-import cherry
+import cherryservers_sdk_python
 
 
 class TestIP:
@@ -12,21 +12,23 @@ class TestIP:
 
     @pytest.fixture(scope="class")
     def ip(
-        self, facade: cherry.facade.CherryApiFacade, project: cherry.projects.Project
-    ) -> cherry.ips.IP:
+        self,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
+        project: cherryservers_sdk_python.projects.Project,
+    ) -> cherryservers_sdk_python.ips.IP:
         """Initialize a Cherry Servers IP."""
-        creation_req = cherry.ips.CreationRequest(region="eu_nord_1")
+        creation_req = cherryservers_sdk_python.ips.CreationRequest(region="eu_nord_1")
         return facade.ips.create(creation_req, project.get_model().id)
 
     def test_create_full_params(
         self,
-        vps: cherry.servers.Server,
-        project: cherry.projects.Project,
-        facade: cherry.facade.CherryApiFacade,
+        vps: cherryservers_sdk_python.servers.Server,
+        project: cherryservers_sdk_python.projects.Project,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test IP creation with all optional parameters."""
         vps_model = vps.get_model()
-        creation_req = cherry.ips.CreationRequest(
+        creation_req = cherryservers_sdk_python.ips.CreationRequest(
             region="eu_nord_1",
             targeted_to=vps_model.id,
             ptr_record="python-sdk-test",
@@ -45,12 +47,14 @@ class TestIP:
         assert ip_model.a_record == "python-sdk-test.cloud.cherryservers.net."
         assert ip_model.tags == {"env": "test"}
 
-        detach_req = cherry.ips.UpdateRequest(targeted_to=0)
+        detach_req = cherryservers_sdk_python.ips.UpdateRequest(targeted_to=0)
         ip.update(detach_req)
         ip.delete()
 
     def test_get_by_id(
-        self, ip: cherry.ips.IP, facade: cherry.facade.CherryApiFacade
+        self,
+        ip: cherryservers_sdk_python.ips.IP,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
     ) -> None:
         """Test getting a single IP by ID."""
         ip_model = ip.get_model()
@@ -63,9 +67,9 @@ class TestIP:
 
     def test_get_by_project(
         self,
-        project: cherry.projects.Project,
-        facade: cherry.facade.CherryApiFacade,
-        ip: cherry.ips.IP,
+        project: cherryservers_sdk_python.projects.Project,
+        facade: cherryservers_sdk_python.facade.CherryApiFacade,
+        ip: cherryservers_sdk_python.ips.IP,
     ) -> None:
         """Test getting IPs by project."""
         ips = facade.ips.list_by_project(project.get_model().id)
@@ -79,7 +83,11 @@ class TestIP:
             for ip_model in retrieved_ip_models
         )
 
-    def test_update(self, ip: cherry.ips.IP, vps: cherry.servers.Server) -> None:
+    def test_update(
+        self,
+        ip: cherryservers_sdk_python.ips.IP,
+        vps: cherryservers_sdk_python.servers.Server,
+    ) -> None:
         """Test updating an IP."""
         vps_model = vps.get_model()
         vps_public_ip_id = None
@@ -91,7 +99,7 @@ class TestIP:
 
         assert vps_public_ip_id is not None, "no public IP found for VPS fixture."
 
-        update_req = cherry.ips.UpdateRequest(
+        update_req = cherryservers_sdk_python.ips.UpdateRequest(
             ptr_record="python-sdk-test-upd",
             a_record="python-sdk-test-upd",
             routed_to=vps_public_ip_id,
@@ -110,12 +118,12 @@ class TestIP:
             assert updated_ip_model.routed_to.id == vps_public_ip_id
         assert updated_ip_model.tags == {"env": "test-upd"}
 
-    def test_delete(self, ip: cherry.ips.IP) -> None:
+    def test_delete(self, ip: cherryservers_sdk_python.ips.IP) -> None:
         """Test deleting an IP."""
-        with pytest.raises(cherry.ips.AddressAttachedError):
+        with pytest.raises(cherryservers_sdk_python.ips.AddressAttachedError):
             ip.delete()
 
-        ip.update(cherry.ips.UpdateRequest(targeted_to=0))
+        ip.update(cherryservers_sdk_python.ips.UpdateRequest(targeted_to=0))
         ip.delete()
 
         # IPs aren't deleted immediately, so we can't check if deletion succeeded

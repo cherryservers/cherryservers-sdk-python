@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, projects, regions
+from cherryservers_sdk_python import _base, projects, regions
 
 
 class AddressAttachedError(Exception):
@@ -53,12 +53,12 @@ class IPModel(_base.ResourceModel):
         cidr (str | None): IP address CIDR.
         gateway (str | None): IP address gateway address, if applicable.
         type (str | None): IP address type, such as `floating-ip` or `primary-ip`.
-        region (cherry.regions.RegionModel | None): IP address region.
-        routed_to (cherry.ips.IPModel | None):
+        region (cherryservers_sdk_python.regions.RegionModel | None): IP address region.
+        routed_to (cherryservers_sdk_python.ips.IPModel | None):
          IP address that this address is routed, if applicable.
-        targeted_to (cherry.ips.AttachedServerModel | None):
+        targeted_to (cherryservers_sdk_python.ips.AttachedServerModel | None):
          Server that this address is targeted to, if applicable.
-        project (cherry.projects.ProjectModel | None):
+        project (cherryservers_sdk_python.projects.ProjectModel | None):
          The project that the IP address belongs to.
         ptr_record (str | None): IP address PTR record, if applicable.
         a_record (str | None): IP address A record, if applicable.
@@ -182,12 +182,12 @@ class IPClient(_base.ResourceClient):
     Manage Cherry Servers IP address resources.
     This class should typically be initialized by
 
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Get IP address by id.
             ip = facade.ips.get_by_id("c8b0cb54-cbd6-a90f-d291-769b6db0f1b9")
@@ -196,7 +196,7 @@ class IPClient(_base.ResourceClient):
             ips = facade.ips.get_by_project(123456)
 
             # Create an IP address.
-            creation_req = cherry.ips.CreationRequest(
+            creation_req = cherryservers_sdk_python.ips.CreationRequest(
                 region="eu_nord_1",
                 ptr_record="test",
                 a_record="test",
@@ -206,7 +206,7 @@ class IPClient(_base.ResourceClient):
             fip = facade.ips.create(creation_req, project_id=123456)
 
             # Update IP address.
-            update_req = cherry.ips.UpdateRequest(
+            update_req = cherryservers_sdk_python.ips.UpdateRequest(
                 ptr_record="",
                 a_record="",
             )

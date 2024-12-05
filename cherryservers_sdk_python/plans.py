@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherry import _base, regions
+from cherryservers_sdk_python import _base, regions
 
 
 class AvailableRegionsModel(regions.RegionModel):
@@ -13,7 +13,7 @@ class AvailableRegionsModel(regions.RegionModel):
     This model is frozen by default,
     since it represents an actual Cherry Servers plan available region resource state.
 
-    Inherits all attributes of :class:`cherry.regions.RegionModel`.
+    Inherits all attributes of :class:`cherryservers_sdk_python.regions.RegionModel`.
 
     Attributes:
         stock_qty (int | None): The number servers in stock.
@@ -159,12 +159,14 @@ class SpecsModel(_base.ResourceModel):
     since it represents an actual Cherry Servers plan specs resource state.
 
     Attributes:
-        cpus (cherry.plans.CPUModel | None): CPU device data.
-        memory (cherry.plans.MemoryModel | None): Memory device data.
-        storage (list[cherry.plans.StorageModel] | None): Storage device data.
-        raid (cherry.plans.RaidModel | None): RAID data.
-        nics (cherry.plans.NicsModel | None): NICS device data.
-        bandwidth (cherry.plans.BandwidthModel | None): Bandwidth data.
+        cpus (cherryservers_sdk_python.plans.CPUModel | None): CPU device data.
+        memory (cherryservers_sdk_python.plans.MemoryModel | None): Memory device data.
+        storage (list[cherryservers_sdk_python.plans.StorageModel] | None):
+         Storage device data.
+        raid (cherryservers_sdk_python.plans.RaidModel | None): RAID data.
+        nics (cherryservers_sdk_python.plans.NicsModel | None): NICS device data.
+        bandwidth (cherryservers_sdk_python.plans.BandwidthModel | None):
+         Bandwidth data.
 
     """
 
@@ -211,12 +213,13 @@ class PlanModel(_base.ResourceModel):
         name (str | None): Plan full name.
         slug (str | None): Plan name slug.
         type (str | None): Plan type, such as `baremetal` or `premium-vds`.
-        specs (cherry.plans.SpecsModel | None): Plan specs.
-        pricing (list[cherry.plans.PricingModel] | None): Plan pricing.
-        available_regions (list[cherry.plans.AvailableRegionsModel] | None):
+        specs (cherryservers_sdk_python.plans.SpecsModel | None): Plan specs.
+        pricing (list[cherryservers_sdk_python.plans.PricingModel] | None):
+         Plan pricing.
+        available_regions(list[cherryservers_sdk_python.plans.AvailableRegionsModel] | None):
          Available regions for the plan.
 
-    """
+    """  # noqa: W505
 
     id: int = Field(description="Plan ID.")
     name: str | None = Field(description="Plan full name.", default=None)
@@ -238,12 +241,12 @@ class PlanClient(_base.ResourceClient):
 
     Manage Cherry Servers plan resources.
     This class should typically be initialized by
-    :class:`cherry.facade.CherryApiFacade`.
+    :class:`cherryservers_sdk_python.facade.CherryApiFacade`.
 
     Example:
         .. code-block:: python
 
-            facade = cherry.facade.CherryApiFacade(token)
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(token)
 
             # Get a list of all team permitted plans.
             plans = facade.plans.get_by_team(123456):

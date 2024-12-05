@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from pydantic import BaseModel, ConfigDict
 
 if TYPE_CHECKING:
-    from cherry import _client
+    from cherryservers_sdk_python import _client
 
 
 class ResourceModel(BaseModel, abc.ABC):

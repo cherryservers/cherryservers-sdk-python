@@ -10,7 +10,7 @@ import pytest
 import requests
 from pydantic import Field
 
-from cherry import _base, _client, _version
+from cherryservers_sdk_python import _base, _client, _version
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -45,7 +45,7 @@ class TestCherryClient:
     def test_headers(self, client: _client.CherryApiClient) -> None:
         """Test HTTP/S headers for the client."""
         assert client._headers == {
-            "User-Agent": f"test/cherry-python/{_version.__version__} {requests.__name__}/{requests.__version__}",
+            "User-Agent": f"test/cherryservers_sdk_python-python/{_version.__version__} {requests.__name__}/{requests.__version__}",
             "Content-Type": "application/json",
             "Authorization": "Bearer test_token",
         }
@@ -54,7 +54,7 @@ class TestCherryClient:
         """Test client user agent, configured with no application name."""
         client = _client.CherryApiClient("test_token")
         assert client._headers == {
-            "User-Agent": f"/cherry-python/{_version.__version__} {requests.__name__}/{requests.__version__}",
+            "User-Agent": f"/cherryservers_sdk_python-python/{_version.__version__} {requests.__name__}/{requests.__version__}",
             "Content-Type": "application/json",
             "Authorization": "Bearer test_token",
         }

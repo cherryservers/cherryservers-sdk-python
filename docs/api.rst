@@ -4,7 +4,7 @@ API References
 Main Interface
 ----------------
 
-.. autoclass:: cherry.facade.CherryApiFacade
+.. autoclass:: cherryservers_sdk_python.facade.CherryApiFacade
     :members:
     :special-members: __init__
 

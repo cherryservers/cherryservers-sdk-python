@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from cherry import (
+from cherryservers_sdk_python import (
     _client,
     backup_storages,
     block_storages,
@@ -53,11 +53,11 @@ class CherryApiFacade:
 
                 # Instantiate the facade.
                 token = environ["CHERRY_AUTH_TOKEN"]
-                facade = cherry.facade.CherryApiFacade(token)
+                facade = cherryservers_sdk_python.facade.CherryApiFacade(token)
 
                 # Order a VPS.
 
-                creation_req = (cherry.servers.
+                creation_req = (cherryservers_sdk_python.servers.
                 CreationRequest(region="eu_nord_1", plan="cloud_vps_1"))
                 server = facade.servers.create(creation_req, project_id=217727)
 
