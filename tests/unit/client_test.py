@@ -10,7 +10,7 @@ import pytest
 import requests
 from pydantic import Field
 
-from cherryservers_sdk_python import _base, _client, _version
+from cherryservers_sdk_python import _base, _client
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -42,23 +42,6 @@ class TestCherryClient:
         yield client
         patcher.stop()
 
-    def test_headers(self, client: _client.CherryApiClient) -> None:
-        """Test HTTP/S headers for the client."""
-        assert client._headers == {
-            "User-Agent": f"test/cherryservers_sdk_python-python/{_version.__version__} {requests.__name__}/{requests.__version__}",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer test_token",
-        }
-
-    def test_no_user_agent_app_name(self) -> None:
-        """Test client user agent, configured with no application name."""
-        client = _client.CherryApiClient("test_token")
-        assert client._headers == {
-            "User-Agent": f"/cherryservers_sdk_python-python/{_version.__version__} {requests.__name__}/{requests.__version__}",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer test_token",
-        }
-
     def test_get(
         self, client: _client.CherryApiClient, response: requests.Response
     ) -> None:
@@ -69,7 +52,7 @@ class TestCherryClient:
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=10,
-            headers=client._headers,
+            allow_redirects=False,
         )
         assert resp == response
 
@@ -83,7 +66,6 @@ class TestCherryClient:
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=10,
-            headers=client._headers,
         )
         assert resp == response
 
@@ -99,7 +81,6 @@ class TestCherryClient:
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=10,
-            headers=client._headers,
             data=req.model_dump_json(),
         )
         assert resp == response
@@ -116,7 +97,6 @@ class TestCherryClient:
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=10,
-            headers=client._headers,
             data=req.model_dump_json(),
         )
         assert resp == response
@@ -133,7 +113,6 @@ class TestCherryClient:
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=10,
-            headers=client._headers,
             data=req.model_dump_json(),
         )
         assert resp == response
