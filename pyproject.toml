@@ -60,8 +60,8 @@ ignore = ["D203", "D104", "D211", "D213", "E501", "COM812", "ISC001"]
 # Explicit re-exports is fine in __init__.py, still a code smell elsewhere.
 "__init__.py" = ["PLC0414"]
 "tests/*" = ["S101"]
-# Client testing needs private member access in a few places.
-"tests/unit/client_test.py" = ["SLF001"]
+# Unit tests often need to mock HTTP/S responses, which requires private member access.
+"tests/unit/*" = ["SLF001"]
 
 [tool.ruff.lint.flake8-type-checking]
 runtime-evaluated-base-classes = ["pydantic.BaseModel", "cherry._models.DefaultModel"]
