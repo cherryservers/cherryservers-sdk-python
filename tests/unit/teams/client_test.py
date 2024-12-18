@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 from unittest import mock
 
 import pytest
 
 import cherryservers_sdk_python.users
+from tests.unit import resource_client_helpers, resource_helpers
 
 if TYPE_CHECKING:
     import requests
@@ -26,37 +27,23 @@ class TestClient:
         get_team_successful_response: requests.Response,
         teams_client: cherryservers_sdk_python.teams.TeamClient,
     ) -> None:
-        """Test successful team get by ID."""
-        cast(
-            mock.Mock, teams_client._api_client.get
-        ).return_value = get_team_successful_response
-        team = teams_client.get_by_id(123456)
-        team_expected_model = cherryservers_sdk_python.teams.TeamModel.model_validate(
-            get_team_successful_response.json()
+        """Test successfully getting a team by ID."""
+        resource_client_helpers.check_getter_function(
+            get_team_successful_response,
+            teams_client,
+            lambda: teams_client.get_by_id(123456),
         )
-        assert team_expected_model == team.get_model()
 
     def test_get_all_success(
         self,
         get_all_teams_successful_response: requests.Response,
         teams_client: cherryservers_sdk_python.teams.TeamClient,
     ) -> None:
-        """Test successful get all teams."""
-        cast(
-            mock.Mock, teams_client._api_client.get
-        ).return_value = get_all_teams_successful_response
-        teams = teams_client.get_all()
-
-        assert teams[
-            0
-        ].get_model() == cherryservers_sdk_python.teams.TeamModel.model_validate(
-            get_all_teams_successful_response.json()[0]
-        )
-
-        assert teams[
-            1
-        ].get_model() == cherryservers_sdk_python.teams.TeamModel.model_validate(
-            get_all_teams_successful_response.json()[1]
+        """Test successfully getting all teams."""
+        resource_client_helpers.check_listing_function(
+            get_all_teams_successful_response,
+            teams_client,
+            teams_client.get_all,
         )
 
     def test_create_success(
@@ -65,22 +52,16 @@ class TestClient:
         teams_client: cherryservers_sdk_python.teams.TeamClient,
     ) -> None:
         """Test successful team creation."""
-        cast(
-            mock.Mock, teams_client._api_client.get
-        ).return_value = create_team_successful_response
-        cast(
-            mock.Mock, teams_client._api_client.post
-        ).return_value = create_team_successful_response
-
-        team = teams_client.create(
-            creation_schema=cherryservers_sdk_python.teams.CreationRequest(name="test")
-        )
-
-        assert (
-            team.get_model()
-            == cherryservers_sdk_python.teams.TeamModel.model_validate(
-                create_team_successful_response.json()
-            )
+        creation_resp_json = create_team_successful_response.json()
+        resource_client_helpers.check_creation_function(
+            create_team_successful_response,
+            create_team_successful_response,
+            teams_client,
+            lambda: teams_client.create(
+                cherryservers_sdk_python.teams.CreationRequest(
+                    name=creation_resp_json["name"],
+                )
+            ),
         )
 
     def test_update_success(
@@ -88,26 +69,18 @@ class TestClient:
         update_team_successful_response: requests.Response,
         teams_client: cherryservers_sdk_python.teams.TeamClient,
     ) -> None:
-        """Test successful team update."""
-        cast(
-            mock.Mock, teams_client._api_client.get
-        ).return_value = update_team_successful_response
-        cast(
-            mock.Mock, teams_client._api_client.put
-        ).return_value = update_team_successful_response
-
-        team = teams_client.update(
-            update_schema=cherryservers_sdk_python.teams.UpdateRequest(
-                name="sdk-test-updated"
+        """Test successfully updating a team.."""
+        update_resp_json = update_team_successful_response.json()
+        resource_client_helpers.check_update_function(
+            update_team_successful_response,
+            update_team_successful_response,
+            teams_client,
+            lambda: teams_client.update(
+                update_resp_json["id"],
+                cherryservers_sdk_python.teams.UpdateRequest(
+                    name=update_resp_json["name"],
+                ),
             ),
-            team_id=159248,
-        )
-
-        assert (
-            team.get_model()
-            == cherryservers_sdk_python.teams.TeamModel.model_validate(
-                update_team_successful_response.json()
-            )
         )
 
 
@@ -128,10 +101,6 @@ class TestTeam:
             ),
         )
 
-    def test_get_model(self, team: cherryservers_sdk_python.teams.Team) -> None:
-        """Test getting team model."""
-        assert team.get_model() == team._model
-
     def test_get_id(
         self,
         team: cherryservers_sdk_python.teams.Team,
@@ -146,16 +115,14 @@ class TestTeam:
         update_team_successful_response: requests.Response,
     ) -> None:
         """Test updating a team."""
-        cast(
-            mock.Mock, team._client._api_client.get
-        ).return_value = update_team_successful_response
-        cast(
-            mock.Mock, team._client._api_client.put
-        ).return_value = update_team_successful_response
-
-        update_req = cherryservers_sdk_python.teams.UpdateRequest(
-            name="sdk-test-updated"
+        update_resp_json = update_team_successful_response.json()
+        resource_helpers.check_update_function(
+            update_team_successful_response,
+            update_team_successful_response,
+            team,
+            lambda: team.update(
+                cherryservers_sdk_python.teams.UpdateRequest(
+                    name=update_resp_json["name"],
+                )
+            ),
         )
-        team.update(update_req)
-
-        assert team.get_model().name == "sdk-test-updated"

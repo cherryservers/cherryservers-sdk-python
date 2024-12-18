@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 from unittest import mock
 
 import pytest
 
 import cherryservers_sdk_python.users
+from tests.unit import resource_client_helpers
 
 if TYPE_CHECKING:
     import requests
@@ -26,30 +27,24 @@ class TestClient:
         get_user_successful_response: requests.Response,
         users_client: cherryservers_sdk_python.users.UserClient,
     ) -> None:
-        """Test successful current user get."""
-        cast(
-            mock.Mock, users_client._api_client.get
-        ).return_value = get_user_successful_response
-        user = users_client.get_current_user()
-        user_expected_model = cherryservers_sdk_python.users.UserModel.model_validate(
-            get_user_successful_response.json()
+        """Test successfully getting current user."""
+        resource_client_helpers.check_getter_function(
+            get_user_successful_response,
+            users_client,
+            users_client.get_current_user,
         )
-        assert user_expected_model == user.get_model()
 
     def test_get_by_id_success(
         self,
         get_user_successful_response: requests.Response,
         users_client: cherryservers_sdk_python.users.UserClient,
     ) -> None:
-        """Test successful user get by ID."""
-        cast(
-            mock.Mock, users_client._api_client.get
-        ).return_value = get_user_successful_response
-        user = users_client.get_by_id(123456)
-        user_expected_model = cherryservers_sdk_python.users.UserModel.model_validate(
-            get_user_successful_response.json()
+        """Test successfully getting a user by ID."""
+        resource_client_helpers.check_getter_function(
+            get_user_successful_response,
+            users_client,
+            lambda: users_client.get_by_id(123456),
         )
-        assert user_expected_model == user.get_model()
 
 
 class TestUser:
@@ -66,10 +61,6 @@ class TestUser:
                 get_user_successful_response.json()
             ),
         )
-
-    def test_get_model(self, user: cherryservers_sdk_python.users.User) -> None:
-        """Test getting user model."""
-        assert user.get_model() == user._model
 
     def test_get_id(
         self,
