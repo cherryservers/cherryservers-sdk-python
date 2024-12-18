@@ -254,14 +254,14 @@ class TeamClient(_base.ResourceClient):
         response = self._api_client.get(
             f"teams/{team_id}",
             None,
-            5,
+            self.request_timeout,
         )
         team_model = TeamModel.model_validate(response.json())
         return Team(self, team_model)
 
     def get_all(self) -> list[Team]:
         """Get all teams."""
-        response = self._api_client.get("teams", None, 5)
+        response = self._api_client.get("teams", None, self.request_timeout)
         teams: list[Team] = []
         for value in response.json():
             team_model = TeamModel.model_validate(value)
@@ -271,16 +271,20 @@ class TeamClient(_base.ResourceClient):
 
     def create(self, creation_schema: CreationRequest) -> Team:
         """Create a new team."""
-        response = self._api_client.post("teams", creation_schema, None, 15)
+        response = self._api_client.post(
+            "teams", creation_schema, None, self.request_timeout
+        )
         return self.get_by_id(response.json()["id"])
 
     def delete(self, team_id: int) -> None:
         """Delete a team by ID."""
-        self._api_client.delete(f"teams/{team_id}", None, 5)
+        self._api_client.delete(f"teams/{team_id}", None, self.request_timeout)
 
     def update(self, team_id: int, update_schema: UpdateRequest) -> Team:
         """Update a team by ID."""
-        response = self._api_client.put(f"teams/{team_id}", update_schema, None, 10)
+        response = self._api_client.put(
+            f"teams/{team_id}", update_schema, None, self.request_timeout
+        )
         return self.get_by_id(response.json()["id"])
 
 

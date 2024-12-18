@@ -303,7 +303,7 @@ class BackupStorageClient(_base.ResourceClient):
                 "used_gigabytes,methods,rules,plan,pricing,name,"
                 "whitelist,enabled,processing"
             },
-            20,
+            self.request_timeout,
         )
         storage_model = BackupStorageModel.model_validate(response.json())
         return BackupStorage(self, storage_model)
@@ -319,7 +319,7 @@ class BackupStorageClient(_base.ResourceClient):
                 "methods,rules,plan,pricing,name,"
                 "whitelist,enabled,processing"
             },
-            10,
+            self.request_timeout,
         )
         storages: list[BackupStorage] = []
         for value in response.json():
@@ -331,7 +331,9 @@ class BackupStorageClient(_base.ResourceClient):
     def list_backup_plans(self) -> list[BackupStoragePlanModel]:
         """Retrieve available backup storage plans."""
         response = self._api_client.get(
-            "backup-storage-plans", {"fields": "plan,pricing,href,region"}, 20
+            "backup-storage-plans",
+            {"fields": "plan,pricing,href,region"},
+            self.request_timeout,
         )
         available_plans: list[BackupStoragePlanModel] = []
         for value in response.json():
@@ -349,20 +351,25 @@ class BackupStorageClient(_base.ResourceClient):
     ) -> BackupStorage:
         """Create a backup storage."""
         response = self._api_client.post(
-            f"servers/{server_id}/backup-storages", creation_schema, None, 30
+            f"servers/{server_id}/backup-storages",
+            creation_schema,
+            None,
+            self.request_timeout,
         )
         backup_storage = BackupStorage(
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
             _resource_wait.wait_for_resource_condition(
-                backup_storage, 720, lambda: backup_storage.get_status() != "deployed"
+                backup_storage, 1200, lambda: backup_storage.get_status() != "deployed"
             )
         return self.get_by_id(response.json()["id"])
 
     def delete(self, storage_id: int) -> None:
         """Delete backup storage.."""
-        self._api_client.delete(f"backup-storages/{storage_id}", None, 10)
+        self._api_client.delete(
+            f"backup-storages/{storage_id}", None, self.request_timeout
+        )
 
     def update(
         self,
@@ -373,14 +380,14 @@ class BackupStorageClient(_base.ResourceClient):
     ) -> BackupStorage:
         """Update backup storage."""
         response = self._api_client.put(
-            f"backup-storages/{storage_id}", update_schema, None, 30
+            f"backup-storages/{storage_id}", update_schema, None, self.request_timeout
         )
         backup_storage = BackupStorage(
             self, BackupStorageModel.model_validate(response.json())
         )
         if wait_for_active:
             _resource_wait.wait_for_resource_condition(
-                backup_storage, 720, lambda: backup_storage.get_status() != "deployed"
+                backup_storage, 1200, lambda: backup_storage.get_status() != "deployed"
             )
         return self.get_by_id(response.json()["id"])
 
@@ -395,7 +402,7 @@ class BackupStorageClient(_base.ResourceClient):
             f"backup-storages/{storage_id}/methods/{method_name}",
             update_schema,
             None,
-            20,
+            self.request_timeout,
         )
 
         return self.get_by_id(storage_id)

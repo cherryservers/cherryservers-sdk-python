@@ -222,7 +222,7 @@ class IPClient(_base.ResourceClient):
         response = self._api_client.get(
             f"ips/{ip_id}",
             {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
-            10,
+            self.request_timeout,
         )
         ip_model = IPModel.model_validate(response.json())
         return IP(self, ip_model)
@@ -232,7 +232,7 @@ class IPClient(_base.ResourceClient):
         response = self._api_client.get(
             f"projects/{project_id}/ips",
             {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
-            10,
+            self.request_timeout,
         )
         ips: list[IP] = []
         for value in response.json():
@@ -244,17 +244,19 @@ class IPClient(_base.ResourceClient):
     def create(self, creation_schema: CreationRequest, project_id: int) -> IP:
         """Create a new IP address."""
         response = self._api_client.post(
-            f"projects/{project_id}/ips", creation_schema, None, 30
+            f"projects/{project_id}/ips", creation_schema, None, self.request_timeout
         )
         return self.get_by_id(response.json()["id"])
 
     def delete(self, ip_id: str) -> None:
         """Delete IP address by ID."""
-        self._api_client.delete(f"ips/{ip_id}", None, 10)
+        self._api_client.delete(f"ips/{ip_id}", None, self.request_timeout)
 
     def update(self, ip_id: str, update_schema: UpdateRequest) -> IP:
         """Update IP address by ID."""
-        response = self._api_client.put(f"ips/{ip_id}", update_schema, None, 30)
+        response = self._api_client.put(
+            f"ips/{ip_id}", update_schema, None, self.request_timeout
+        )
         return self.get_by_id(response.json()["id"])
 
 

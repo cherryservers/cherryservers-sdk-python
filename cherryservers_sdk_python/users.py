@@ -65,13 +65,13 @@ class UserClient(_base.ResourceClient):
 
     def get_by_id(self, user_id: int) -> User:
         """Retrieve a user by ID."""
-        response = self._api_client.get(f"users/{user_id}", None, 5)
+        response = self._api_client.get(f"users/{user_id}", None, self.request_timeout)
         user_model = UserModel.model_validate(response.json())
         return User(self, user_model)
 
     def get_current_user(self) -> User:
         """Retrieve the current user."""
-        response = self._api_client.get("user", None, 5)
+        response = self._api_client.get("user", None, self.request_timeout)
         user_model = UserModel.model_validate(response.json())
         return User(self, user_model)
 

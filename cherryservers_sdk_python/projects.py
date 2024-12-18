@@ -114,14 +114,16 @@ class ProjectClient(_base.ResourceClient):
         response = self._api_client.get(
             f"projects/{project_id}",
             None,
-            5,
+            self.request_timeout,
         )
         project_model = ProjectModel.model_validate(response.json())
         return Project(self, project_model)
 
     def list_by_team(self, team_id: int) -> list[Project]:
         """Get all projects that belong to a team."""
-        response = self._api_client.get(f"teams/{team_id}/projects", None, 5)
+        response = self._api_client.get(
+            f"teams/{team_id}/projects", None, self.request_timeout
+        )
         projects: list[Project] = []
         for value in response.json():
             project_model = ProjectModel.model_validate(value)
@@ -132,18 +134,18 @@ class ProjectClient(_base.ResourceClient):
     def create(self, creation_schema: CreationRequest, team_id: int) -> Project:
         """Create a new project."""
         response = self._api_client.post(
-            f"teams/{team_id}/projects", creation_schema, None, 5
+            f"teams/{team_id}/projects", creation_schema, None, self.request_timeout
         )
         return self.get_by_id(response.json()["id"])
 
     def delete(self, project_id: int) -> None:
         """Delete project by ID."""
-        self._api_client.delete(f"projects/{project_id}", None, 5)
+        self._api_client.delete(f"projects/{project_id}", None, self.request_timeout)
 
     def update(self, project_id: int, update_schema: UpdateRequest) -> Project:
         """Update project by ID."""
         response = self._api_client.put(
-            f"projects/{project_id}", update_schema, None, 5
+            f"projects/{project_id}", update_schema, None, self.request_timeout
         )
         return self.get_by_id(response.json()["id"])
 

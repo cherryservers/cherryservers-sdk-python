@@ -73,13 +73,15 @@ class RegionClient(_base.ResourceClient):
 
     def get_by_id(self, region_id: int) -> Region:
         """Retrieve a region by ID."""
-        response = self._api_client.get(f"regions/{region_id}", None, 5)
+        response = self._api_client.get(
+            f"regions/{region_id}", None, self.request_timeout
+        )
         region_model = RegionModel.model_validate(response.json())
         return Region(self, region_model)
 
     def get_all(self) -> list[Region]:
         """Retrieve all regions."""
-        response = self._api_client.get("regions", None, 5)
+        response = self._api_client.get("regions", None, self.request_timeout)
         regions: list[Region] = []
         for value in response.json():
             region_model = RegionModel.model_validate(value)

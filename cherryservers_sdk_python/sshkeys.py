@@ -95,18 +95,20 @@ class SSHKeyClient(_base.ResourceClient):
     """
 
     def get_by_id(self, sshkey_id: int) -> SSHKey:
-        """Retrieve a SSH key by ID."""
+        """Retrieve an SSH key by ID."""
         response = self._api_client.get(
             f"ssh-keys/{sshkey_id}",
             {"fields": "ssh_key,user"},
-            5,
+            self.request_timeout,
         )
         sshkey_model = SSHKeyModel.model_validate(response.json())
         return SSHKey(self, sshkey_model)
 
     def get_all(self) -> list[SSHKey]:
         """Retrieve all SSH keys."""
-        response = self._api_client.get("ssh-keys", {"fields": "ssh_key,user"}, 5)
+        response = self._api_client.get(
+            "ssh-keys", {"fields": "ssh_key,user"}, self.request_timeout
+        )
         keys: list[SSHKey] = []
         for value in response.json():
             sshkey_model = SSHKeyModel.model_validate(value)
@@ -116,16 +118,24 @@ class SSHKeyClient(_base.ResourceClient):
 
     def create(self, creation_schema: CreationRequest) -> SSHKey:
         """Create a new SSH key."""
-        response = self._api_client.post("ssh-keys", creation_schema, None, 5)
+        response = self._api_client.post(
+            "ssh-keys", creation_schema, None, self.request_timeout
+        )
         return self.get_by_id(response.json()["id"])
 
     def delete(self, sshkey_id: int) -> None:
         """Delete SSH key by ID."""
-        self._api_client.delete(f"ssh-keys/{sshkey_id}", None, 5)
+        self._api_client.delete(f"ssh-keys/{sshkey_id}", None, self.request_timeout)
 
-    def update(self, sshkey_id: int, update_schema: UpdateRequest) -> SSHKey:
+    def update(
+        self,
+        sshkey_id: int,
+        update_schema: UpdateRequest,
+    ) -> SSHKey:
         """Update SSH key by ID."""
-        response = self._api_client.put(f"ssh-keys/{sshkey_id}", update_schema, None, 5)
+        response = self._api_client.put(
+            f"ssh-keys/{sshkey_id}", update_schema, None, self.request_timeout
+        )
         return self.get_by_id(response.json()["id"])
 
 

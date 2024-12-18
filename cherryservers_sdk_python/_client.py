@@ -45,7 +45,7 @@ class CherryApiClient:
         url: str,
         params: dict[str, Any] | None = None,
         data: str | None = None,
-        timeout: int = 10,
+        timeout: int = 120,
     ) -> requests.Response:
         r = None
         if method == "GET":
@@ -86,7 +86,7 @@ class CherryApiClient:
         raise InvalidMethodError(method)
 
     def get(
-        self, path: str, params: dict[str, Any] | None = None, timeout: int = 10
+        self, path: str, params: dict[str, Any] | None = None, timeout: int = 120
     ) -> requests.Response:
         """GET to Cherry Servers API."""
         return self._send_request(
@@ -98,7 +98,7 @@ class CherryApiClient:
         path: str,
         data: _base.RequestSchema,
         params: dict[str, Any] | None = None,
-        timeout: int = 10,
+        timeout: int = 120,
     ) -> requests.Response:
         """POST to Cherry Servers API."""
         return self._send_request(
@@ -114,7 +114,7 @@ class CherryApiClient:
         path: str,
         data: _base.RequestSchema,
         params: dict[str, Any] | None = None,
-        timeout: int = 10,
+        timeout: int = 120,
     ) -> requests.Response:
         """PUT to Cherry Servers API."""
         return self._send_request(
@@ -130,7 +130,7 @@ class CherryApiClient:
         path: str,
         data: _base.RequestSchema,
         params: dict[str, Any] | None = None,
-        timeout: int = 10,
+        timeout: int = 120,
     ) -> requests.Response:
         """PATCH to Cherry Servers API."""
         return self._send_request(

@@ -421,7 +421,7 @@ class ServerClient(_base.ResourceClient):
 
     """
 
-    DEPLOYMENT_TIMEOUT = 1440
+    DEFAULT_DEPLOYMENT_TIMEOUT = 1800
 
     def _wait_for_status(
         self, response: Response, target_status: str, timeout: float
@@ -438,7 +438,7 @@ class ServerClient(_base.ResourceClient):
         response = self._api_client.get(
             f"servers/{server_id}",
             None,
-            10,
+            self.request_timeout,
         )
         server_model = ServerModel.model_validate(response.json())
         return Server(self, server_model)
@@ -448,7 +448,7 @@ class ServerClient(_base.ResourceClient):
         response = self._api_client.get(
             f"projects/{project_id}/servers",
             None,
-            10,
+            self.request_timeout,
         )
         servers: list[Server] = []
         for value in response.json():
@@ -463,18 +463,22 @@ class ServerClient(_base.ResourceClient):
         project_id: int,
         *,
         wait_for_active: bool = True,
+        deployment_timeout: int = DEFAULT_DEPLOYMENT_TIMEOUT,
     ) -> Server:
         """Create a new server."""
         response = self._api_client.post(
-            f"projects/{project_id}/servers", creation_schema, None, 30
+            f"projects/{project_id}/servers",
+            creation_schema,
+            None,
+            self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", self.DEPLOYMENT_TIMEOUT)
+            return self._wait_for_status(response, "deployed", deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def delete(self, server_id: int) -> None:
         """Delete server by ID."""
-        self._api_client.delete(f"servers/{server_id}", None, 20)
+        self._api_client.delete(f"servers/{server_id}", None, self.request_timeout)
 
     def update(
         self,
@@ -482,43 +486,63 @@ class ServerClient(_base.ResourceClient):
         update_schema: UpdateRequest,
     ) -> Server:
         """Update server by ID."""
-        response = self._api_client.put(f"servers/{server_id}", update_schema, None, 30)
+        response = self._api_client.put(
+            f"servers/{server_id}", update_schema, None, self.request_timeout
+        )
         return self.get_by_id(response.json()["id"])
 
-    def power_off(self, server_id: int, *, wait_for_active: bool = True) -> Server:
+    def power_off(
+        self,
+        server_id: int,
+        *,
+        wait_for_active: bool = True,
+        deployment_timeout: int = DEFAULT_DEPLOYMENT_TIMEOUT,
+    ) -> Server:
         """Power off server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
             PowerOffRequest(),
             None,
-            30,
+            self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", 120)
+            return self._wait_for_status(response, "deployed", deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
-    def power_on(self, server_id: int, *, wait_for_active: bool = True) -> Server:
+    def power_on(
+        self,
+        server_id: int,
+        *,
+        wait_for_active: bool = True,
+        deployment_timeout: int = DEFAULT_DEPLOYMENT_TIMEOUT,
+    ) -> Server:
         """Power on server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
             PowerOnRequest(),
             None,
-            30,
+            self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", 300)
+            return self._wait_for_status(response, "deployed", deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
-    def reboot(self, server_id: int, *, wait_for_active: bool = True) -> Server:
+    def reboot(
+        self,
+        server_id: int,
+        *,
+        wait_for_active: bool = True,
+        deployment_timeout: int = DEFAULT_DEPLOYMENT_TIMEOUT,
+    ) -> Server:
         """Reboot server by ID."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
             RebootRequest(),
             None,
-            30,
+            self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", 420)
+            return self._wait_for_status(response, "deployed", deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def enter_rescue_mode(
@@ -527,6 +551,7 @@ class ServerClient(_base.ResourceClient):
         rescue_mode_schema: EnterRescueModeRequest,
         *,
         wait_for_active: bool = True,
+        deployment_timeout: int = DEFAULT_DEPLOYMENT_TIMEOUT,
     ) -> Server:
         """Put server into rescue mode.
 
@@ -542,26 +567,30 @@ class ServerClient(_base.ResourceClient):
             f"servers/{server_id}/actions",
             rescue_mode_schema,
             None,
-            30,
+            self.request_timeout,
         )
 
         if wait_for_active:
-            return self._wait_for_status(response, "rescue mode", 720)
+            return self._wait_for_status(response, "rescue mode", deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def exit_rescue_mode(
-        self, server_id: int, *, wait_for_active: bool = True
+        self,
+        server_id: int,
+        *,
+        wait_for_active: bool = True,
+        deployment_timeout: int = DEFAULT_DEPLOYMENT_TIMEOUT,
     ) -> Server:
         """Put server out of rescue mode."""
         response = self._api_client.post(
             f"servers/{server_id}/actions",
             ExitRescueModeRequest(),
             None,
-            30,
+            self.request_timeout,
         )
 
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", 720)
+            return self._wait_for_status(response, "deployed", deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def rebuild(
@@ -570,6 +599,7 @@ class ServerClient(_base.ResourceClient):
         rebuild_schema: RebuildRequest,
         *,
         wait_for_active: bool = True,
+        deployment_timeout: int = DEFAULT_DEPLOYMENT_TIMEOUT,
     ) -> Server:
         """Rebuild server.
 
@@ -579,10 +609,10 @@ class ServerClient(_base.ResourceClient):
             f"servers/{server_id}/actions",
             rebuild_schema,
             None,
-            30,
+            self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", self.DEPLOYMENT_TIMEOUT)
+            return self._wait_for_status(response, "deployed", deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def reset_bmc_password(self, server_id: int) -> Server:
@@ -600,7 +630,7 @@ class ServerClient(_base.ResourceClient):
             f"servers/{server_id}/actions",
             ResetBMCPasswordRequest(),
             None,
-            30,
+            self.request_timeout,
         )
 
         return self.get_by_id(response.json()["id"])
@@ -615,6 +645,21 @@ class Server(
     and should only be initialized by :class:`ServerClient`.
     """
 
+    def __init__(self, client: ServerClient, model: ServerModel) -> None:
+        """Initialize a Cherry Servers server resource."""
+        super().__init__(client, model)
+        self._deployment_timeout = client.DEFAULT_DEPLOYMENT_TIMEOUT
+
+    @property
+    def deployment_timeout(self) -> int:
+        """Deployment timeout in seconds."""
+        return self._deployment_timeout
+
+    @deployment_timeout.setter
+    def deployment_timeout(self, value: int) -> None:
+        """Deployment timeout in seconds."""
+        self._deployment_timeout = value
+
     def update(self, update_schema: UpdateRequest) -> None:
         """Update Cherry Servers server resource."""
         updated = self._client.update(self._model.id, update_schema)
@@ -626,17 +671,23 @@ class Server(
 
     def power_off(self) -> None:
         """Power off Cherry Servers server."""
-        serv = self._client.power_off(self._model.id)
+        serv = self._client.power_off(
+            self._model.id, deployment_timeout=self.deployment_timeout
+        )
         self._model = serv.get_model()
 
     def power_on(self) -> None:
         """Power on Cherry Servers server."""
-        serv = self._client.power_on(self._model.id)
+        serv = self._client.power_on(
+            self._model.id, deployment_timeout=self.deployment_timeout
+        )
         self._model = serv.get_model()
 
     def reboot(self) -> None:
         """Reboot a Cherry Servers server."""
-        serv = self._client.reboot(self._model.id)
+        serv = self._client.reboot(
+            self._model.id, deployment_timeout=self.deployment_timeout
+        )
         self._model = serv.get_model()
 
     def enter_rescue_mode(self, rescue_mode_schema: EnterRescueModeRequest) -> None:
@@ -644,12 +695,18 @@ class Server(
 
         Only for baremetal servers!
         """
-        serv = self._client.enter_rescue_mode(self._model.id, rescue_mode_schema)
+        serv = self._client.enter_rescue_mode(
+            self._model.id,
+            rescue_mode_schema,
+            deployment_timeout=self.deployment_timeout,
+        )
         self._model = serv.get_model()
 
     def exit_rescue_mode(self) -> None:
         """Put a Cherry Servers server out of rescue mode."""
-        serv = self._client.exit_rescue_mode(self._model.id)
+        serv = self._client.exit_rescue_mode(
+            self._model.id, deployment_timeout=self.deployment_timeout
+        )
         self._model = serv.get_model()
 
     def rebuild(self, rebuild_schema: RebuildRequest) -> None:
@@ -657,7 +714,9 @@ class Server(
 
         WARNING: this a destructive action that will delete all of your data!
         """
-        serv = self._client.rebuild(self._model.id, rebuild_schema)
+        serv = self._client.rebuild(
+            self._model.id, rebuild_schema, deployment_timeout=self.deployment_timeout
+        )
         self._model = serv.get_model()
 
     def reset_bmc_password(self) -> None:

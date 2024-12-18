@@ -16,9 +16,22 @@ class ResourceModel(BaseModel, abc.ABC):
 class ResourceClient(abc.ABC):  # noqa: B024
     """Cherry Servers resource client base.."""
 
-    def __init__(self, api_client: _client.CherryApiClient) -> None:
+    def __init__(
+        self, api_client: _client.CherryApiClient, request_timeout: int = 120
+    ) -> None:
         """Initialize a Cherry Servers resource client."""
         self._api_client = api_client
+        self._request_timeout = request_timeout
+
+    @property
+    def request_timeout(self) -> int:
+        """API request timeout in seconds."""
+        return self._request_timeout
+
+    @request_timeout.setter
+    def request_timeout(self, value: int) -> None:
+        """Set API request timeout in seconds."""
+        self._request_timeout = value
 
 
 class Resource[C: ResourceClient, T: ResourceModel](abc.ABC):  # noqa: B024

@@ -147,7 +147,7 @@ class BlockStorageClient(_base.ResourceClient):
         response = self._api_client.get(
             f"storages/{storage_id}",
             None,
-            10,
+            self.request_timeout,
         )
         storage_model = BlockStorageModel.model_validate(response.json())
         return BlockStorage(self, storage_model)
@@ -157,7 +157,7 @@ class BlockStorageClient(_base.ResourceClient):
         response = self._api_client.get(
             f"projects/{project_id}/storages",
             None,
-            10,
+            self.request_timeout,
         )
         storages: list[BlockStorage] = []
         for value in response.json():
@@ -173,13 +173,16 @@ class BlockStorageClient(_base.ResourceClient):
     ) -> BlockStorage:
         """Create a new block storage."""
         response = self._api_client.post(
-            f"projects/{project_id}/storages", creation_schema, None, 30
+            f"projects/{project_id}/storages",
+            creation_schema,
+            None,
+            self.request_timeout,
         )
         return self.get_by_id(response.json()["id"])
 
     def delete(self, storage_id: int) -> None:
         """Delete block storage."""
-        self._api_client.delete(f"storages/{storage_id}", None, 10)
+        self._api_client.delete(f"storages/{storage_id}", None, self.request_timeout)
 
     def update(
         self,
@@ -191,12 +194,12 @@ class BlockStorageClient(_base.ResourceClient):
         WARNING: increasing storage size will change its ID!
         """
         response = self._api_client.put(
-            f"storages/{storage_id}", update_schema, None, 30
+            f"storages/{storage_id}", update_schema, None, self.request_timeout
         )
         storage = BlockStorage(self, BlockStorageModel.model_validate(response.json()))
         # We need to wait for backend.
         _resource_wait.wait_for_resource_condition(
-            storage, 20, lambda: storage.get_size() == update_schema.size
+            storage, 120, lambda: storage.get_size() == update_schema.size
         )
         return self.get_by_id(response.json()["id"])
 
@@ -207,14 +210,19 @@ class BlockStorageClient(_base.ResourceClient):
     ) -> BlockStorage:
         """Attach block storage to server."""
         response = self._api_client.post(
-            f"storages/{storage_id}/attachments", attach_schema, None, 30
+            f"storages/{storage_id}/attachments",
+            attach_schema,
+            None,
+            self.request_timeout,
         )
 
         return self.get_by_id(response.json()["id"])
 
     def detach(self, storage_id: int) -> BlockStorage:
         """Detach block storage from server."""
-        self._api_client.delete(f"storages/{storage_id}/attachments", None, 10)
+        self._api_client.delete(
+            f"storages/{storage_id}/attachments", None, self.request_timeout
+        )
 
         return self.get_by_id(storage_id)
 

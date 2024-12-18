@@ -261,7 +261,7 @@ class PlanClient(_base.ResourceClient):
         response = self._api_client.get(
             f"plans/{plan_id_or_slug}",
             {"fields": "plan,specs,pricing,region,href"},
-            10,
+            self.request_timeout,
         )
         plan_model = PlanModel.model_validate(response.json())
         return Plan(self, plan_model)
@@ -271,7 +271,7 @@ class PlanClient(_base.ResourceClient):
         response = self._api_client.get(
             f"teams/{team_id}/plans",
             {"fields": "plan,specs,pricing,region,href"},
-            10,
+            self.request_timeout,
         )
         plans: list[Plan] = []
         for value in response.json():

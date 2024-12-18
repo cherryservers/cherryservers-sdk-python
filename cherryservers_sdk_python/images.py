@@ -48,7 +48,9 @@ class ImageClient(_base.ResourceClient):
 
     def list_by_plan(self, plan_slug: str) -> list[Image]:
         """Retrieve a list of available OSes for a server plan."""
-        response = self._api_client.get(f"plans/{plan_slug}/images", None, 5)
+        response = self._api_client.get(
+            f"plans/{plan_slug}/images", None, self.request_timeout
+        )
         images: list[Image] = []
         for value in response.json():
             image_model = ImageModel.model_validate(value)

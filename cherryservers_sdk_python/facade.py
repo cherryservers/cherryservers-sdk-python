@@ -40,13 +40,16 @@ class CherryApiFacade:
 
     """
 
-    def __init__(self, token: str, user_agent_prefix: str = "") -> None:
+    def __init__(
+        self, token: str, user_agent_prefix: str = "", request_timeout: int = 120
+    ) -> None:
         """Create a new :class:`CherryApiFacade` instance.
 
         :param str token: Cherry Servers API token.
             Can be created at https://portal.cherryservers.com/settings/api-keys.
         :param str user_agent_prefix:
             User-Agent prefix that will be added to the header. Empty by default.
+        :param int request_timeout: Default timeout for API requests, in seconds.
 
         Example:
             .. code-block:: python
@@ -66,24 +69,28 @@ class CherryApiFacade:
             token=token, user_agent_prefix=user_agent_prefix
         )
 
-        self.users = users.UserClient(self._api_client)
+        self.users = users.UserClient(self._api_client, request_timeout)
 
-        self.sshkeys = sshkeys.SSHKeyClient(self._api_client)
+        self.sshkeys = sshkeys.SSHKeyClient(self._api_client, request_timeout)
 
-        self.projects = projects.ProjectClient(self._api_client)
+        self.projects = projects.ProjectClient(self._api_client, request_timeout)
 
-        self.regions = regions.RegionClient(self._api_client)
+        self.regions = regions.RegionClient(self._api_client, request_timeout)
 
-        self.ips = ips.IPClient(self._api_client)
+        self.ips = ips.IPClient(self._api_client, request_timeout)
 
-        self.teams = teams.TeamClient(self._api_client)
+        self.teams = teams.TeamClient(self._api_client, request_timeout)
 
-        self.plans = plans.PlanClient(self._api_client)
+        self.plans = plans.PlanClient(self._api_client, request_timeout)
 
-        self.images = images.ImageClient(self._api_client)
+        self.images = images.ImageClient(self._api_client, request_timeout)
 
-        self.servers = servers.ServerClient(self._api_client)
+        self.servers = servers.ServerClient(self._api_client, request_timeout)
 
-        self.block_storages = block_storages.BlockStorageClient(self._api_client)
+        self.block_storages = block_storages.BlockStorageClient(
+            self._api_client, request_timeout
+        )
 
-        self.backup_storages = backup_storages.BackupStorageClient(self._api_client)
+        self.backup_storages = backup_storages.BackupStorageClient(
+            self._api_client, request_timeout
+        )
