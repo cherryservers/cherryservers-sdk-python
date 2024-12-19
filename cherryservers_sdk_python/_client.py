@@ -142,7 +142,7 @@ class CherryApiClient:
         )
 
     def delete(
-        self, path: str, params: dict[str, Any] | None = None, timeout: int = 10
+        self, path: str, params: dict[str, Any] | None = None, timeout: int = 120
     ) -> requests.Response:
         """DELETE to Cherry Servers API."""
         return self._send_request(
