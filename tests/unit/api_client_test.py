@@ -51,7 +51,7 @@ class TestCherryClient:
         cast(mock.Mock, client._requests_session.get).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
-            timeout=10,
+            timeout=120,
             allow_redirects=False,
         )
         assert resp == response
@@ -65,7 +65,7 @@ class TestCherryClient:
         cast(mock.Mock, client._requests_session.delete).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
-            timeout=10,
+            timeout=120,
         )
         assert resp == response
 
@@ -80,7 +80,7 @@ class TestCherryClient:
         cast(mock.Mock, client._requests_session.post).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
-            timeout=10,
+            timeout=120,
             data=req.model_dump_json(),
         )
         assert resp == response
@@ -96,7 +96,7 @@ class TestCherryClient:
         cast(mock.Mock, client._requests_session.put).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
-            timeout=10,
+            timeout=120,
             data=req.model_dump_json(),
         )
         assert resp == response
@@ -112,7 +112,7 @@ class TestCherryClient:
         cast(mock.Mock, client._requests_session.patch).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
-            timeout=10,
+            timeout=120,
             data=req.model_dump_json(),
         )
         assert resp == response
