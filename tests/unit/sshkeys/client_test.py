@@ -2,134 +2,138 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import Any, cast
 from unittest import mock
 
-import pytest
-
 import cherryservers_sdk_python.users
-from tests.unit import resource_client_helpers, resource_helpers
-
-if TYPE_CHECKING:
-    import requests
+from tests.unit import helpers
 
 
-class TestClient:
-    """Test SSH key client."""
+def test_get_by_id_success(
+    simple_sshkey: dict[str, Any],
+    sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
+) -> None:
+    """Test successfully getting SSH key by ID."""
+    expected_api_resp = helpers.build_api_response(simple_sshkey, 200)
+    cast(mock.Mock, sshkeys_client._api_client.get).return_value = expected_api_resp
+    sshkey = sshkeys_client.get_by_id(simple_sshkey["id"])
 
-    @pytest.fixture
-    def sshkeys_client(self) -> cherryservers_sdk_python.sshkeys.SSHKeyClient:
-        """Initialize SSH key client fixture."""
-        return cherryservers_sdk_python.sshkeys.SSHKeyClient(
-            api_client=mock.MagicMock()
+    assert (
+        sshkey.get_model()
+        == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(simple_sshkey)
+    )
+
+    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_with(
+        f"ssh-keys/{simple_sshkey['id']}",
+        {"fields": "ssh_key,user"},
+        sshkeys_client.request_timeout,
+    )
+
+
+def test_get_all_success(
+    simple_sshkey: dict[str, Any],
+    sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
+) -> None:
+    """Test successfully getting all SSH keys."""
+    expected_api_resp = helpers.build_api_response([simple_sshkey, simple_sshkey], 200)
+    cast(mock.Mock, sshkeys_client._api_client.get).return_value = expected_api_resp
+    servers = sshkeys_client.get_all()
+
+    for sshkey, expected_sshkey in zip(servers, [simple_sshkey, simple_sshkey]):
+        assert (
+            sshkey.get_model()
+            == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(
+                expected_sshkey
+            )
         )
 
-    def test_get_by_id_success(
-        self,
-        get_sshkey_response: requests.Response,
-        sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
-    ) -> None:
-        """Test successfully getting SSH key by ID."""
-        resource_client_helpers.check_getter_function(
-            get_sshkey_response,
-            sshkeys_client,
-            lambda: sshkeys_client.get_by_id(1234),
-        )
-
-    def test_get_all_success(
-        self,
-        list_sshkeys_response: requests.Response,
-        sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
-    ) -> None:
-        """Test successfully getting all SSH keys."""
-        resource_client_helpers.check_listing_function(
-            list_sshkeys_response,
-            sshkeys_client,
-            sshkeys_client.get_all,
-        )
-
-    def test_create_success(
-        self,
-        post_sshkey_response: requests.Response,
-        get_sshkey_response: requests.Response,
-        sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
-    ) -> None:
-        """Test successfully creating an SSH key."""
-        creation_resp_json = post_sshkey_response.json()
-        resource_client_helpers.check_creation_function(
-            post_sshkey_response,
-            get_sshkey_response,
-            sshkeys_client,
-            lambda: sshkeys_client.create(
-                cherryservers_sdk_python.sshkeys.CreationRequest(
-                    label=creation_resp_json["label"],
-                    key=creation_resp_json["key"],
-                )
-            ),
-        )
-
-    def test_update_success(
-        self,
-        put_sshkey_response: requests.Response,
-        get_sshkey_response: requests.Response,
-        sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
-    ) -> None:
-        """Test successfully updating an SSH key."""
-        update_resp_json = put_sshkey_response.json()
-        resource_client_helpers.check_update_function(
-            put_sshkey_response,
-            get_sshkey_response,
-            sshkeys_client,
-            lambda: sshkeys_client.update(
-                1234,
-                cherryservers_sdk_python.sshkeys.UpdateRequest(
-                    label=update_resp_json["label"], key=update_resp_json["key"]
-                ),
-            ),
-        )
+    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_with(
+        "ssh-keys", {"fields": "ssh_key,user"}, sshkeys_client.request_timeout
+    )
 
 
-class TestSSHKey:
-    """Test SSH key resource."""
+def test_create_success(
+    simple_sshkey: dict[str, Any],
+    sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
+) -> None:
+    """Test successfully creating an SSH key."""
+    creation_schema = cherryservers_sdk_python.sshkeys.CreationRequest(
+        label=simple_sshkey["label"],
+        key=simple_sshkey["key"],
+    )
 
-    @pytest.fixture
-    def sshkey(
-        self, get_sshkey_response: requests.Response
-    ) -> cherryservers_sdk_python.sshkeys.SSHKey:
-        """Initialize SSH key fixture."""
-        return cherryservers_sdk_python.sshkeys.SSHKey(
-            client=cherryservers_sdk_python.sshkeys.SSHKeyClient(
-                api_client=mock.MagicMock()
-            ),
-            model=cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(
-                get_sshkey_response.json()
-            ),
-        )
+    get_response = helpers.build_api_response(simple_sshkey, 200)
+    post_response = helpers.build_api_response(simple_sshkey, 201)
+    cast(mock.Mock, sshkeys_client._api_client.post).return_value = post_response
+    cast(mock.Mock, sshkeys_client._api_client.get).return_value = get_response
 
-    def test_get_id(
-        self,
-        sshkey: cherryservers_sdk_python.sshkeys.SSHKey,
-        get_sshkey_response: requests.Response,
-    ) -> None:
-        """Test getting SSH key ID."""
-        assert sshkey.get_id() == get_sshkey_response.json()["id"]
+    sshkey = sshkeys_client.create(creation_schema)
 
-    def test_update(
-        self,
-        sshkey: cherryservers_sdk_python.sshkeys.SSHKey,
-        put_sshkey_response: requests.Response,
-        get_sshkey_after_update_response: requests.Response,
-    ) -> None:
-        """Test updating an SSH key."""
-        update_resp_json = put_sshkey_response.json()
-        resource_helpers.check_update_function(
-            put_sshkey_response,
-            get_sshkey_after_update_response,
-            sshkey,
-            lambda: sshkey.update(
-                cherryservers_sdk_python.sshkeys.UpdateRequest(
-                    label=update_resp_json["label"],
-                    key=update_resp_json["key"],
-                )
-            ),
-        )
+    assert (
+        sshkey.get_model()
+        == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(simple_sshkey)
+    )
+
+    cast(mock.Mock, sshkeys_client._api_client.post).assert_called_with(
+        "ssh-keys", creation_schema, None, sshkeys_client.request_timeout
+    )
+
+    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_with(
+        f"ssh-keys/{simple_sshkey['id']}",
+        {"fields": "ssh_key,user"},
+        sshkeys_client.request_timeout,
+    )
+
+
+def test_update_success(
+    simple_sshkey: dict[str, Any],
+    sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
+) -> None:
+    """Test successfully updating an SSH key."""
+    update_req = cherryservers_sdk_python.sshkeys.UpdateRequest(
+        label=simple_sshkey["label"],
+        key=simple_sshkey["key"],
+    )
+
+    cast(
+        mock.Mock, sshkeys_client._api_client.get
+    ).return_value = helpers.build_api_response(simple_sshkey, 200)
+    cast(
+        mock.Mock, sshkeys_client._api_client.put
+    ).return_value = helpers.build_api_response(simple_sshkey, 201)
+
+    sshkey = sshkeys_client.update(simple_sshkey["id"], update_req)
+
+    assert (
+        sshkey.get_model()
+        == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(simple_sshkey)
+    )
+
+    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_once_with(
+        f"ssh-keys/{simple_sshkey['id']}",
+        {"fields": "ssh_key,user"},
+        sshkeys_client.request_timeout,
+    )
+
+    cast(mock.Mock, sshkeys_client._api_client.put).assert_called_once_with(
+        f"ssh-keys/{simple_sshkey['id']}",
+        update_req,
+        None,
+        sshkeys_client._request_timeout,
+    )
+
+
+def test_delete_success(
+    simple_sshkey: dict[str, Any],
+    sshkeys_client: cherryservers_sdk_python.sshkeys.SSHKeyClient,
+) -> None:
+    """Test successfully deleting an SSH key."""
+    cast(
+        mock.Mock, sshkeys_client._api_client.delete
+    ).return_value = helpers.build_api_response({}, 204)
+
+    sshkeys_client.delete(simple_sshkey["id"])
+
+    cast(mock.Mock, sshkeys_client._api_client.delete).assert_called_once_with(
+        f"ssh-keys/{simple_sshkey['id']}", None, sshkeys_client._request_timeout
+    )
