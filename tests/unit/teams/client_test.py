@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import cast
+from typing import Any, cast
 from unittest import mock
 
 import cherryservers_sdk_python.users
@@ -10,27 +10,27 @@ from tests.unit import helpers
 
 
 def test_get_by_id_success(
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
     teams_client: cherryservers_sdk_python.teams.TeamClient,
 ) -> None:
     """Test successfully getting a team by ID."""
     expected_api_resp = helpers.build_api_response(simple_team, 200)
     cast(mock.Mock, teams_client._api_client.get).return_value = expected_api_resp
-    team = teams_client.get_by_id(helpers.get_integer_id(simple_team))
+    team = teams_client.get_by_id(simple_team["id"])
 
     assert team.get_model() == cherryservers_sdk_python.teams.TeamModel.model_validate(
         simple_team
     )
 
     cast(mock.Mock, teams_client._api_client.get).assert_called_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         None,
         teams_client.request_timeout,
     )
 
 
 def test_get_all_success(
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
     teams_client: cherryservers_sdk_python.teams.TeamClient,
 ) -> None:
     """Test successfully getting all teams."""
@@ -52,7 +52,7 @@ def test_get_all_success(
 
 
 def test_create_success(
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
     teams_client: cherryservers_sdk_python.teams.TeamClient,
 ) -> None:
     """Test successfully creating a team."""
@@ -76,14 +76,14 @@ def test_create_success(
     )
 
     cast(mock.Mock, teams_client._api_client.get).assert_called_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         None,
         teams_client.request_timeout,
     )
 
 
 def test_update_success(
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
     teams_client: cherryservers_sdk_python.teams.TeamClient,
 ) -> None:
     """Test successfully updating a team."""
@@ -96,20 +96,20 @@ def test_update_success(
         mock.Mock, teams_client._api_client.put
     ).return_value = helpers.build_api_response(simple_team, 201)
 
-    team = teams_client.update(helpers.get_integer_id(simple_team), update_req)
+    team = teams_client.update(simple_team["id"], update_req)
 
     assert team.get_model() == cherryservers_sdk_python.teams.TeamModel.model_validate(
         simple_team
     )
 
     cast(mock.Mock, teams_client._api_client.get).assert_called_once_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         None,
         teams_client.request_timeout,
     )
 
     cast(mock.Mock, teams_client._api_client.put).assert_called_once_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         update_req,
         None,
         teams_client._request_timeout,
@@ -117,7 +117,7 @@ def test_update_success(
 
 
 def test_delete_success(
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
     teams_client: cherryservers_sdk_python.teams.TeamClient,
 ) -> None:
     """Test successfully deleting a team."""
@@ -125,10 +125,10 @@ def test_delete_success(
         mock.Mock, teams_client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
-    teams_client.delete(helpers.get_integer_id(simple_team))
+    teams_client.delete(simple_team["id"])
 
     cast(mock.Mock, teams_client._api_client.delete).assert_called_once_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         None,
         teams_client._request_timeout,
     )

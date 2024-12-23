@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import copy
-from typing import cast
+from typing import Any, cast
 from unittest import mock
 
 import cherryservers_sdk_python.users
@@ -19,7 +19,7 @@ def test_get_id(
 
 def test_update(
     team_resource: cherryservers_sdk_python.teams.Team,
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
 ) -> None:
     """Test updating a team resource."""
     updated_team = copy.deepcopy(simple_team)
@@ -44,13 +44,13 @@ def test_update(
     )
 
     cast(mock.Mock, team_resource._client._api_client.get).assert_called_once_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         None,
         team_resource._client.request_timeout,
     )
 
     cast(mock.Mock, team_resource._client._api_client.put).assert_called_once_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         update_req,
         None,
         team_resource._client._request_timeout,
@@ -59,7 +59,7 @@ def test_update(
 
 def test_delete(
     team_resource: cherryservers_sdk_python.teams.Team,
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
 ) -> None:
     """Test deleting a team resource."""
     cast(
@@ -69,7 +69,7 @@ def test_delete(
     team_resource.delete()
 
     cast(mock.Mock, team_resource._client._api_client.delete).assert_called_once_with(
-        f"teams/{helpers.get_integer_id(simple_team)}",
+        f"teams/{simple_team['id']}",
         None,
         team_resource._client._request_timeout,
     )

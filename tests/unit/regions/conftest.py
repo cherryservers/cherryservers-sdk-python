@@ -2,15 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import Any
 from unittest import mock
 
 import pytest
 
 import cherryservers_sdk_python.regions
-
-if TYPE_CHECKING:
-    from tests.unit import helpers
 
 
 @pytest.fixture
@@ -21,7 +18,7 @@ def regions_client() -> cherryservers_sdk_python.regions.RegionClient:
 
 @pytest.fixture
 def region_resource(
-    simple_region: helpers.JSON,
+    simple_region: dict[str, Any],
     regions_client: cherryservers_sdk_python.regions.RegionClient,
 ) -> cherryservers_sdk_python.regions.Region:
     """Initialize region resource fixture."""
@@ -34,7 +31,7 @@ def region_resource(
 
 
 @pytest.fixture
-def simple_region() -> helpers.JSON:
+def simple_region() -> dict[str, Any]:
     """Initialize simple region fixture."""
     return {
         "id": 1,

@@ -2,15 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import Any
 from unittest import mock
 
 import pytest
 
 import cherryservers_sdk_python.users
-
-if TYPE_CHECKING:
-    from tests.unit import helpers
 
 
 @pytest.fixture
@@ -21,7 +18,7 @@ def users_client() -> cherryservers_sdk_python.users.UserClient:
 
 @pytest.fixture
 def user_resource(
-    simple_user: helpers.JSON,
+    simple_user: dict[str, Any],
     users_client: cherryservers_sdk_python.users.UserClient,
 ) -> cherryservers_sdk_python.users.User:
     """Initialize user resource fixture."""
@@ -32,7 +29,7 @@ def user_resource(
 
 
 @pytest.fixture
-def simple_user() -> helpers.JSON:
+def simple_user() -> dict[str, Any]:
     """Initialize simple user fixture."""
     return {
         "id": 123456,

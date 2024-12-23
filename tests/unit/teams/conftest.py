@@ -2,15 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import Any
 from unittest import mock
 
 import pytest
 
 import cherryservers_sdk_python.teams
-
-if TYPE_CHECKING:
-    from tests.unit import helpers
 
 
 @pytest.fixture
@@ -21,7 +18,7 @@ def teams_client() -> cherryservers_sdk_python.teams.TeamClient:
 
 @pytest.fixture
 def team_resource(
-    simple_team: helpers.JSON,
+    simple_team: dict[str, Any],
     teams_client: cherryservers_sdk_python.teams.TeamClient,
 ) -> cherryservers_sdk_python.teams.Team:
     """Initialize team resource fixture."""
@@ -32,7 +29,7 @@ def team_resource(
 
 
 @pytest.fixture
-def simple_team() -> helpers.JSON:
+def simple_team() -> dict[str, Any]:
     """Initialize simple team fixture."""
     return {
         "id": 123456,
