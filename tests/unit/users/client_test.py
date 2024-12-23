@@ -2,70 +2,46 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import cast
 from unittest import mock
 
-import pytest
-
 import cherryservers_sdk_python.users
-from tests.unit import resource_client_helpers
-
-if TYPE_CHECKING:
-    import requests
+from tests.unit import helpers
 
 
-class TestClient:
-    """Test user client."""
+def test_get_current_user_success(
+    simple_user: helpers.JSON, users_client: cherryservers_sdk_python.users.UserClient
+) -> None:
+    """Test successfully getting current user."""
+    expected_api_resp = helpers.build_api_response(simple_user, 200)
+    cast(mock.Mock, users_client._api_client.get).return_value = expected_api_resp
+    user = users_client.get_current_user()
 
-    @pytest.fixture
-    def users_client(self) -> cherryservers_sdk_python.users.UserClient:
-        """Initialize user client fixture."""
-        return cherryservers_sdk_python.users.UserClient(api_client=mock.MagicMock())
+    assert user.get_model() == cherryservers_sdk_python.users.UserModel.model_validate(
+        simple_user
+    )
 
-    def test_get_current_user_success(
-        self,
-        get_user_successful_response: requests.Response,
-        users_client: cherryservers_sdk_python.users.UserClient,
-    ) -> None:
-        """Test successfully getting current user."""
-        resource_client_helpers.check_getter_function(
-            get_user_successful_response,
-            users_client,
-            users_client.get_current_user,
-        )
-
-    def test_get_by_id_success(
-        self,
-        get_user_successful_response: requests.Response,
-        users_client: cherryservers_sdk_python.users.UserClient,
-    ) -> None:
-        """Test successfully getting a user by ID."""
-        resource_client_helpers.check_getter_function(
-            get_user_successful_response,
-            users_client,
-            lambda: users_client.get_by_id(123456),
-        )
+    cast(mock.Mock, users_client._api_client.get).assert_called_with(
+        "user",
+        None,
+        users_client.request_timeout,
+    )
 
 
-class TestUser:
-    """Test user resource."""
+def test_get_by_id_success(
+    simple_user: helpers.JSON, users_client: cherryservers_sdk_python.users.UserClient
+) -> None:
+    """Test successfully getting a user by ID."""
+    expected_api_resp = helpers.build_api_response(simple_user, 200)
+    cast(mock.Mock, users_client._api_client.get).return_value = expected_api_resp
+    user = users_client.get_by_id(helpers.get_integer_id(simple_user))
 
-    @pytest.fixture
-    def user(
-        self, get_user_successful_response: requests.Response
-    ) -> cherryservers_sdk_python.users.User:
-        """Initialize user fixture."""
-        return cherryservers_sdk_python.users.User(
-            client=mock.MagicMock(),
-            model=cherryservers_sdk_python.users.UserModel.model_validate(
-                get_user_successful_response.json()
-            ),
-        )
+    assert user.get_model() == cherryservers_sdk_python.users.UserModel.model_validate(
+        simple_user
+    )
 
-    def test_get_id(
-        self,
-        user: cherryservers_sdk_python.users.User,
-        get_user_successful_response: requests.Response,
-    ) -> None:
-        """Test getting user ID."""
-        assert user.get_id() == get_user_successful_response.json()["id"]
+    cast(mock.Mock, users_client._api_client.get).assert_called_with(
+        f"users/{helpers.get_integer_id(simple_user)}",
+        None,
+        users_client.request_timeout,
+    )
