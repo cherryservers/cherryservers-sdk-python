@@ -1,4 +1,4 @@
-"""Unit tests for Cherry Servers Python SDK server resource."""
+"""Unit tests for Cherry Servers Python SDK SSH key resource."""
 
 from __future__ import annotations
 
