@@ -361,7 +361,7 @@ class BackupStorageClient(_base.ResourceClient):
         )
         if wait_for_active:
             _resource_wait.wait_for_resource_condition(
-                backup_storage, 1200, lambda: backup_storage.get_status() != "deployed"
+                backup_storage, 1200, lambda: backup_storage.get_status() == "deployed"
             )
         return self.get_by_id(response.json()["id"])
 
@@ -387,7 +387,7 @@ class BackupStorageClient(_base.ResourceClient):
         )
         if wait_for_active:
             _resource_wait.wait_for_resource_condition(
-                backup_storage, 1200, lambda: backup_storage.get_status() != "deployed"
+                backup_storage, 1200, lambda: backup_storage.get_status() == "deployed"
             )
         return self.get_by_id(response.json()["id"])
 
