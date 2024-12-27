@@ -1,7 +1,9 @@
 name: Unit test
 
 on:
-  [push, pull_request]
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
   test:
@@ -37,6 +39,8 @@ jobs:
       - name: Run tests
         run: poetry run pytest tests/unit/ --cov=cherryservers_sdk_python --cov-report=xml -v
       - name: Upload coverage
+        if: >
+          !startsWith(github.head_ref, 'dependabot')
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
