@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import Field
 
-from cherryservers_sdk_python import _base, _resource_wait, ips, regions
+from cherryservers_sdk_python import _base, _resource_polling, ips, regions
 
 
 class BlockStorageModel(_base.ResourceModel):
@@ -198,7 +198,7 @@ class BlockStorageClient(_base.ResourceClient):
         )
         storage = BlockStorage(self, BlockStorageModel.model_validate(response.json()))
         # We need to wait for backend.
-        _resource_wait.wait_for_resource_condition(
+        _resource_polling.wait_for_resource_condition(
             storage, 120, lambda: storage.get_size() == update_schema.size
         )
         return self.get_by_id(response.json()["id"])
@@ -229,7 +229,7 @@ class BlockStorageClient(_base.ResourceClient):
 
 class BlockStorage(
     _base.Resource[BlockStorageClient, BlockStorageModel],
-    _resource_wait.RefreshableResource,
+    _resource_polling.RefreshableResource,
 ):
     """Cherry Servers block storage resource.
 

@@ -8,7 +8,7 @@ from pydantic import Field
 
 from cherryservers_sdk_python import (
     _base,
-    _resource_wait,
+    _resource_polling,
     block_storages,
     ips,
     plans,
@@ -428,7 +428,7 @@ class ServerClient(_base.ResourceClient):
     ) -> Server:
         resp_json = response.json()
         server = Server(self, ServerModel.model_validate(resp_json))
-        _resource_wait.wait_for_resource_condition(
+        _resource_polling.wait_for_resource_condition(
             server, timeout, lambda: server.get_status() == target_status
         )
         return server
@@ -637,7 +637,7 @@ class ServerClient(_base.ResourceClient):
 
 
 class Server(
-    _base.Resource[ServerClient, ServerModel], _resource_wait.RefreshableResource
+    _base.Resource[ServerClient, ServerModel], _resource_polling.RefreshableResource
 ):
     """Cherry Servers Server resource.
 
