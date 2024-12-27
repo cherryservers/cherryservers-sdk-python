@@ -35,7 +35,10 @@ jobs:
       - name: Install library
         run: poetry install --no-interaction
       - name: Run tests
-        run: |
-          source .venv/bin/activate
-          pytest tests/unit/
-          coverage report
+        run: poetry run pytest tests/unit/ --cov=cherryservers_sdk_python --cov-report=xml -v
+      - name: Upload coverage
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: true
