@@ -9,16 +9,11 @@ build:
   os: ubuntu-24.04
   tools:
     python: "3.12"
-    # You can also specify other tool versions:
-    # nodejs: "20"
-    # rust: "1.70"
-    # golang: "1.20"
-# Credit to https://browniebroke.com/blog/specify-docs-dependency-groups-with-poetry-and-read-the-docs/.
   jobs:
     post_create_environment:
       - pip install poetry
-      - poetry config virtualenvs.create false
-      - poetry install --with docs
+    post_install:
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
@@ -27,8 +22,3 @@ sphinx:
   # builder: "dirhtml"
   # Fail on all warnings to avoid broken references
   fail_on_warning: true
-
-# Optionally build your docs in additional formats such as PDF and ePub
-# formats:
-#   - pdf
-#   - epub
