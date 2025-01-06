@@ -39,7 +39,9 @@ def test_get_all_success(
     cast(mock.Mock, sshkeys_client._api_client.get).return_value = expected_api_resp
     sshkeys = sshkeys_client.get_all()
 
-    for sshkey, expected_sshkey in zip(sshkeys, [simple_sshkey, simple_sshkey]):
+    for sshkey, expected_sshkey in zip(
+        sshkeys, [simple_sshkey, simple_sshkey], strict=False
+    ):
         assert (
             sshkey.get_model()
             == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(

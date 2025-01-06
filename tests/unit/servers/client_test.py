@@ -44,7 +44,9 @@ def test_list_by_project_success(
     cast(mock.Mock, servers_client._api_client.get).return_value = expected_api_resp
     servers = servers_client.list_by_project(simple_server["project"]["id"])
 
-    for server, expected_server in zip(servers, [simple_server, simple_server]):
+    for server, expected_server in zip(
+        servers, [simple_server, simple_server], strict=False
+    ):
         assert (
             server.get_model()
             == cherryservers_sdk_python.servers.ServerModel.model_validate(

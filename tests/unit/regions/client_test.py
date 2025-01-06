@@ -39,7 +39,9 @@ def test_get_all_success(
     cast(mock.Mock, regions_client._api_client.get).return_value = expected_api_resp
     regions = regions_client.get_all()
 
-    for region, expected_region in zip(regions, [simple_region, simple_region]):
+    for region, expected_region in zip(
+        regions, [simple_region, simple_region], strict=False
+    ):
         assert (
             region.get_model()
             == cherryservers_sdk_python.regions.RegionModel.model_validate(

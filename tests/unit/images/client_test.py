@@ -18,7 +18,9 @@ def test_list_by_plan_success(
     cast(mock.Mock, images_client._api_client.get).return_value = expected_api_resp
     images = images_client.list_by_plan("cloud_vps_1")
 
-    for image, expected_image in zip(images, [simple_image, simple_image]):
+    for image, expected_image in zip(
+        images, [simple_image, simple_image], strict=False
+    ):
         assert (
             image.get_model()
             == cherryservers_sdk_python.images.ImageModel.model_validate(expected_image)

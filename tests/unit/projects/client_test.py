@@ -41,7 +41,9 @@ def test_list_by_team_success(
     cast(mock.Mock, projects_client._api_client.get).return_value = expected_api_resp
     projects = projects_client.list_by_team(123456)
 
-    for project, expected_project in zip(projects, [simple_project, simple_project]):
+    for project, expected_project in zip(
+        projects, [simple_project, simple_project], strict=False
+    ):
         assert (
             project.get_model()
             == cherryservers_sdk_python.projects.ProjectModel.model_validate(

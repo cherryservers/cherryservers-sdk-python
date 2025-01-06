@@ -55,7 +55,7 @@ def test_list_by_project_success(
     backup_storages = backup_storages_client.list_by_project(123456)
 
     for backup_storage, expected_backup_storage in zip(
-        backup_storages, [simple_backup_storage, simple_backup_storage]
+        backup_storages, [simple_backup_storage, simple_backup_storage], strict=False
     ):
         assert (
             backup_storage.get_model()
@@ -93,6 +93,7 @@ def test_list_backup_plans_success(
     for backup_storage_plan_model, expected_backup_storage_plan_model in zip(
         backup_storage_plan_models,
         [simple_backup_storage_plan, simple_backup_storage_plan],
+        strict=False,
     ):
         assert (
             backup_storage_plan_model

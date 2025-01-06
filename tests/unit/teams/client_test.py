@@ -38,7 +38,7 @@ def test_get_all_success(
     cast(mock.Mock, teams_client._api_client.get).return_value = expected_api_resp
     teams = teams_client.get_all()
 
-    for team, expected_team in zip(teams, [simple_team, simple_team]):
+    for team, expected_team in zip(teams, [simple_team, simple_team], strict=False):
         assert (
             team.get_model()
             == cherryservers_sdk_python.teams.TeamModel.model_validate(expected_team)

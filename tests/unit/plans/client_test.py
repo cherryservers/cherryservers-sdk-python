@@ -38,7 +38,7 @@ def test_list_by_team(
     cast(mock.Mock, plans_client._api_client.get).return_value = expected_api_resp
     plans = plans_client.list_by_team(123456)
 
-    for plan, expected_plan in zip(plans, [simple_plan, simple_plan]):
+    for plan, expected_plan in zip(plans, [simple_plan, simple_plan], strict=False):
         assert (
             plan.get_model()
             == cherryservers_sdk_python.plans.PlanModel.model_validate(expected_plan)

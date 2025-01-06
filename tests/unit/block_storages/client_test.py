@@ -48,7 +48,7 @@ def test_list_by_project_success(
     block_storages = block_storages_client.list_by_project(123456)
 
     for block_storage, expected_block_storage in zip(
-        block_storages, [simple_block_storage, simple_block_storage]
+        block_storages, [simple_block_storage, simple_block_storage], strict=False
     ):
         assert (
             block_storage.get_model()

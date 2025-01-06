@@ -43,7 +43,7 @@ def test_list_by_team_success(
     cast(mock.Mock, ips_client._api_client.get).return_value = expected_api_resp
     ips = ips_client.list_by_project(123456)
 
-    for ip, expected_ip in zip(ips, [simple_ip, simple_ip]):
+    for ip, expected_ip in zip(ips, [simple_ip, simple_ip], strict=False):
         assert ip.get_model() == cherryservers_sdk_python.ips.IPModel.model_validate(
             expected_ip
         )
