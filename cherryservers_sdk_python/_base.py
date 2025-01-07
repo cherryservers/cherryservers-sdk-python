@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import abc
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 from pydantic import BaseModel, ConfigDict
 
@@ -14,7 +14,7 @@ class ResourceModel(BaseModel, abc.ABC):
 
 
 class ResourceClient(abc.ABC):  # noqa: B024
-    """Cherry Servers resource client base.."""
+    """Cherry Servers resource client base."""
 
     def __init__(
         self, api_client: _client.CherryApiClient, request_timeout: int = 120
@@ -34,7 +34,11 @@ class ResourceClient(abc.ABC):  # noqa: B024
         self._request_timeout = value
 
 
-class Resource[C: ResourceClient, T: ResourceModel](abc.ABC):  # noqa: B024
+C = TypeVar("C", bound=ResourceClient)
+T = TypeVar("T", bound=ResourceModel)
+
+
+class Resource(Generic[C, T], abc.ABC):
     def __init__(self, client: C, model: T) -> None:
         """Initialize a Cherry Servers resource."""
         self._model = model
