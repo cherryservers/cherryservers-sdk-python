@@ -25,6 +25,7 @@ classifiers = [
 Homepage = "https://github.com/caliban0/cherryservers-sdk-python"
 Documentation = "https://cherryservers-sdk-python.readthedocs.io/en/latest/"
 Repository = "https://github.com/caliban0/cherryservers-sdk-python"
+Changelog = "https://github.com/caliban0/cherryservers-sdk-python/blob/main/CHANGELOG.md"
 
 [tool.poetry.group.dev]
 optional = true
