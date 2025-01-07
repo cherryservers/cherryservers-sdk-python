@@ -1,6 +1,6 @@
 [project]
 name = "cherryservers_sdk_python"
-version = "0.1.0"
+version = "1.0.0"
 description = "The official SDK for interacting with the Cherry Servers API"
 authors = [{ name = "Cherry Servers", email = "support@cherryservers.com" }]
 readme = "README.md"
