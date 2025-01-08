@@ -59,6 +59,10 @@ Otherwise, it will create a new one, which you can activate with:
 ```sh
 eval $(poetry env activate)
 ```
+I's also highly recommended to set up [`pre-commit`](https://pre-commit.com/):
+```sh
+pre-commit install
+```
 
 ### Testing
 
