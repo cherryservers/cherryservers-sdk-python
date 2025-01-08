@@ -6,7 +6,7 @@ authors = [{ name = "Cherry Servers", email = "support@cherryservers.com" }]
 readme = "README.md"
 license = "GPL-3.0-or-later"
 keywords = ["cherry-servers", "api", "client"]
-requires-python = ">=3.10"
+requires-python = ">=3.10,<4.0.0"
 dependencies = [
     "requests (>=2.32.3,<3.0.0)",
     "pydantic (>=2.10.4,<3.0.0)"
