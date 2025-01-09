@@ -1,8 +1,8 @@
 # Cherry Servers Python SDK
 
-[![codecov](https://codecov.io/gh/caliban0/cherryservers-sdk-python/graph/badge.svg?token=ESS0ERVT9U)](https://codecov.io/gh/caliban0/cherryservers-sdk-python)
-[![unit-test](https://github.com/caliban0/cherryservers-sdk-python/actions/workflows/unit-test.yml/badge.svg)](https://github.com/caliban0/cherryservers-sdk-python/actions/workflows/unit-test.yml)
-[![lint](https://github.com/caliban0/cherryservers-sdk-python/actions/workflows/lint.yml/badge.svg)](https://github.com/caliban0/cherryservers-sdk-python/actions/workflows/lint.yml)
+[![codecov](https://codecov.io/gh/cherryservers/cherryservers-sdk-python/graph/badge.svg?token=tQY8jXwiZS)](https://codecov.io/gh/cherryservers/cherryservers-sdk-python)
+[![unit-test](https://github.com/cherryservers/cherryservers-sdk-python/actions/workflows/unit-test.yml/badge.svg)](https://github.com/cherryservers/cherryservers-sdk-python/actions/workflows/unit-test.yml)
+[![lint](https://github.com/cherryservers/cherryservers-sdk-python/actions/workflows/lint.yml/badge.svg)](https://github.com/cherryservers/cherryservers-sdk-python/actions/workflows/lint.yml)
 [![Documentation Status](https://readthedocs.org/projects/cherryservers-sdk-python/badge/?version=latest)](https://cherryservers-sdk-python.readthedocs.io/en/latest/?badge=latest)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cherryservers-sdk-python?pypiBaseUrl=https%3A%2F%2Ftest.pypi.org)
 
