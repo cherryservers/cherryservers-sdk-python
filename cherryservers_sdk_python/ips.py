@@ -197,7 +197,7 @@ class IPClient(_base.ResourceClient):
 
             # Create an IP address.
             creation_req = cherryservers_sdk_python.ips.CreationRequest(
-                region="eu_nord_1",
+                region="LT-Siauliai",
                 ptr_record="test",
                 a_record="test",
                 targeted_to=606764,

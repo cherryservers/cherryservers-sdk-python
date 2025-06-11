@@ -42,7 +42,7 @@ class ImageClient(_base.ResourceClient):
             facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
             # Retrieve a list of available OSes for a server plan.
-            images = facade.images.get_by_plan("cloud_vps_1")
+            images = facade.images.get_by_plan("B1-1-1gb-20s-shared")
 
     """
 

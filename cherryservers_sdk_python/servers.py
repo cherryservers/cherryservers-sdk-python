@@ -406,7 +406,7 @@ class ServerClient(_base.ResourceClient):
 
             # Create a server.
             creation_req = cherryservers_sdk_python.servers.CreationRequest(
-                region="eu_nord_1", plan="cloud_vps_1"
+                region="LT-Siauliai", plan="B1-1-1gb-20s-shared"
             )
             server = facade.servers.create(creation_req, project_id=217727)
 

@@ -118,7 +118,7 @@ class BlockStorageClient(_base.ResourceClient):
 
             # Create a storage.
             creation_req = cherryservers_sdk_python.block_storages.CreationRequest(
-                region="eu_nord_1", size=1
+                region="LT-Siauliai", size=1
             )
             storage = facade.block_storages.create(creation_req, project_id=123456)
 

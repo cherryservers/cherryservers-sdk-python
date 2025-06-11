@@ -17,7 +17,9 @@ class TestIP:
         project: cherryservers_sdk_python.projects.Project,
     ) -> cherryservers_sdk_python.ips.IP:
         """Initialize a Cherry Servers IP."""
-        creation_req = cherryservers_sdk_python.ips.CreationRequest(region="eu_nord_1")
+        creation_req = cherryservers_sdk_python.ips.CreationRequest(
+            region="LT-Siauliai"
+        )
         return facade.ips.create(creation_req, project.get_model().id)
 
     def test_create_full_params(
@@ -29,7 +31,7 @@ class TestIP:
         """Test IP creation with all optional parameters."""
         vps_model = vps.get_model()
         creation_req = cherryservers_sdk_python.ips.CreationRequest(
-            region="eu_nord_1",
+            region="LT-Siauliai",
             targeted_to=vps_model.id,
             ptr_record="python-sdk-test",
             a_record="python-sdk-test",
@@ -40,7 +42,7 @@ class TestIP:
         ip_model = ip.get_model()
 
         if ip_model.region is not None:
-            assert ip_model.region.slug == "eu_nord_1"
+            assert ip_model.region.slug == "LT-Siauliai"
         if ip_model.targeted_to is not None:
             assert ip_model.targeted_to.id == vps_model.id
         assert ip_model.ptr_record == "python-sdk-test."

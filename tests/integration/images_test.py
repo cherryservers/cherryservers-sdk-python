@@ -15,7 +15,7 @@ class TestImage:
         self, facade: cherryservers_sdk_python.facade.CherryApiFacade
     ) -> None:
         """Test getting a list of images by plan slug."""
-        images = facade.images.list_by_plan("cloud_vps_1")
+        images = facade.images.list_by_plan("B1-1-1gb-20s-shared")
 
         retrieved_image_models = [image.get_model() for image in images]
 

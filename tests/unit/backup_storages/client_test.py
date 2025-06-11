@@ -115,7 +115,7 @@ def test_create_success(
 ) -> None:
     """Test successfully creating a block storage."""
     creation_request = cherryservers_sdk_python.backup_storages.CreationRequest(
-        region="eu_nord_1", slug="backup_50"
+        region="LT-Siauliai", slug="backup_50"
     )
 
     undeployed_backup_storage = copy.deepcopy(simple_backup_storage)

@@ -21,7 +21,7 @@ class TestRegion:
         ]
 
         assert any(
-            region_model.id == 1 and region_model.slug == "eu_nord_1"
+            region_model.id == 1 and region_model.slug == "LT-Siauliai"
             for region_model in retrieved_region_models
         )
 
@@ -31,4 +31,4 @@ class TestRegion:
         """Test getting a region by id."""
         region = facade.regions.get_by_id(1)
 
-        assert region.get_model().slug == "eu_nord_1"
+        assert region.get_model().slug == "LT-Siauliai"
