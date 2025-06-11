@@ -27,7 +27,7 @@ class TestBlockStorage:
     ) -> cherryservers_sdk_python.block_storages.BlockStorage:
         """Initialize a Block Storage instance."""
         creation_req = cherryservers_sdk_python.block_storages.CreationRequest(
-            region="eu_nord_1", size=1
+            region="LT-Siauliai", size=1
         )
 
         return facade.block_storages.create(creation_req, project_id=project_id)

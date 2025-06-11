@@ -50,7 +50,7 @@ class TestServer:
         """Initialize a Cherry servers floating IP address."""
         fip = facade.ips.create(
             cherryservers_sdk_python.ips.CreationRequest(
-                region="eu_nord_1",
+                region="LT-Siauliai",
             ),
             project.get_id(),
         )
@@ -66,7 +66,7 @@ class TestServer:
     ) -> cherryservers_sdk_python.servers.Server:
         """Initialize a Cherry Servers server."""
         creation_req = cherryservers_sdk_python.servers.CreationRequest(
-            region="eu_nord_1",
+            region="LT-Siauliai",
             plan="cloud_vps_1",
         )
         server = facade.servers.create(creation_req, project.get_id())
@@ -88,7 +88,7 @@ class TestServer:
     ) -> None:
         """Test creating a server with full params provided."""
         creation_req = cherryservers_sdk_python.servers.CreationRequest(
-            region="eu_nord_1",
+            region="LT-Siauliai",
             plan="cloud_vps_1",
             image="debian_12_64bit",
             hostname="python-sdk-test",

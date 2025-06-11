@@ -269,7 +269,7 @@ class BackupStorageClient(_base.ResourceClient):
 
             # Create a storage.
             creation_req = cherryservers_sdk_python.backup_storages.CreationRequest(
-                region="eu_nord_1", slug="backup_50"
+                region="LT-Siauliai", slug="backup_50"
             )
             storage = facade.backup_storages.create(creation_req, server_id=123456)
 
