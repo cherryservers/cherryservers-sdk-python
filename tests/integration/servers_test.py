@@ -67,7 +67,7 @@ class TestServer:
         """Initialize a Cherry Servers server."""
         creation_req = cherryservers_sdk_python.servers.CreationRequest(
             region="LT-Siauliai",
-            plan="cloud_vps_1",
+            plan="B1-1-1gb-20s-shared",
         )
         server = facade.servers.create(creation_req, project.get_id())
         server_model = server.get_model()
@@ -89,7 +89,7 @@ class TestServer:
         """Test creating a server with full params provided."""
         creation_req = cherryservers_sdk_python.servers.CreationRequest(
             region="LT-Siauliai",
-            plan="cloud_vps_1",
+            plan="B1-1-1gb-20s-shared",
             image="debian_12_64bit",
             hostname="python-sdk-test",
             user_data="I2Nsb3VkLWNvbmZpZwp3cml0ZV9maWxlczoKICAt"

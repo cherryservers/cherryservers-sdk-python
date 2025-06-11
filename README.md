@@ -28,7 +28,7 @@ facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
 
 # Create a server.
 creation_req = cherryservers_sdk_python.servers.CreationRequest(
-    region="LT-Siauliai", plan="cloud_vps_1"
+    region="LT-Siauliai", plan="B1-1-1gb-20s-shared"
 )
 server = facade.servers.create(creation_req, project_id=220189)
 
@@ -59,7 +59,7 @@ Otherwise, it will create a new one, which you can activate with:
 ```sh
 eval $(poetry env activate)
 ```
-I's also highly recommended to set up [`pre-commit`](https://pre-commit.com/):
+It's also highly recommended to set up [`pre-commit`](https://pre-commit.com/):
 ```sh
 pre-commit install
 ```

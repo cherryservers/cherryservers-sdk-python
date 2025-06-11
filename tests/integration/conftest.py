@@ -51,7 +51,7 @@ def vps(
 ) -> Generator[cherryservers_sdk_python.servers.Server]:
     """Initialize a Cherry Servers VPS."""
     creation_req = cherryservers_sdk_python.servers.CreationRequest(
-        region="LT-Siauliai", plan="cloud_vps_1"
+        region="LT-Siauliai", plan="B1-1-1gb-20s-shared"
     )
 
     vps = facade.servers.create(creation_req, project.get_model().id)

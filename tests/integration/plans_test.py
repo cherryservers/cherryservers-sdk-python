@@ -21,6 +21,6 @@ class TestPlan:
         self, facade: cherryservers_sdk_python.facade.CherryApiFacade
     ) -> None:
         """Test getting a plan by ID or slug."""
-        plan = facade.plans.get_by_id_or_slug("cloud_vps_1")
+        plan = facade.plans.get_by_id_or_slug("B1-1-1gb-20s-shared")
 
-        assert plan.get_model().slug == "cloud_vps_1"
+        assert plan.get_model().slug == "B1-1-1gb-20s-shared"

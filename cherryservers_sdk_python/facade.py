@@ -61,7 +61,7 @@ class CherryApiFacade:
                 # Order a VPS.
 
                 creation_req = (cherryservers_sdk_python.servers.
-                CreationRequest(region="LT-Siauliai", plan="cloud_vps_1"))
+                CreationRequest(region="LT-Siauliai", plan="B1-1-1gb-20s-shared"))
                 server = facade.servers.create(creation_req, project_id=217727)
 
         """
