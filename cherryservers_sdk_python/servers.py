@@ -250,6 +250,7 @@ class CreationRequest(_base.RequestSchema):
         spot_market (bool): Whether the server should be a spot instance.
          Defaults to False.
         storage_id (int | None): ID of the EBS that will be attached to the server.
+        cycle (str | None): Billing cycle slug. Defaults to 'hourly'.
 
     """
 
@@ -284,6 +285,9 @@ class CreationRequest(_base.RequestSchema):
     )
     storage_id: int | None = Field(
         description="ID of the EBS that will be attached to the server.", default=None
+    )
+    cycle: str | None = Field(
+        description="Billing cycle slug. Defaults to 'hourly'.", default="hourly"
     )
 
 
