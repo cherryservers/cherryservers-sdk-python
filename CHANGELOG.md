@@ -2,13 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.1] - 2025-06-11
+## [1.1.0] - 2025-07-08
+
+### 🚀 Features
+
+- Add server billing cycle options
+- Add py.typed for type checker compatibility
+
+### ⚙️ Miscellaneous Tasks
+
+- Update versions
+
+## [1.0.1] - 2025-06-12
 
 ### 🐛 Bug Fixes
 
 - Update region param to 'LT-Siauliai" where relevant
 - Change 'cloud_vps_1' to 'B1-1-1gb-20s-shared' in the relevant sections
 - Update 'request' library to fix CVE-2024-47081
+
+### 💼 Other
+
+- *(deps)* Bump JRubics/poetry-publish from 2.0 to 2.1
 
 ### ⚙️ Miscellaneous Tasks
 
