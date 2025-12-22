@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -15,24 +15,24 @@ repos:
         args: [ --fix=lf ]
 
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.0
+    rev: v8.30.0
     hooks:
       - id: gitleaks
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.6
+    rev: v0.14.10
     hooks:
       - id: ruff
         args: [ --fix ]
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.14.1
+    rev: v1.19.1
     hooks:
       - id: mypy
         args: [ --strict, --ignore-missing-imports ]
         additional_dependencies:
-          - requests==2.32.3
-          - types-requests==2.32.0.20241016
-          - pydantic == 2.10.4
-          - pytest == 8.3.4
+          - requests==2.32.5
+          - types-requests== 2.32.4.20250913
+          - pydantic == 2.12.5
+          - pytest == 9.0.2

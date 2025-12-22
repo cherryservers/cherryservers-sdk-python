@@ -31,11 +31,11 @@ Changelog = "https://github.com/cherryservers/cherryservers-sdk-python/blob/main
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.8.6"
+ruff = "^0"
 pre-commit = "^4.0.1"
 mypy = "^1.14.1"
-pytest = "^8.3.3"
-pytest-cov = "^6.0.0"
+pytest = "^9.0.2"
+pytest-cov = "^7.0.0"
 types-requests = "^2.32.0"
 git-cliff = "^2.7.0"
 
