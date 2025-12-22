@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python.users
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_id(
@@ -27,10 +29,10 @@ def test_update(
     )
 
     cast(
-        mock.Mock, sshkey_resource._client._api_client.get
+        "mock.Mock", sshkey_resource._client._api_client.get
     ).return_value = helpers.build_api_response(simple_sshkey, 200)
     cast(
-        mock.Mock, sshkey_resource._client._api_client.put
+        "mock.Mock", sshkey_resource._client._api_client.put
     ).return_value = helpers.build_api_response(simple_sshkey, 201)
 
     sshkey_resource.update(update_req)
@@ -40,13 +42,13 @@ def test_update(
         == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(simple_sshkey)
     )
 
-    cast(mock.Mock, sshkey_resource._client._api_client.get).assert_called_once_with(
+    cast("mock.Mock", sshkey_resource._client._api_client.get).assert_called_once_with(
         f"ssh-keys/{simple_sshkey['id']}",
         {"fields": "ssh_key,user"},
         sshkey_resource._client.request_timeout,
     )
 
-    cast(mock.Mock, sshkey_resource._client._api_client.put).assert_called_once_with(
+    cast("mock.Mock", sshkey_resource._client._api_client.put).assert_called_once_with(
         f"ssh-keys/{simple_sshkey['id']}",
         update_req,
         None,
@@ -60,12 +62,14 @@ def test_delete(
 ) -> None:
     """Test deleting an SSH key resource."""
     cast(
-        mock.Mock, sshkey_resource._client._api_client.delete
+        "mock.Mock", sshkey_resource._client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     sshkey_resource.delete()
 
-    cast(mock.Mock, sshkey_resource._client._api_client.delete).assert_called_once_with(
+    cast(
+        "mock.Mock", sshkey_resource._client._api_client.delete
+    ).assert_called_once_with(
         f"ssh-keys/{simple_sshkey['id']}",
         None,
         sshkey_resource._client._request_timeout,

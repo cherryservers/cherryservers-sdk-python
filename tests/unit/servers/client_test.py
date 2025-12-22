@@ -4,14 +4,16 @@ from __future__ import annotations
 
 import copy
 from operator import methodcaller
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import pytest
 
 import cherryservers_sdk_python.users
 from cherryservers_sdk_python import _base
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_by_id_success(
@@ -20,7 +22,7 @@ def test_get_by_id_success(
 ) -> None:
     """Test successfully getting server by ID."""
     expected_api_resp = helpers.build_api_response(simple_server, 200)
-    cast(mock.Mock, servers_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", servers_client._api_client.get).return_value = expected_api_resp
     server = servers_client.get_by_id(simple_server["id"])
 
     assert (
@@ -28,7 +30,7 @@ def test_get_by_id_success(
         == cherryservers_sdk_python.servers.ServerModel.model_validate(simple_server)
     )
 
-    cast(mock.Mock, servers_client._api_client.get).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.get).assert_called_with(
         f"servers/{simple_server['id']}",
         None,
         servers_client.request_timeout,
@@ -41,7 +43,7 @@ def test_list_by_project_success(
 ) -> None:
     """Test successfully getting servers by project."""
     expected_api_resp = helpers.build_api_response([simple_server, simple_server], 200)
-    cast(mock.Mock, servers_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", servers_client._api_client.get).return_value = expected_api_resp
     servers = servers_client.list_by_project(simple_server["project"]["id"])
 
     for server, expected_server in zip(
@@ -54,7 +56,7 @@ def test_list_by_project_success(
             )
         )
 
-    cast(mock.Mock, servers_client._api_client.get).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.get).assert_called_with(
         f"projects/{simple_server['project']['id']}/servers",
         None,
         servers_client.request_timeout,
@@ -94,8 +96,8 @@ def test_create_success(
 
     get_response = helpers.build_api_response(simple_server, 200)
     post_response = helpers.build_api_response(server_pre_deploy, 201)
-    cast(mock.Mock, servers_client._api_client.post).return_value = post_response
-    cast(mock.Mock, servers_client._api_client.get).return_value = get_response
+    cast("mock.Mock", servers_client._api_client.post).return_value = post_response
+    cast("mock.Mock", servers_client._api_client.get).return_value = get_response
 
     server = servers_client.create(creation_request, simple_server["project"]["id"])
 
@@ -104,14 +106,14 @@ def test_create_success(
         == cherryservers_sdk_python.servers.ServerModel.model_validate(simple_server)
     )
 
-    cast(mock.Mock, servers_client._api_client.post).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.post).assert_called_with(
         f"projects/{simple_server['project']['id']}/servers",
         creation_request,
         None,
         servers_client.request_timeout,
     )
 
-    cast(mock.Mock, servers_client._api_client.get).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.get).assert_called_with(
         f"servers/{simple_server['id']}",
         None,
         servers_client.request_timeout,
@@ -137,8 +139,8 @@ def test_update_success(
 
     get_response = helpers.build_api_response(updated_server, 200)
     put_response = helpers.build_api_response(updated_server, 201)
-    cast(mock.Mock, servers_client._api_client.put).return_value = put_response
-    cast(mock.Mock, servers_client._api_client.get).return_value = get_response
+    cast("mock.Mock", servers_client._api_client.put).return_value = put_response
+    cast("mock.Mock", servers_client._api_client.get).return_value = get_response
 
     server = servers_client.update(simple_server["id"], update_req)
 
@@ -147,14 +149,14 @@ def test_update_success(
         == cherryservers_sdk_python.servers.ServerModel.model_validate(updated_server)
     )
 
-    cast(mock.Mock, servers_client._api_client.put).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.put).assert_called_with(
         f"servers/{simple_server['id']}",
         update_req,
         None,
         servers_client.request_timeout,
     )
 
-    cast(mock.Mock, servers_client._api_client.get).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.get).assert_called_with(
         f"servers/{simple_server['id']}",
         None,
         servers_client.request_timeout,
@@ -167,12 +169,12 @@ def test_delete_success(
 ) -> None:
     """Test successfully deleting a server."""
     cast(
-        mock.Mock, servers_client._api_client.delete
+        "mock.Mock", servers_client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     servers_client.delete(simple_server["id"])
 
-    cast(mock.Mock, servers_client._api_client.delete).assert_called_once_with(
+    cast("mock.Mock", servers_client._api_client.delete).assert_called_once_with(
         f"servers/{simple_server['id']}", None, servers_client._request_timeout
     )
 
@@ -250,19 +252,19 @@ def test_actions(
         method_to_test = methodcaller(action_func_name, simple_server["id"])
 
     cast(
-        mock.Mock, servers_client._api_client.post
+        "mock.Mock", servers_client._api_client.post
     ).return_value = helpers.build_api_response(server_with_action_in_progress, 201)
     cast(
-        mock.Mock, servers_client._api_client.get
+        "mock.Mock", servers_client._api_client.get
     ).return_value = helpers.build_api_response(simple_server, 200)
 
     method_to_test(servers_client)
 
-    cast(mock.Mock, servers_client._api_client.get).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.get).assert_called_with(
         f"servers/{simple_server['id']}", None, servers_client.request_timeout
     )
 
-    cast(mock.Mock, servers_client._api_client.post).assert_called_with(
+    cast("mock.Mock", servers_client._api_client.post).assert_called_with(
         f"servers/{simple_server['id']}/actions",
         action_request,
         None,

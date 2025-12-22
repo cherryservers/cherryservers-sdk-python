@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, cast
-from unittest import mock
 
 import pytest
 
@@ -11,6 +10,8 @@ import cherryservers_sdk_python.ips
 from tests.unit import helpers
 
 if TYPE_CHECKING:
+    from unittest import mock
+
     from _pytest.fixtures import FixtureRequest
 
 
@@ -20,14 +21,14 @@ def test_get_by_id_success(
 ) -> None:
     """Test successfully getting an IP by ID."""
     expected_api_resp = helpers.build_api_response(simple_ip, 200)
-    cast(mock.Mock, ips_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", ips_client._api_client.get).return_value = expected_api_resp
     project = ips_client.get_by_id(simple_ip["id"])
 
     assert project.get_model() == cherryservers_sdk_python.ips.IPModel.model_validate(
         simple_ip
     )
 
-    cast(mock.Mock, ips_client._api_client.get).assert_called_with(
+    cast("mock.Mock", ips_client._api_client.get).assert_called_with(
         f"ips/{simple_ip['id']}",
         {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
         ips_client.request_timeout,
@@ -40,7 +41,7 @@ def test_list_by_team_success(
 ) -> None:
     """Test successfully listing all team projects."""
     expected_api_resp = helpers.build_api_response([simple_ip, simple_ip], 200)
-    cast(mock.Mock, ips_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", ips_client._api_client.get).return_value = expected_api_resp
     ips = ips_client.list_by_project(123456)
 
     for ip, expected_ip in zip(ips, [simple_ip, simple_ip], strict=False):
@@ -48,7 +49,7 @@ def test_list_by_team_success(
             expected_ip
         )
 
-    cast(mock.Mock, ips_client._api_client.get).assert_called_with(
+    cast("mock.Mock", ips_client._api_client.get).assert_called_with(
         "projects/123456/ips",
         {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
         ips_client.request_timeout,
@@ -82,8 +83,8 @@ def test_create_success(
 
     get_response = helpers.build_api_response(ip, 200)
     post_response = helpers.build_api_response(ip, 201)
-    cast(mock.Mock, ips_client._api_client.post).return_value = post_response
-    cast(mock.Mock, ips_client._api_client.get).return_value = get_response
+    cast("mock.Mock", ips_client._api_client.post).return_value = post_response
+    cast("mock.Mock", ips_client._api_client.get).return_value = get_response
 
     project = ips_client.create(creation_request, 123456)
 
@@ -91,11 +92,11 @@ def test_create_success(
         ip
     )
 
-    cast(mock.Mock, ips_client._api_client.post).assert_called_with(
+    cast("mock.Mock", ips_client._api_client.post).assert_called_with(
         "projects/123456/ips", creation_request, None, ips_client.request_timeout
     )
 
-    cast(mock.Mock, ips_client._api_client.get).assert_called_with(
+    cast("mock.Mock", ips_client._api_client.get).assert_called_with(
         f"ips/{ip['id']}",
         {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
         ips_client.request_timeout,
@@ -115,10 +116,10 @@ def test_update_success(
     )
 
     cast(
-        mock.Mock, ips_client._api_client.get
+        "mock.Mock", ips_client._api_client.get
     ).return_value = helpers.build_api_response(attached_ip, 200)
     cast(
-        mock.Mock, ips_client._api_client.put
+        "mock.Mock", ips_client._api_client.put
     ).return_value = helpers.build_api_response(attached_ip, 201)
 
     ip = ips_client.update(attached_ip["id"], update_req)
@@ -127,13 +128,13 @@ def test_update_success(
         attached_ip
     )
 
-    cast(mock.Mock, ips_client._api_client.get).assert_called_with(
+    cast("mock.Mock", ips_client._api_client.get).assert_called_with(
         f"ips/{attached_ip['id']}",
         {"fields": "ip,project,routed_to,region,href,bgp,id,hostname"},
         ips_client.request_timeout,
     )
 
-    cast(mock.Mock, ips_client._api_client.put).assert_called_once_with(
+    cast("mock.Mock", ips_client._api_client.put).assert_called_once_with(
         f"ips/{attached_ip['id']}",
         update_req,
         None,
@@ -147,11 +148,11 @@ def test_delete_success(
 ) -> None:
     """Test successfully deleting an IP."""
     cast(
-        mock.Mock, ips_client._api_client.delete
+        "mock.Mock", ips_client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     ips_client.delete(simple_ip["id"])
 
-    cast(mock.Mock, ips_client._api_client.delete).assert_called_once_with(
+    cast("mock.Mock", ips_client._api_client.delete).assert_called_once_with(
         f"ips/{simple_ip['id']}", None, ips_client._request_timeout
     )

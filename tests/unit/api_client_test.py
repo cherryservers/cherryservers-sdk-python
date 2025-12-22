@@ -46,9 +46,9 @@ class TestCherryClient:
         self, client: _client.CherryApiClient, response: requests.Response
     ) -> None:
         """Test GET request."""
-        cast(mock.Mock, client._requests_session.get).return_value = response
+        cast("mock.Mock", client._requests_session.get).return_value = response
         resp = client.get(path="test_url", params=None)
-        cast(mock.Mock, client._requests_session.get).assert_called_with(
+        cast("mock.Mock", client._requests_session.get).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=120,
@@ -60,9 +60,9 @@ class TestCherryClient:
         self, client: _client.CherryApiClient, response: requests.Response
     ) -> None:
         """Test DELETE request."""
-        cast(mock.Mock, client._requests_session.delete).return_value = response
+        cast("mock.Mock", client._requests_session.delete).return_value = response
         resp = client.delete(path="test_url", params=None)
-        cast(mock.Mock, client._requests_session.delete).assert_called_with(
+        cast("mock.Mock", client._requests_session.delete).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=120,
@@ -74,10 +74,10 @@ class TestCherryClient:
     ) -> None:
         """Test POST request."""
         response.status_code = 201
-        cast(mock.Mock, client._requests_session.post).return_value = response
+        cast("mock.Mock", client._requests_session.post).return_value = response
         req = RequestSchema()
         resp = client.post(path="test_url", data=req)
-        cast(mock.Mock, client._requests_session.post).assert_called_with(
+        cast("mock.Mock", client._requests_session.post).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=120,
@@ -90,10 +90,10 @@ class TestCherryClient:
     ) -> None:
         """Test PUT request."""
         response.status_code = 201
-        cast(mock.Mock, client._requests_session.put).return_value = response
+        cast("mock.Mock", client._requests_session.put).return_value = response
         req = RequestSchema()
         resp = client.put(path="test_url", data=req)
-        cast(mock.Mock, client._requests_session.put).assert_called_with(
+        cast("mock.Mock", client._requests_session.put).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=120,
@@ -106,10 +106,10 @@ class TestCherryClient:
     ) -> None:
         """Test PATCH request."""
         response.status_code = 201
-        cast(mock.Mock, client._requests_session.patch).return_value = response
+        cast("mock.Mock", client._requests_session.patch).return_value = response
         req = RequestSchema()
         resp = client.patch(path="test_url", data=req)
-        cast(mock.Mock, client._requests_session.patch).assert_called_with(
+        cast("mock.Mock", client._requests_session.patch).assert_called_with(
             "https://api.cherryservers.com/v1/test_url",
             params=None,
             timeout=120,

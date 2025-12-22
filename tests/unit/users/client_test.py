@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python.users
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_current_user_success(
@@ -14,14 +16,14 @@ def test_get_current_user_success(
 ) -> None:
     """Test successfully getting current user."""
     expected_api_resp = helpers.build_api_response(simple_user, 200)
-    cast(mock.Mock, users_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", users_client._api_client.get).return_value = expected_api_resp
     user = users_client.get_current_user()
 
     assert user.get_model() == cherryservers_sdk_python.users.UserModel.model_validate(
         simple_user
     )
 
-    cast(mock.Mock, users_client._api_client.get).assert_called_with(
+    cast("mock.Mock", users_client._api_client.get).assert_called_with(
         "user",
         None,
         users_client.request_timeout,
@@ -33,14 +35,14 @@ def test_get_by_id_success(
 ) -> None:
     """Test successfully getting a user by ID."""
     expected_api_resp = helpers.build_api_response(simple_user, 200)
-    cast(mock.Mock, users_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", users_client._api_client.get).return_value = expected_api_resp
     user = users_client.get_by_id(simple_user["id"])
 
     assert user.get_model() == cherryservers_sdk_python.users.UserModel.model_validate(
         simple_user
     )
 
-    cast(mock.Mock, users_client._api_client.get).assert_called_with(
+    cast("mock.Mock", users_client._api_client.get).assert_called_with(
         f"users/{simple_user['id']}",
         None,
         users_client.request_timeout,

@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import copy
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_by_id_success(
@@ -17,7 +19,7 @@ def test_get_by_id_success(
     """Test successfully getting a block backup storage by ID."""
     expected_api_resp = helpers.build_api_response(simple_backup_storage, 200)
     cast(
-        mock.Mock, backup_storages_client._api_client.get
+        "mock.Mock", backup_storages_client._api_client.get
     ).return_value = expected_api_resp
     backup_storage = backup_storages_client.get_by_id(simple_backup_storage["id"])
 
@@ -28,7 +30,7 @@ def test_get_by_id_success(
         )
     )
 
-    cast(mock.Mock, backup_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", backup_storages_client._api_client.get).assert_called_with(
         f"backup-storages/{simple_backup_storage['id']}",
         {
             "fields": "available_addresses,ip,region,project,"
@@ -50,7 +52,7 @@ def test_list_by_project_success(
         [simple_backup_storage, simple_backup_storage], 200
     )
     cast(
-        mock.Mock, backup_storages_client._api_client.get
+        "mock.Mock", backup_storages_client._api_client.get
     ).return_value = expected_api_resp
     backup_storages = backup_storages_client.list_by_project(123456)
 
@@ -64,7 +66,7 @@ def test_list_by_project_success(
             )
         )
 
-    cast(mock.Mock, backup_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", backup_storages_client._api_client.get).assert_called_with(
         "projects/123456/backup-storages",
         {
             "fields": "available_addresses,ip,region,project,"
@@ -86,7 +88,7 @@ def test_list_backup_plans_success(
         [simple_backup_storage_plan, simple_backup_storage_plan], 200
     )
     cast(
-        mock.Mock, backup_storages_client._api_client.get
+        "mock.Mock", backup_storages_client._api_client.get
     ).return_value = expected_api_resp
     backup_storage_plan_models = backup_storages_client.list_backup_plans()
 
@@ -102,7 +104,7 @@ def test_list_backup_plans_success(
             )
         )
 
-    cast(mock.Mock, backup_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", backup_storages_client._api_client.get).assert_called_with(
         "backup-storage-plans",
         {"fields": "plan,pricing,href,region"},
         backup_storages_client.request_timeout,
@@ -124,9 +126,11 @@ def test_create_success(
     get_response = helpers.build_api_response(simple_backup_storage, 200)
     post_response = helpers.build_api_response(undeployed_backup_storage, 201)
     cast(
-        mock.Mock, backup_storages_client._api_client.post
+        "mock.Mock", backup_storages_client._api_client.post
     ).return_value = post_response
-    cast(mock.Mock, backup_storages_client._api_client.get).return_value = get_response
+    cast(
+        "mock.Mock", backup_storages_client._api_client.get
+    ).return_value = get_response
 
     backup_storage = backup_storages_client.create(creation_request, 622690)
 
@@ -137,14 +141,14 @@ def test_create_success(
         )
     )
 
-    cast(mock.Mock, backup_storages_client._api_client.post).assert_called_with(
+    cast("mock.Mock", backup_storages_client._api_client.post).assert_called_with(
         "servers/622690/backup-storages",
         creation_request,
         None,
         backup_storages_client.request_timeout,
     )
 
-    cast(mock.Mock, backup_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", backup_storages_client._api_client.get).assert_called_with(
         f"backup-storages/{simple_backup_storage['id']}",
         {
             "fields": "available_addresses,ip,region,project,"
@@ -170,10 +174,10 @@ def test_update_success(
     undeployed_backup_storage["status"] = "provisioning"
 
     cast(
-        mock.Mock, backup_storages_client._api_client.get
+        "mock.Mock", backup_storages_client._api_client.get
     ).return_value = helpers.build_api_response(simple_backup_storage, 200)
     cast(
-        mock.Mock, backup_storages_client._api_client.put
+        "mock.Mock", backup_storages_client._api_client.put
     ).return_value = helpers.build_api_response(undeployed_backup_storage, 201)
 
     backup_storage = backup_storages_client.update(
@@ -187,7 +191,7 @@ def test_update_success(
         )
     )
 
-    cast(mock.Mock, backup_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", backup_storages_client._api_client.get).assert_called_with(
         f"backup-storages/{simple_backup_storage['id']}",
         {
             "fields": "available_addresses,ip,region,project,"
@@ -199,7 +203,7 @@ def test_update_success(
         backup_storages_client.request_timeout,
     )
 
-    cast(mock.Mock, backup_storages_client._api_client.put).assert_called_once_with(
+    cast("mock.Mock", backup_storages_client._api_client.put).assert_called_once_with(
         f"backup-storages/{simple_backup_storage['id']}",
         update_req,
         None,
@@ -217,10 +221,10 @@ def test_update_access_method_success(
     )
 
     cast(
-        mock.Mock, backup_storages_client._api_client.get
+        "mock.Mock", backup_storages_client._api_client.get
     ).return_value = helpers.build_api_response(simple_backup_storage, 200)
     cast(
-        mock.Mock, backup_storages_client._api_client.patch
+        "mock.Mock", backup_storages_client._api_client.patch
     ).return_value = helpers.build_api_response(simple_backup_storage, 200)
 
     backup_storage = backup_storages_client.update_access_method(
@@ -234,7 +238,7 @@ def test_update_access_method_success(
         )
     )
 
-    cast(mock.Mock, backup_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", backup_storages_client._api_client.get).assert_called_with(
         f"backup-storages/{simple_backup_storage['id']}",
         {
             "fields": "available_addresses,ip,region,project,"
@@ -246,7 +250,7 @@ def test_update_access_method_success(
         backup_storages_client.request_timeout,
     )
 
-    cast(mock.Mock, backup_storages_client._api_client.patch).assert_called_once_with(
+    cast("mock.Mock", backup_storages_client._api_client.patch).assert_called_once_with(
         f"backup-storages/{simple_backup_storage['id']}/methods/ftp",
         update_req,
         None,
@@ -260,12 +264,14 @@ def test_delete_success(
 ) -> None:
     """Test successfully deleting a block storage."""
     cast(
-        mock.Mock, backup_storages_client._api_client.delete
+        "mock.Mock", backup_storages_client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     backup_storages_client.delete(simple_backup_storage["id"])
 
-    cast(mock.Mock, backup_storages_client._api_client.delete).assert_called_once_with(
+    cast(
+        "mock.Mock", backup_storages_client._api_client.delete
+    ).assert_called_once_with(
         f"backup-storages/{simple_backup_storage['id']}",
         None,
         backup_storages_client._request_timeout,

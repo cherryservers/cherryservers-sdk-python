@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_by_id_success(
@@ -16,7 +18,7 @@ def test_get_by_id_success(
     """Test successfully getting a block storage by ID."""
     expected_api_resp = helpers.build_api_response(simple_block_storage, 200)
     cast(
-        mock.Mock, block_storages_client._api_client.get
+        "mock.Mock", block_storages_client._api_client.get
     ).return_value = expected_api_resp
     project = block_storages_client.get_by_id(simple_block_storage["id"])
 
@@ -27,7 +29,7 @@ def test_get_by_id_success(
         )
     )
 
-    cast(mock.Mock, block_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.get).assert_called_with(
         f"storages/{simple_block_storage['id']}",
         None,
         block_storages_client.request_timeout,
@@ -43,7 +45,7 @@ def test_list_by_project_success(
         [simple_block_storage, simple_block_storage], 200
     )
     cast(
-        mock.Mock, block_storages_client._api_client.get
+        "mock.Mock", block_storages_client._api_client.get
     ).return_value = expected_api_resp
     block_storages = block_storages_client.list_by_project(123456)
 
@@ -57,7 +59,7 @@ def test_list_by_project_success(
             )
         )
 
-    cast(mock.Mock, block_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.get).assert_called_with(
         "projects/123456/storages",
         None,
         block_storages_client.request_timeout,
@@ -75,8 +77,10 @@ def test_create_success(
 
     get_response = helpers.build_api_response(simple_block_storage, 200)
     post_response = helpers.build_api_response(simple_block_storage, 201)
-    cast(mock.Mock, block_storages_client._api_client.post).return_value = post_response
-    cast(mock.Mock, block_storages_client._api_client.get).return_value = get_response
+    cast(
+        "mock.Mock", block_storages_client._api_client.post
+    ).return_value = post_response
+    cast("mock.Mock", block_storages_client._api_client.get).return_value = get_response
 
     block_storage = block_storages_client.create(creation_request, 123456)
 
@@ -87,14 +91,14 @@ def test_create_success(
         )
     )
 
-    cast(mock.Mock, block_storages_client._api_client.post).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.post).assert_called_with(
         "projects/123456/storages",
         creation_request,
         None,
         block_storages_client.request_timeout,
     )
 
-    cast(mock.Mock, block_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.get).assert_called_with(
         f"storages/{simple_block_storage['id']}",
         None,
         block_storages_client.request_timeout,
@@ -111,10 +115,10 @@ def test_update_success(
     )
 
     cast(
-        mock.Mock, block_storages_client._api_client.get
+        "mock.Mock", block_storages_client._api_client.get
     ).return_value = helpers.build_api_response(simple_block_storage, 200)
     cast(
-        mock.Mock, block_storages_client._api_client.put
+        "mock.Mock", block_storages_client._api_client.put
     ).return_value = helpers.build_api_response(simple_block_storage, 201)
 
     block_storage = block_storages_client.update(simple_block_storage["id"], update_req)
@@ -126,13 +130,13 @@ def test_update_success(
         )
     )
 
-    cast(mock.Mock, block_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.get).assert_called_with(
         f"storages/{simple_block_storage['id']}",
         None,
         block_storages_client.request_timeout,
     )
 
-    cast(mock.Mock, block_storages_client._api_client.put).assert_called_once_with(
+    cast("mock.Mock", block_storages_client._api_client.put).assert_called_once_with(
         f"storages/{simple_block_storage['id']}",
         update_req,
         None,
@@ -149,8 +153,10 @@ def test_attach_success(
 
     get_response = helpers.build_api_response(attached_block_storage, 200)
     post_response = helpers.build_api_response(attached_block_storage, 201)
-    cast(mock.Mock, block_storages_client._api_client.post).return_value = post_response
-    cast(mock.Mock, block_storages_client._api_client.get).return_value = get_response
+    cast(
+        "mock.Mock", block_storages_client._api_client.post
+    ).return_value = post_response
+    cast("mock.Mock", block_storages_client._api_client.get).return_value = get_response
 
     block_storage = block_storages_client.attach(
         attached_block_storage["id"], attach_req
@@ -163,14 +169,14 @@ def test_attach_success(
         )
     )
 
-    cast(mock.Mock, block_storages_client._api_client.post).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.post).assert_called_with(
         f"storages/{attached_block_storage['id']}/attachments",
         attach_req,
         None,
         block_storages_client.request_timeout,
     )
 
-    cast(mock.Mock, block_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.get).assert_called_with(
         f"storages/{attached_block_storage['id']}",
         None,
         block_storages_client.request_timeout,
@@ -183,7 +189,7 @@ def test_detach_success(
 ) -> None:
     """Test successfully detaching a block storage from a server."""
     get_response = helpers.build_api_response(simple_block_storage, 200)
-    cast(mock.Mock, block_storages_client._api_client.get).return_value = get_response
+    cast("mock.Mock", block_storages_client._api_client.get).return_value = get_response
 
     block_storage = block_storages_client.detach(simple_block_storage["id"])
 
@@ -194,13 +200,13 @@ def test_detach_success(
         )
     )
 
-    cast(mock.Mock, block_storages_client._api_client.delete).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.delete).assert_called_with(
         f"storages/{simple_block_storage['id']}/attachments",
         None,
         block_storages_client.request_timeout,
     )
 
-    cast(mock.Mock, block_storages_client._api_client.get).assert_called_with(
+    cast("mock.Mock", block_storages_client._api_client.get).assert_called_with(
         f"storages/{simple_block_storage['id']}",
         None,
         block_storages_client.request_timeout,
@@ -213,12 +219,12 @@ def test_delete_success(
 ) -> None:
     """Test successfully deleting a block storage."""
     cast(
-        mock.Mock, block_storages_client._api_client.delete
+        "mock.Mock", block_storages_client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     block_storages_client.delete(simple_block_storage["id"])
 
-    cast(mock.Mock, block_storages_client._api_client.delete).assert_called_once_with(
+    cast("mock.Mock", block_storages_client._api_client.delete).assert_called_once_with(
         f"storages/{simple_block_storage['id']}",
         None,
         block_storages_client._request_timeout,

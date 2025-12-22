@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python.regions
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_by_id_success(
@@ -15,7 +17,7 @@ def test_get_by_id_success(
 ) -> None:
     """Test successfully getting a region by ID."""
     expected_api_resp = helpers.build_api_response(simple_region, 200)
-    cast(mock.Mock, regions_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", regions_client._api_client.get).return_value = expected_api_resp
     region = regions_client.get_by_id(simple_region["id"])
 
     assert (
@@ -23,7 +25,7 @@ def test_get_by_id_success(
         == cherryservers_sdk_python.regions.RegionModel.model_validate(simple_region)
     )
 
-    cast(mock.Mock, regions_client._api_client.get).assert_called_with(
+    cast("mock.Mock", regions_client._api_client.get).assert_called_with(
         f"regions/{simple_region['id']}",
         None,
         regions_client.request_timeout,
@@ -36,7 +38,7 @@ def test_get_all_success(
 ) -> None:
     """Test successfully getting all regions."""
     expected_api_resp = helpers.build_api_response([simple_region, simple_region], 200)
-    cast(mock.Mock, regions_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", regions_client._api_client.get).return_value = expected_api_resp
     regions = regions_client.get_all()
 
     for region, expected_region in zip(
@@ -49,6 +51,6 @@ def test_get_all_success(
             )
         )
 
-    cast(mock.Mock, regions_client._api_client.get).assert_called_with(
+    cast("mock.Mock", regions_client._api_client.get).assert_called_with(
         "regions", None, regions_client.request_timeout
     )

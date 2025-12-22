@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python.users
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_by_id_success(
@@ -15,7 +17,7 @@ def test_get_by_id_success(
 ) -> None:
     """Test successfully getting SSH key by ID."""
     expected_api_resp = helpers.build_api_response(simple_sshkey, 200)
-    cast(mock.Mock, sshkeys_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", sshkeys_client._api_client.get).return_value = expected_api_resp
     sshkey = sshkeys_client.get_by_id(simple_sshkey["id"])
 
     assert (
@@ -23,7 +25,7 @@ def test_get_by_id_success(
         == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(simple_sshkey)
     )
 
-    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_with(
+    cast("mock.Mock", sshkeys_client._api_client.get).assert_called_with(
         f"ssh-keys/{simple_sshkey['id']}",
         {"fields": "ssh_key,user"},
         sshkeys_client.request_timeout,
@@ -36,7 +38,7 @@ def test_get_all_success(
 ) -> None:
     """Test successfully getting all SSH keys."""
     expected_api_resp = helpers.build_api_response([simple_sshkey, simple_sshkey], 200)
-    cast(mock.Mock, sshkeys_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", sshkeys_client._api_client.get).return_value = expected_api_resp
     sshkeys = sshkeys_client.get_all()
 
     for sshkey, expected_sshkey in zip(
@@ -49,7 +51,7 @@ def test_get_all_success(
             )
         )
 
-    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_with(
+    cast("mock.Mock", sshkeys_client._api_client.get).assert_called_with(
         "ssh-keys", {"fields": "ssh_key,user"}, sshkeys_client.request_timeout
     )
 
@@ -66,8 +68,8 @@ def test_create_success(
 
     get_response = helpers.build_api_response(simple_sshkey, 200)
     post_response = helpers.build_api_response(simple_sshkey, 201)
-    cast(mock.Mock, sshkeys_client._api_client.post).return_value = post_response
-    cast(mock.Mock, sshkeys_client._api_client.get).return_value = get_response
+    cast("mock.Mock", sshkeys_client._api_client.post).return_value = post_response
+    cast("mock.Mock", sshkeys_client._api_client.get).return_value = get_response
 
     sshkey = sshkeys_client.create(creation_schema)
 
@@ -76,11 +78,11 @@ def test_create_success(
         == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(simple_sshkey)
     )
 
-    cast(mock.Mock, sshkeys_client._api_client.post).assert_called_with(
+    cast("mock.Mock", sshkeys_client._api_client.post).assert_called_with(
         "ssh-keys", creation_schema, None, sshkeys_client.request_timeout
     )
 
-    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_with(
+    cast("mock.Mock", sshkeys_client._api_client.get).assert_called_with(
         f"ssh-keys/{simple_sshkey['id']}",
         {"fields": "ssh_key,user"},
         sshkeys_client.request_timeout,
@@ -98,10 +100,10 @@ def test_update_success(
     )
 
     cast(
-        mock.Mock, sshkeys_client._api_client.get
+        "mock.Mock", sshkeys_client._api_client.get
     ).return_value = helpers.build_api_response(simple_sshkey, 200)
     cast(
-        mock.Mock, sshkeys_client._api_client.put
+        "mock.Mock", sshkeys_client._api_client.put
     ).return_value = helpers.build_api_response(simple_sshkey, 201)
 
     sshkey = sshkeys_client.update(simple_sshkey["id"], update_req)
@@ -111,13 +113,13 @@ def test_update_success(
         == cherryservers_sdk_python.sshkeys.SSHKeyModel.model_validate(simple_sshkey)
     )
 
-    cast(mock.Mock, sshkeys_client._api_client.get).assert_called_once_with(
+    cast("mock.Mock", sshkeys_client._api_client.get).assert_called_once_with(
         f"ssh-keys/{simple_sshkey['id']}",
         {"fields": "ssh_key,user"},
         sshkeys_client.request_timeout,
     )
 
-    cast(mock.Mock, sshkeys_client._api_client.put).assert_called_once_with(
+    cast("mock.Mock", sshkeys_client._api_client.put).assert_called_once_with(
         f"ssh-keys/{simple_sshkey['id']}",
         update_req,
         None,
@@ -131,11 +133,11 @@ def test_delete_success(
 ) -> None:
     """Test successfully deleting an SSH key."""
     cast(
-        mock.Mock, sshkeys_client._api_client.delete
+        "mock.Mock", sshkeys_client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     sshkeys_client.delete(simple_sshkey["id"])
 
-    cast(mock.Mock, sshkeys_client._api_client.delete).assert_called_once_with(
+    cast("mock.Mock", sshkeys_client._api_client.delete).assert_called_once_with(
         f"ssh-keys/{simple_sshkey['id']}", None, sshkeys_client._request_timeout
     )
