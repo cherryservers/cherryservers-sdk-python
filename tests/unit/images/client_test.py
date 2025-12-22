@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python.images
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_list_by_plan_success(
@@ -15,7 +17,7 @@ def test_list_by_plan_success(
 ) -> None:
     """Test successfully listing images by plan."""
     expected_api_resp = helpers.build_api_response([simple_image, simple_image], 200)
-    cast(mock.Mock, images_client._api_client.get).return_value = expected_api_resp
+    cast("mock.Mock", images_client._api_client.get).return_value = expected_api_resp
     images = images_client.list_by_plan("cloud_vps_1")
 
     for image, expected_image in zip(
@@ -26,6 +28,6 @@ def test_list_by_plan_success(
             == cherryservers_sdk_python.images.ImageModel.model_validate(expected_image)
         )
 
-    cast(mock.Mock, images_client._api_client.get).assert_called_with(
+    cast("mock.Mock", images_client._api_client.get).assert_called_with(
         "plans/cloud_vps_1/images", None, images_client.request_timeout
     )

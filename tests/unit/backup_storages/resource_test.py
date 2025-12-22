@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import copy
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_id(
@@ -33,10 +35,10 @@ def test_update(
     simple_backup_storage["status"] = "provisioning"
 
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.get
+        "mock.Mock", backup_storage_resource._client._api_client.get
     ).return_value = helpers.build_api_response(updated_backup_storage, 200)
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.put
+        "mock.Mock", backup_storage_resource._client._api_client.put
     ).return_value = helpers.build_api_response(simple_backup_storage, 201)
 
     backup_storage_resource.update(update_req)
@@ -48,7 +50,9 @@ def test_update(
         )
     )
 
-    cast(mock.Mock, backup_storage_resource._client._api_client.get).assert_called_with(
+    cast(
+        "mock.Mock", backup_storage_resource._client._api_client.get
+    ).assert_called_with(
         f"backup-storages/{simple_backup_storage['id']}",
         {
             "fields": "available_addresses,ip,region,project,"
@@ -61,7 +65,7 @@ def test_update(
     )
 
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.put
+        "mock.Mock", backup_storage_resource._client._api_client.put
     ).assert_called_once_with(
         f"backup-storages/{simple_backup_storage['id']}",
         update_req,
@@ -80,10 +84,10 @@ def test_update_access_method(
     )
 
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.get
+        "mock.Mock", backup_storage_resource._client._api_client.get
     ).return_value = helpers.build_api_response(simple_backup_storage, 200)
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.patch
+        "mock.Mock", backup_storage_resource._client._api_client.patch
     ).return_value = helpers.build_api_response(simple_backup_storage, 200)
 
     backup_storage_resource.update_access_method(update_req, "ftp")
@@ -95,7 +99,9 @@ def test_update_access_method(
         )
     )
 
-    cast(mock.Mock, backup_storage_resource._client._api_client.get).assert_called_with(
+    cast(
+        "mock.Mock", backup_storage_resource._client._api_client.get
+    ).assert_called_with(
         f"backup-storages/{simple_backup_storage['id']}",
         {
             "fields": "available_addresses,ip,region,project,"
@@ -108,7 +114,7 @@ def test_update_access_method(
     )
 
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.patch
+        "mock.Mock", backup_storage_resource._client._api_client.patch
     ).assert_called_once_with(
         f"backup-storages/{simple_backup_storage['id']}/methods/ftp",
         update_req,
@@ -123,13 +129,13 @@ def test_delete(
 ) -> None:
     """Test deleting a backup storage resource."""
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.delete
+        "mock.Mock", backup_storage_resource._client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     backup_storage_resource.delete()
 
     cast(
-        mock.Mock, backup_storage_resource._client._api_client.delete
+        "mock.Mock", backup_storage_resource._client._api_client.delete
     ).assert_called_once_with(
         f"backup-storages/{simple_backup_storage['id']}",
         None,

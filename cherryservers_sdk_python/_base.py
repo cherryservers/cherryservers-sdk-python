@@ -38,7 +38,7 @@ C = TypeVar("C", bound=ResourceClient)
 T = TypeVar("T", bound=ResourceModel)
 
 
-class Resource(Generic[C, T], abc.ABC):
+class Resource(abc.ABC, Generic[C, T]):
     def __init__(self, client: C, model: T) -> None:
         """Initialize a Cherry Servers resource."""
         self._model = model

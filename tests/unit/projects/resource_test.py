@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import copy
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python.projects
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_id(
@@ -31,10 +33,10 @@ def test_update(
     )
 
     cast(
-        mock.Mock, project_resource._client._api_client.get
+        "mock.Mock", project_resource._client._api_client.get
     ).return_value = helpers.build_api_response(updated_project, 200)
     cast(
-        mock.Mock, project_resource._client._api_client.put
+        "mock.Mock", project_resource._client._api_client.put
     ).return_value = helpers.build_api_response(updated_project, 201)
 
     project_resource.update(update_req)
@@ -46,13 +48,13 @@ def test_update(
         )
     )
 
-    cast(mock.Mock, project_resource._client._api_client.get).assert_called_once_with(
+    cast("mock.Mock", project_resource._client._api_client.get).assert_called_once_with(
         f"projects/{simple_project['id']}",
         None,
         project_resource._client.request_timeout,
     )
 
-    cast(mock.Mock, project_resource._client._api_client.put).assert_called_once_with(
+    cast("mock.Mock", project_resource._client._api_client.put).assert_called_once_with(
         f"projects/{simple_project['id']}",
         update_req,
         None,
@@ -66,13 +68,13 @@ def test_delete(
 ) -> None:
     """Test deleting a project resource."""
     cast(
-        mock.Mock, project_resource._client._api_client.delete
+        "mock.Mock", project_resource._client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     project_resource.delete()
 
     cast(
-        mock.Mock, project_resource._client._api_client.delete
+        "mock.Mock", project_resource._client._api_client.delete
     ).assert_called_once_with(
         f"projects/{simple_project['id']}",
         None,

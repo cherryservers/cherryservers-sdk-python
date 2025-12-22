@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import copy
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import cherryservers_sdk_python.block_storages
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_id(
@@ -31,10 +33,10 @@ def test_update(
     updated_block_storage["description"] = "updated-description"
 
     cast(
-        mock.Mock, block_storage_resource._client._api_client.get
+        "mock.Mock", block_storage_resource._client._api_client.get
     ).return_value = helpers.build_api_response(updated_block_storage, 200)
     cast(
-        mock.Mock, block_storage_resource._client._api_client.put
+        "mock.Mock", block_storage_resource._client._api_client.put
     ).return_value = helpers.build_api_response(updated_block_storage, 201)
 
     block_storage_resource.update(update_req)
@@ -46,14 +48,16 @@ def test_update(
         )
     )
 
-    cast(mock.Mock, block_storage_resource._client._api_client.get).assert_called_with(
+    cast(
+        "mock.Mock", block_storage_resource._client._api_client.get
+    ).assert_called_with(
         f"storages/{simple_block_storage['id']}",
         None,
         block_storage_resource._client.request_timeout,
     )
 
     cast(
-        mock.Mock, block_storage_resource._client._api_client.put
+        "mock.Mock", block_storage_resource._client._api_client.put
     ).assert_called_once_with(
         f"storages/{simple_block_storage['id']}",
         update_req,
@@ -72,10 +76,10 @@ def test_attach(
     get_response = helpers.build_api_response(attached_block_storage, 200)
     post_response = helpers.build_api_response(attached_block_storage, 201)
     cast(
-        mock.Mock, block_storage_resource._client._api_client.post
+        "mock.Mock", block_storage_resource._client._api_client.post
     ).return_value = post_response
     cast(
-        mock.Mock, block_storage_resource._client._api_client.get
+        "mock.Mock", block_storage_resource._client._api_client.get
     ).return_value = get_response
 
     block_storage_resource.attach(attach_req)
@@ -87,14 +91,16 @@ def test_attach(
         )
     )
 
-    cast(mock.Mock, block_storage_resource._client._api_client.get).assert_called_with(
+    cast(
+        "mock.Mock", block_storage_resource._client._api_client.get
+    ).assert_called_with(
         f"storages/{attached_block_storage['id']}",
         None,
         block_storage_resource._client.request_timeout,
     )
 
     cast(
-        mock.Mock, block_storage_resource._client._api_client.post
+        "mock.Mock", block_storage_resource._client._api_client.post
     ).assert_called_once_with(
         f"storages/{attached_block_storage['id']}/attachments",
         attach_req,
@@ -109,13 +115,13 @@ def test_delete(
 ) -> None:
     """Test deleting a block storage resource."""
     cast(
-        mock.Mock, block_storage_resource._client._api_client.delete
+        "mock.Mock", block_storage_resource._client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     block_storage_resource.delete()
 
     cast(
-        mock.Mock, block_storage_resource._client._api_client.delete
+        "mock.Mock", block_storage_resource._client._api_client.delete
     ).assert_called_once_with(
         f"storages/{simple_block_storage['id']}",
         None,

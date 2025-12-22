@@ -4,14 +4,16 @@ from __future__ import annotations
 
 import copy
 from operator import methodcaller
-from typing import Any, cast
-from unittest import mock
+from typing import TYPE_CHECKING, Any, cast
 
 import pytest
 
 import cherryservers_sdk_python.users
 from cherryservers_sdk_python import _base
 from tests.unit import helpers
+
+if TYPE_CHECKING:
+    from unittest import mock
 
 
 def test_get_id(
@@ -39,10 +41,10 @@ def test_update(
     updated_server["bgp"]["enabled"] = update_req.bgp
 
     cast(
-        mock.Mock, server_resource._client._api_client.get
+        "mock.Mock", server_resource._client._api_client.get
     ).return_value = helpers.build_api_response(updated_server, 200)
     cast(
-        mock.Mock, server_resource._client._api_client.put
+        "mock.Mock", server_resource._client._api_client.put
     ).return_value = helpers.build_api_response(updated_server, 201)
 
     server_resource.update(update_req)
@@ -52,11 +54,11 @@ def test_update(
         == cherryservers_sdk_python.servers.ServerModel.model_validate(updated_server)
     )
 
-    cast(mock.Mock, server_resource._client._api_client.get).assert_called_once_with(
+    cast("mock.Mock", server_resource._client._api_client.get).assert_called_once_with(
         f"servers/{simple_server['id']}", None, server_resource._client._request_timeout
     )
 
-    cast(mock.Mock, server_resource._client._api_client.put).assert_called_once_with(
+    cast("mock.Mock", server_resource._client._api_client.put).assert_called_once_with(
         f"servers/{simple_server['id']}",
         update_req,
         None,
@@ -70,12 +72,14 @@ def test_delete(
 ) -> None:
     """Test deleting a server resource."""
     cast(
-        mock.Mock, server_resource._client._api_client.delete
+        "mock.Mock", server_resource._client._api_client.delete
     ).return_value = helpers.build_api_response({}, 204)
 
     server_resource.delete()
 
-    cast(mock.Mock, server_resource._client._api_client.delete).assert_called_once_with(
+    cast(
+        "mock.Mock", server_resource._client._api_client.delete
+    ).assert_called_once_with(
         f"servers/{simple_server['id']}", None, server_resource._client._request_timeout
     )
 
@@ -149,19 +153,19 @@ def test_actions(
         method_to_test = methodcaller(action_func_name)
 
     cast(
-        mock.Mock, server_resource._client._api_client.post
+        "mock.Mock", server_resource._client._api_client.post
     ).return_value = helpers.build_api_response(server_with_action_in_progress, 201)
     cast(
-        mock.Mock, server_resource._client._api_client.get
+        "mock.Mock", server_resource._client._api_client.get
     ).return_value = helpers.build_api_response(simple_server, 200)
 
     method_to_test(server_resource)
 
-    cast(mock.Mock, server_resource._client._api_client.get).assert_called_with(
+    cast("mock.Mock", server_resource._client._api_client.get).assert_called_with(
         f"servers/{simple_server['id']}", None, server_resource._client._request_timeout
     )
 
-    cast(mock.Mock, server_resource._client._api_client.post).assert_called_with(
+    cast("mock.Mock", server_resource._client._api_client.post).assert_called_with(
         f"servers/{simple_server['id']}/actions",
         action_request,
         None,
