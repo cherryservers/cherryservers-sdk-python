@@ -36,7 +36,7 @@ class TestCherryClient:
     @pytest.fixture
     def client(self) -> Generator[_client.CherryApiClient]:
         """Initialize default Cherry API client."""
-        client = _client.CherryApiClient("test_token", user_agent_prefix="test")
+        client = _client.CherryApiClient("test_api_key", user_agent_prefix="test")
         patcher = mock.patch.object(client, "_requests_session")
         patcher.start()
         yield client

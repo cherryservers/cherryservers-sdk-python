@@ -21,11 +21,11 @@ class CherryApiClient:
 
     def __init__(
         self,
-        token: str,
+        api_key: str,
         api_endpoint_base: str = "https://api.cherryservers.com/v1/",
         user_agent_prefix: str = "",
     ) -> None:
-        self._token = token
+        self._api_key = api_key
         self._api_endpoint_base = api_endpoint_base
         self._requests_session = requests.Session()
         self._headers = self._get_headers(user_agent_prefix)
@@ -36,7 +36,7 @@ class CherryApiClient:
             "User-Agent": f"{user_agent_prefix}/cherryservers_sdk_python-python/"
             f"{_version.__version__} {requests.__name__}/{requests.__version__}",
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self._token}",
+            "Authorization": f"Bearer {self._api_key}",
         }
 
     def _send_request(

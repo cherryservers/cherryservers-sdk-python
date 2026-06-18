@@ -398,7 +398,7 @@ class ServerClient(_base.ResourceClient):
     Example:
         .. code-block:: python
 
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
             # Get server by id.
             server = facade.servers.get_by_id(123456)

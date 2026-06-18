@@ -24,7 +24,7 @@ A simple example of how to provision a server and print its information:
 ```python
 import cherryservers_sdk_python
 
-facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
 # Create a server.
 creation_req = cherryservers_sdk_python.servers.CreationRequest(
@@ -35,6 +35,7 @@ server = facade.servers.create(creation_req, project_id=220189)
 print(server.get_model())
 ```
 For more examples, check out the [documentation](https://cherryservers-sdk-python.readthedocs.io).
+You can get an API key at the [client portal](https://portal.cherryservers.com/settings/api-keys).
 
 ## Development
 

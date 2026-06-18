@@ -53,7 +53,7 @@ class UserClient(_base.ResourceClient):
     Example:
         .. code-block:: python
 
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
             # Retrieve by ID.
             user = facade.users.get_by_id(123456)

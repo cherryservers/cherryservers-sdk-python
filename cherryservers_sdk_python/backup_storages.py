@@ -254,7 +254,7 @@ class BackupStorageClient(_base.ResourceClient):
     Example:
         .. code-block:: python
 
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
             # Get storage by ID.
             storage = facade.backup_storages.get_by_id(123456)

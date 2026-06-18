@@ -39,7 +39,7 @@ class ImageClient(_base.ResourceClient):
     Example:
         .. code-block:: python
 
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
             # Retrieve a list of available OSes for a server plan.
             images = facade.images.get_by_plan("B1-1-1gb-20s-shared")

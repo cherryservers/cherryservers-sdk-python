@@ -86,7 +86,7 @@ class ProjectClient(_base.ResourceClient):
     Example:
         .. code-block:: python
 
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
             # Retrieve a project.
             existing_project = facade.projects.get_by_id(123456)

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import warnings
+
 from cherryservers_sdk_python import (
     _client,
     backup_storages,
@@ -41,11 +43,20 @@ class CherryApiFacade:
     """
 
     def __init__(
-        self, token: str, user_agent_prefix: str = "", request_timeout: int = 120
+        self,
+        api_key: str | None = None,
+        *,
+        token: str | None = None,
+        user_agent_prefix: str = "",
+        request_timeout: int = 120,
     ) -> None:
         """Create a new :class:`CherryApiFacade` instance.
 
         :param str token: Cherry Servers API token.
+            **Deprecated:** this parameter will be removed in the next major
+            version, please use `api_key` instead.
+            Can be created at https://portal.cherryservers.com/settings/api-keys.
+        :param str api_key: Cherry Servers API key.
             Can be created at https://portal.cherryservers.com/settings/api-keys.
         :param str user_agent_prefix:
             User-Agent prefix that will be added to the header. Empty by default.
@@ -55,8 +66,8 @@ class CherryApiFacade:
             .. code-block:: python
 
                 # Instantiate the facade.
-                token = environ["CHERRY_AUTH_TOKEN"]
-                facade = cherryservers_sdk_python.facade.CherryApiFacade(token)
+                api_key = environ["CHERRY_API_KEY"]
+                facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key=api_key)
 
                 # Order a VPS.
 
@@ -64,9 +75,29 @@ class CherryApiFacade:
                 CreationRequest(region="LT-Siauliai", plan="B1-1-1gb-20s-shared"))
                 server = facade.servers.create(creation_req, project_id=217727)
 
-        """
+        """  # noqa: W505
+        auth = token
+        if auth is not None:
+            warnings.warn(
+                (
+                    "`token` is deprecated and will be removed in the next major version"
+                    " use `api_key` instead"
+                ),
+                DeprecationWarning,
+                2,
+            )
+        if api_key is not None:
+            if auth is not None:
+                msg = "`token` and `api_key` both set"
+                raise ValueError(msg)
+            auth = api_key
+
+        if auth is None:
+            msg = "no `api_key` provided"
+            raise TypeError(msg)
+
         self._api_client = _client.CherryApiClient(
-            token=token, user_agent_prefix=user_agent_prefix
+            api_key=auth, user_agent_prefix=user_agent_prefix
         )
 
         self.users = users.UserClient(self._api_client, request_timeout)

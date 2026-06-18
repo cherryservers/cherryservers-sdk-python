@@ -76,7 +76,7 @@ class SSHKeyClient(_base.ResourceClient):
         .. code-block:: python
 
             # Create SSH key.
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
             req = cherryservers_sdk_python.sshkeys.CreationRequest(
                 label = "test",
                 key = "my-public-api-key"

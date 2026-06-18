@@ -246,7 +246,7 @@ class PlanClient(_base.ResourceClient):
     Example:
         .. code-block:: python
 
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token)
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
             # Get a list of all team permitted plans.
             plans = facade.plans.get_by_team(123456):

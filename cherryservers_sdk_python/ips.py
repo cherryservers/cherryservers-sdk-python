@@ -187,7 +187,7 @@ class IPClient(_base.ResourceClient):
     Example:
         .. code-block:: python
 
-            facade = cherryservers_sdk_python.facade.CherryApiFacade(token="my-token")
+            facade = cherryservers_sdk_python.facade.CherryApiFacade(api_key="my-key")
 
             # Get IP address by id.
             ip = facade.ips.get_by_id("c8b0cb54-cbd6-a90f-d291-769b6db0f1b9")

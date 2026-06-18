@@ -16,10 +16,10 @@ if TYPE_CHECKING:
 @pytest.fixture(scope="package")
 def facade() -> cherryservers_sdk_python.facade.CherryApiFacade:
     """Initialize Cherry API facade."""
-    token = os.environ.get("CHERRY_TEST_API_KEY")
-    assert token, "CHERRY_TEST_API_KEY environment variable is not set"
+    api_key = os.environ.get("CHERRY_TEST_API_KEY")
+    assert api_key, "CHERRY_TEST_API_KEY environment variable is not set"
     return cherryservers_sdk_python.facade.CherryApiFacade(
-        token=token, user_agent_prefix="test"
+        api_key=api_key, user_agent_prefix="test"
     )
 
 
