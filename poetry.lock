@@ -1473,14 +1473,14 @@ markers = {dev = "python_full_version <= \"3.11.0a6\"", docs = "python_version =
 
 [[package]]
 name = "types-requests"
-version = "2.32.4.20250913"
+version = "2.32.4.20260107"
 description = "Typing stubs for requests"
 optional = false
 python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "types_requests-2.32.4.20250913-py3-none-any.whl", hash = "sha256:78c9c1fffebbe0fa487a418e0fa5252017e9c60d1a2da394077f1780f655d7e1"},
-    {file = "types_requests-2.32.4.20250913.tar.gz", hash = "sha256:abd6d4f9ce3a9383f269775a9835a4c24e5cd6b9f647d64f88aa4613c33def5d"},
+    {file = "types_requests-2.32.4.20260107-py3-none-any.whl", hash = "sha256:b703fe72f8ce5b31ef031264fe9395cac8f46a04661a79f7ed31a80fb308730d"},
+    {file = "types_requests-2.32.4.20260107.tar.gz", hash = "sha256:018a11ac158f801bfa84857ddec1650750e393df8a004a8a9ae2a9bec6fcb24f"},
 ]
 
 [package.dependencies]
@@ -1556,4 +1556,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0.0"
-content-hash = "3642dd06c871a605a781bfbbec6ba10cec3f2d4044a1cb8d5ae883b2fc3cb2bb"
+content-hash = "56949769413d8019dd721007b0b207cfa2f67dcdba3d8f8b4273f76d25db3c9c"
