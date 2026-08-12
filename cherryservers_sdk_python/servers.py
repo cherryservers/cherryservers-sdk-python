@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from pydantic import Field
 
@@ -27,6 +27,18 @@ class NotBaremetalError(Exception):
     def __init__(self) -> None:
         """Initialize error."""
         super().__init__("This operation can only be performed on bare-metal servers.")
+
+
+class FailedDeploymentError(Exception):
+    """Failed to deploy server."""
+
+    def __init__(self, _id: int) -> None:
+        """Initialize error."""
+        super().__init__(
+            f"Server {_id} failed to deploy. "
+            "This is always an internal error, "
+            "please contact Cherry Servers support for assistance."
+        )
 
 
 class ServerBGPRouteModel(_base.ResourceModel):
@@ -251,6 +263,13 @@ class CreationRequest(_base.RequestSchema):
          Defaults to False.
         storage_id (int | None): ID of the EBS that will be attached to the server.
         cycle (str | None): Billing cycle slug. Defaults to 'hourly'.
+        ipxe (str | None): Base64 encoded iPXE script.
+         The decoded content must start with `#!ipxe`.
+         `image` must be set to `custom_ipxe_install`.
+         Note that not all server plans support the `custom_ipxe_install` image.
+        persist_ipxe (bool): Persist the universal iPXE image between server boots.
+         See the `product docs <https://www.cherryservers.com/knowledge/docs/compute/configuration-management/ipxe#how-ipxe-works-with-cherry-servers>`__
+         for more on how Cherry Servers implements iPXE support.
 
     """
 
@@ -288,6 +307,17 @@ class CreationRequest(_base.RequestSchema):
     )
     cycle: str | None = Field(
         description="Billing cycle slug. Defaults to 'hourly'.", default="hourly"
+    )
+    ipxe: str | None = Field(
+        description="Base64 encoded iPXE script. "
+        "The decoded content must start with `#!ipxe`. "
+        "`image` must be set to `custom_ipxe_install`. "
+        "Note that not all server plans support the `custom_ipxe_install` image.",
+        default=None,
+    )
+    persist_ipxe: bool = Field(
+        description="Persist the universal iPXE image between server boots.",
+        default=False,
     )
 
 
@@ -369,6 +399,13 @@ class RebuildRequest(_base.RequestSchema):
         user_data (str | None): Base64 encoded user-data blob.
          Either a bash or cloud-config script.
         os_partition_size (int | None): OS partition size in GB.
+        ipxe (str | None): Base64 encoded iPXE script.
+         The decoded content must start with `#!ipxe`.
+         `image` must be set to `custom_ipxe_install`.
+         Note that not all server plans support the `custom_ipxe_install` image.
+        persist_ipxe (bool): Persist the universal iPXE image between server boots.
+         See the `product docs <https://www.cherryservers.com/knowledge/docs/compute/configuration-management/ipxe#how-ipxe-works-with-cherry-servers>`__
+         for more on how Cherry Servers implements iPXE support.
 
     """
 
@@ -385,6 +422,17 @@ class RebuildRequest(_base.RequestSchema):
     )
     os_partition_size: int | None = Field(
         description="OS partition size.", default=None
+    )
+    ipxe: str | None = Field(
+        description="Base64 encoded iPXE script. "
+        "The decoded content must start with `#!ipxe`. "
+        "`image` must be set to `custom_ipxe_install`. "
+        "Note that not all server plans support the `custom_ipxe_install` image.",
+        default=None,
+    )
+    persist_ipxe: bool = Field(
+        description="Persist the universal iPXE image between server boots.",
+        default=False,
     )
 
 
@@ -427,14 +475,22 @@ class ServerClient(_base.ResourceClient):
 
     DEFAULT_DEPLOYMENT_TIMEOUT = 1800
 
-    def _wait_for_status(
-        self, response: Response, target_status: str, timeout: float
-    ) -> Server:
+    def _wait_for_terminal(self, response: Response, timeout: float) -> Server:
+        # "allocated" is the terminal status for iPXE deployments.
+        terminal_statuses: Final[set[str]] = {
+            "deployed",
+            "allocated",
+            "rescue mode",
+            "failed deployment",
+        }
+
         resp_json = response.json()
         server = Server(self, ServerModel.model_validate(resp_json))
         _resource_polling.wait_for_resource_condition(
-            server, timeout, lambda: server.get_status() == target_status
+            server, timeout, lambda: server.get_status() in terminal_statuses
         )
+        if server.get_status() == "failed deployment":
+            raise FailedDeploymentError(server.get_id())
         return server
 
     def get_by_id(self, server_id: int) -> Server:
@@ -477,7 +533,7 @@ class ServerClient(_base.ResourceClient):
             self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", deployment_timeout)
+            return self._wait_for_terminal(response, deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def delete(self, server_id: int) -> None:
@@ -510,7 +566,7 @@ class ServerClient(_base.ResourceClient):
             self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", deployment_timeout)
+            return self._wait_for_terminal(response, deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def power_on(
@@ -528,7 +584,7 @@ class ServerClient(_base.ResourceClient):
             self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", deployment_timeout)
+            return self._wait_for_terminal(response, deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def reboot(
@@ -546,7 +602,7 @@ class ServerClient(_base.ResourceClient):
             self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", deployment_timeout)
+            return self._wait_for_terminal(response, deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def enter_rescue_mode(
@@ -575,7 +631,7 @@ class ServerClient(_base.ResourceClient):
         )
 
         if wait_for_active:
-            return self._wait_for_status(response, "rescue mode", deployment_timeout)
+            return self._wait_for_terminal(response, deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def exit_rescue_mode(
@@ -594,7 +650,7 @@ class ServerClient(_base.ResourceClient):
         )
 
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", deployment_timeout)
+            return self._wait_for_terminal(response, deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def rebuild(
@@ -616,7 +672,7 @@ class ServerClient(_base.ResourceClient):
             self.request_timeout,
         )
         if wait_for_active:
-            return self._wait_for_status(response, "deployed", deployment_timeout)
+            return self._wait_for_terminal(response, deployment_timeout)
         return self.get_by_id(response.json()["id"])
 
     def reset_bmc_password(self, server_id: int) -> Server:

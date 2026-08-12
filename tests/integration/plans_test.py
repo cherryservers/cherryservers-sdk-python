@@ -22,5 +22,8 @@ class TestPlan:
     ) -> None:
         """Test getting a plan by ID or slug."""
         plan = facade.plans.get_by_id_or_slug("B1-1-1gb-20s-shared")
+        model = plan.get_model()
 
-        assert plan.get_model().slug == "B1-1-1gb-20s-shared"
+        assert model.slug == "B1-1-1gb-20s-shared"
+        assert model.softwares is not None
+        assert len(model.softwares) != 0

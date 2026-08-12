@@ -1,0 +1,1719 @@
+[
+  {
+    "id": 1060,
+    "href": "/plans/G1-4-24gb-100nv-arm64-ded",
+    "name": "Cloud ARM VDS 4",
+    "slug": "G1-4-24gb-100nv-arm64-ded",
+    "title": "Cloud ARM VDS 4",
+    "type": "arm-vds",
+    "category": "Dedicated resources",
+    "softwares": [
+      {
+        "image": {
+          "name": "Ubuntu 24.04 64bit",
+          "slug": "ubuntu_24_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 22.04 64bit",
+          "slug": "ubuntu_22_04"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 26.04 64bit",
+          "slug": "ubuntu_26_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 13 64bit",
+          "slug": "debian_13_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 12 64bit",
+          "slug": "debian_12_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 11 64bit",
+          "slug": "debian_11_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 10 64bit",
+          "slug": "almalinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 9 64bit",
+          "slug": "almalinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 8 64bit",
+          "slug": "almalinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 9 64bit",
+          "slug": "rockylinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 8 64bit",
+          "slug": "rockylinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "openSUSE Leap 16 64bit",
+          "slug": "opensuse_leap_16_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 41 64bit",
+          "slug": "fedora_41_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 40 64bit",
+          "slug": "fedora_40_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 10 64bit",
+          "slug": "centos_stream_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 9 64bit",
+          "slug": "centos_stream_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlpineLinux 3 64bit",
+          "slug": "alpinelinux_3_64bit"
+        }
+      }
+    ],
+    "specs": {
+      "cpus": {
+        "count": 4,
+        "name": "4 x AmpereONE A192-32X",
+        "cores": 4,
+        "frequency": 3.2,
+        "unit": "GHz"
+      },
+      "memory": {
+        "count": 1,
+        "total": 24,
+        "unit": "GB",
+        "name": "24GB"
+      },
+      "storage": [
+        {
+          "count": 1,
+          "name": "NVMe 100GB",
+          "size": 100,
+          "unit": "GB",
+          "type": "NVME"
+        }
+      ],
+      "nics": {
+        "name": "1Gbps"
+      },
+      "bandwidth": {
+        "name": "10TB"
+      }
+    },
+    "pricing": [
+      {
+        "id": 3,
+        "unit": "Monthly",
+        "price": 35.09,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 4,
+        "unit": "Quarterly",
+        "price": 100.0065,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 5,
+        "unit": "Semiannually",
+        "price": 189.486,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 6,
+        "unit": "Annually",
+        "price": 357.918,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 37,
+        "unit": "Hourly",
+        "price": 0.0605,
+        "currency": "EUR",
+        "taxed": true
+      }
+    ],
+    "available_regions": [
+      {
+        "id": 1,
+        "name": "Lithuania",
+        "region_iso_2": "LT",
+        "stock_qty": 1,
+        "spot_qty": 0,
+        "slug": "LT-Siauliai",
+        "bgp": {
+          "hosts": [
+            "46.166.166.122",
+            "46.166.166.123"
+          ],
+          "asn": 16125
+        },
+        "location": "Lithuania, Šiauliai"
+      }
+    ]
+  },
+  {
+    "id": 86,
+    "href": "/plans/e3-1240v3",
+    "name": "E3-1240v3",
+    "slug": "e3-1240v3",
+    "title": "E3-1240v3",
+    "type": "baremetal",
+    "category": "lightweight",
+    "softwares": [
+      {
+        "image": {
+          "name": "Ubuntu 24.04 64bit",
+          "slug": "ubuntu_24_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 22.04 64bit",
+          "slug": "ubuntu_22_04"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 26.04 64bit",
+          "slug": "ubuntu_26_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 10 64bit",
+          "slug": "almalinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 9 64bit",
+          "slug": "almalinux_9_64bit"
+        },
+        "addons": [
+          {
+            "name": "DirectAdmin",
+            "slug": "directadmin_php_7_1",
+            "pricing": [
+              {
+                "id": 3,
+                "unit": "Monthly",
+                "price": 12.1,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 4,
+                "unit": "Quarterly",
+                "price": 36.3,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 5,
+                "unit": "Semiannually",
+                "price": 72.6,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 6,
+                "unit": "Annually",
+                "price": 145.2,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 37,
+                "unit": "Hourly",
+                "price": 0.0199,
+                "currency": "EUR",
+                "taxed": true
+              }
+            ]
+          },
+          {
+            "name": "DirectAdmin Lifetime",
+            "slug": "lifetime_directadmin_php_7_1",
+            "pricing": [
+              {
+                "id": 3,
+                "unit": "Monthly",
+                "price": 72.6,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 4,
+                "unit": "Quarterly",
+                "price": 217.8,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 5,
+                "unit": "Semiannually",
+                "price": 435.6,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 6,
+                "unit": "Annually",
+                "price": 871.2,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 37,
+                "unit": "Hourly",
+                "price": 0.1194,
+                "currency": "EUR",
+                "taxed": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 8 64bit",
+          "slug": "almalinux_8_64bit"
+        },
+        "addons": [
+          {
+            "name": "DirectAdmin",
+            "slug": "directadmin_php_7_1",
+            "pricing": [
+              {
+                "id": 3,
+                "unit": "Monthly",
+                "price": 12.1,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 4,
+                "unit": "Quarterly",
+                "price": 36.3,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 5,
+                "unit": "Semiannually",
+                "price": 72.6,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 6,
+                "unit": "Annually",
+                "price": 145.2,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 37,
+                "unit": "Hourly",
+                "price": 0.0199,
+                "currency": "EUR",
+                "taxed": true
+              }
+            ]
+          },
+          {
+            "name": "DirectAdmin Lifetime",
+            "slug": "lifetime_directadmin_php_7_1",
+            "pricing": [
+              {
+                "id": 3,
+                "unit": "Monthly",
+                "price": 72.6,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 4,
+                "unit": "Quarterly",
+                "price": 217.8,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 5,
+                "unit": "Semiannually",
+                "price": 435.6,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 6,
+                "unit": "Annually",
+                "price": 871.2,
+                "currency": "EUR",
+                "taxed": true
+              },
+              {
+                "id": 37,
+                "unit": "Hourly",
+                "price": 0.1194,
+                "currency": "EUR",
+                "taxed": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "image": {
+          "name": "Debian 13 64bit",
+          "slug": "debian_13_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 12 64bit",
+          "slug": "debian_12_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 11 64bit",
+          "slug": "debian_11_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Windows Server 2022 Standard",
+          "slug": "windows_2022",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 23.6192,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 70.8576,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 141.7152,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 283.4304,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.0399,
+              "currency": "EUR",
+              "taxed": true
+            }
+          ]
+        }
+      },
+      {
+        "image": {
+          "name": "Windows Server 2019 Standard",
+          "slug": "windows_2019",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 23.6192,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 70.8576,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 141.7152,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 283.4304,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.0399,
+              "currency": "EUR",
+              "taxed": true
+            }
+          ]
+        }
+      },
+      {
+        "image": {
+          "name": "Windows Server 2022 Datacenter",
+          "slug": "windows_server_2022_datacenter",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 193.6,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 580.8,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 1161.6,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 2323.2,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.3315,
+              "currency": "EUR",
+              "taxed": true
+            }
+          ]
+        }
+      },
+      {
+        "image": {
+          "name": "Windows Server 2019 Datacenter",
+          "slug": "windows_server_2019_datacenter",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 193.6,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 580.8,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 1161.6,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 2323.2,
+              "currency": "EUR",
+              "taxed": true
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.3315,
+              "currency": "EUR",
+              "taxed": true
+            }
+          ]
+        }
+      },
+      {
+        "image": {
+          "name": "openSUSE Leap 15 64bit",
+          "slug": "opensuse_leap_15_64bit"
+        }
+      }
+    ],
+    "specs": {
+      "cpus": {
+        "count": 1,
+        "name": "E3-1240v3",
+        "cores": 4,
+        "frequency": 3.4,
+        "unit": "GHz"
+      },
+      "memory": {
+        "count": 1,
+        "total": 16,
+        "unit": "GB",
+        "name": "16GB ECC DDRIII "
+      },
+      "storage": [
+        {
+          "count": 1,
+          "name": "SSD 250GB",
+          "size": 250,
+          "unit": "GB",
+          "type": "SSD"
+        }
+      ],
+      "nics": {
+        "name": "1Gbps"
+      },
+      "bandwidth": {
+        "name": "30TB"
+      }
+    },
+    "pricing": [
+      {
+        "id": 3,
+        "unit": "Monthly",
+        "price": 59.29,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 4,
+        "unit": "Quarterly",
+        "price": 168.9765,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 5,
+        "unit": "Semiannually",
+        "price": 320.166,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 6,
+        "unit": "Annually",
+        "price": 604.758,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 37,
+        "unit": "Hourly",
+        "price": 0.1016,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 38,
+        "unit": "Spot hourly",
+        "price": 0.0812,
+        "currency": "EUR",
+        "taxed": true
+      }
+    ],
+    "available_regions": [
+      {
+        "id": 1,
+        "name": "Lithuania",
+        "region_iso_2": "LT",
+        "stock_qty": 0,
+        "spot_qty": 0,
+        "slug": "LT-Siauliai",
+        "bgp": {
+          "hosts": [
+            "46.166.166.122",
+            "46.166.166.123"
+          ],
+          "asn": 16125
+        },
+        "location": "Lithuania, Šiauliai"
+      }
+    ]
+  },
+  {
+    "id": 820,
+    "href": "/plans/P1-4-16gb-100nv-ded",
+    "name": "Premium VDS 2",
+    "slug": "P1-4-16gb-100nv-ded",
+    "title": "Premium VDS 2",
+    "type": "premium-vds",
+    "category": "Dedicated resources",
+    "softwares": [
+      {
+        "image": {
+          "name": "Ubuntu 24.04 64bit",
+          "slug": "ubuntu_24_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 22.04 64bit",
+          "slug": "ubuntu_22_04"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 26.04 64bit",
+          "slug": "ubuntu_26_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 13 64bit",
+          "slug": "debian_13_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 12 64bit",
+          "slug": "debian_12_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 11 64bit",
+          "slug": "debian_11_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 10 64bit",
+          "slug": "almalinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 9 64bit",
+          "slug": "almalinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 8 64bit",
+          "slug": "almalinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 10 64bit",
+          "slug": "rockylinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 9 64bit",
+          "slug": "rockylinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 8 64bit",
+          "slug": "rockylinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "openSUSE Leap 16 64bit",
+          "slug": "opensuse_leap_16_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 43 64bit",
+          "slug": "fedora_43_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 42 64bit",
+          "slug": "fedora_42_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 10 64bit",
+          "slug": "centos_stream_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 9 64bit",
+          "slug": "centos_stream_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlpineLinux 3 64bit",
+          "slug": "alpinelinux_3_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Arch Linux 64bit",
+          "slug": "arch_linux_64bit"
+        }
+      }
+    ],
+    "specs": {
+      "cpus": {
+        "count": 2,
+        "name": "2x AMD EPYC 9554P",
+        "cores": 4,
+        "frequency": 3.1,
+        "unit": "GHz"
+      },
+      "memory": {
+        "count": 1,
+        "total": 16,
+        "unit": "GB",
+        "name": "16GB"
+      },
+      "storage": [
+        {
+          "count": 1,
+          "name": "NVMe 100GB",
+          "size": 100,
+          "unit": "GB",
+          "type": "NVME"
+        }
+      ],
+      "nics": {
+        "name": "1Gbps"
+      },
+      "bandwidth": {
+        "name": "10TB"
+      }
+    },
+    "pricing": [
+      {
+        "id": 3,
+        "unit": "Monthly",
+        "price": 83.49,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 4,
+        "unit": "Quarterly",
+        "price": 237.9465,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 5,
+        "unit": "Semiannually",
+        "price": 450.846,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 6,
+        "unit": "Annually",
+        "price": 851.598,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 37,
+        "unit": "Hourly",
+        "price": 0.1428,
+        "currency": "EUR",
+        "taxed": true
+      }
+    ],
+    "available_regions": [
+      {
+        "id": 2,
+        "name": "Amsterdam, NL",
+        "region_iso_2": "NL",
+        "stock_qty": 1,
+        "spot_qty": 0,
+        "slug": "NL-Amsterdam",
+        "bgp": {
+          "hosts": [
+            "195.189.96.10",
+            "195.189.96.11"
+          ],
+          "asn": 59642
+        },
+        "location": "Netherlands, Amsterdam"
+      },
+      {
+        "id": 3,
+        "name": "Chicago, US",
+        "region_iso_2": "US",
+        "stock_qty": 51,
+        "spot_qty": 0,
+        "slug": "US-Chicago",
+        "bgp": {
+          "hosts": [
+            "185.8.106.10",
+            "185.8.106.11"
+          ],
+          "asn": 204770
+        },
+        "location": "United States, Chicago"
+      },
+      {
+        "id": 4,
+        "name": "Singapore",
+        "region_iso_2": "SG",
+        "stock_qty": 5,
+        "spot_qty": 0,
+        "slug": "SG-Singapore",
+        "bgp": {
+          "hosts": [
+            "5.199.164.10",
+            "5.199.164.11"
+          ],
+          "asn": 216444
+        },
+        "location": "Singapore"
+      },
+      {
+        "id": 6,
+        "name": "Frankfurt, DE",
+        "region_iso_2": "DE",
+        "stock_qty": 0,
+        "spot_qty": 0,
+        "slug": "DE-Frankfurt",
+        "bgp": {
+          "hosts": [
+            "185.191.116.10",
+            "185.191.116.11"
+          ],
+          "asn": 213896
+        },
+        "location": "Germany, Frankfurt"
+      }
+    ]
+  },
+  {
+    "id": 726,
+    "href": "/plans/S1-1-2gb-700hdd-shared",
+    "name": "Storage VPS 2",
+    "slug": "S1-1-2gb-700hdd-shared",
+    "title": "Storage VPS 2",
+    "type": "storage-vps",
+    "category": "Shared resources",
+    "softwares": [
+      {
+        "image": {
+          "name": "Ubuntu 24.04 64bit",
+          "slug": "ubuntu_24_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 22.04 64bit",
+          "slug": "ubuntu_22_04"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 26.04 64bit",
+          "slug": "ubuntu_26_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 13 64bit",
+          "slug": "debian_13_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 12 64bit",
+          "slug": "debian_12_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 11 64bit",
+          "slug": "debian_11_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 10 64bit",
+          "slug": "almalinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 9 64bit",
+          "slug": "almalinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 8 64bit",
+          "slug": "almalinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 10 64bit",
+          "slug": "rockylinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 9 64bit",
+          "slug": "rockylinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 8 64bit",
+          "slug": "rockylinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "openSUSE Leap 16 64bit",
+          "slug": "opensuse_leap_16_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 43 64bit",
+          "slug": "fedora_43_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 42 64bit",
+          "slug": "fedora_42_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 10 64bit",
+          "slug": "centos_stream_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 9 64bit",
+          "slug": "centos_stream_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlpineLinux 3 64bit",
+          "slug": "alpinelinux_3_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Arch Linux 64bit",
+          "slug": "arch_linux_64bit"
+        }
+      }
+    ],
+    "specs": {
+      "cpus": {
+        "count": 1,
+        "name": "1 vCore",
+        "cores": 1,
+        "frequency": 0.0,
+        "unit": "GHz"
+      },
+      "memory": {
+        "count": 1,
+        "total": 2,
+        "unit": "GB",
+        "name": "2GB"
+      },
+      "storage": [
+        {
+          "count": 1,
+          "name": "HDD 700GB",
+          "size": 700,
+          "unit": "GB",
+          "type": "HDD"
+        }
+      ],
+      "nics": {
+        "name": "500Mbps"
+      },
+      "bandwidth": {
+        "name": "15TB"
+      }
+    },
+    "pricing": [
+      {
+        "id": 3,
+        "unit": "Monthly",
+        "price": 22.99,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 4,
+        "unit": "Quarterly",
+        "price": 65.5215,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 5,
+        "unit": "Semiannually",
+        "price": 124.146,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 6,
+        "unit": "Annually",
+        "price": 234.498,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 37,
+        "unit": "Hourly",
+        "price": 0.0399,
+        "currency": "EUR",
+        "taxed": true
+      }
+    ],
+    "available_regions": [
+      {
+        "id": 1,
+        "name": "Lithuania",
+        "region_iso_2": "LT",
+        "stock_qty": 4,
+        "spot_qty": 0,
+        "slug": "LT-Siauliai",
+        "bgp": {
+          "hosts": [
+            "46.166.166.122",
+            "46.166.166.123"
+          ],
+          "asn": 16125
+        },
+        "location": "Lithuania, Šiauliai"
+      }
+    ]
+  },
+  {
+    "id": 718,
+    "href": "/plans/G1-4-16gb-100nv-ded",
+    "name": "Cloud VDS 2",
+    "slug": "G1-4-16gb-100nv-ded",
+    "title": "Cloud VDS 2",
+    "type": "vds",
+    "category": "Dedicated resources",
+    "softwares": [
+      {
+        "image": {
+          "name": "Ubuntu 24.04 64bit",
+          "slug": "ubuntu_24_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 22.04 64bit",
+          "slug": "ubuntu_22_04"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 26.04 64bit",
+          "slug": "ubuntu_26_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 13 64bit",
+          "slug": "debian_13_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 12 64bit",
+          "slug": "debian_12_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 11 64bit",
+          "slug": "debian_11_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 10 64bit",
+          "slug": "almalinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 9 64bit",
+          "slug": "almalinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 8 64bit",
+          "slug": "almalinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 10 64bit",
+          "slug": "rockylinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 9 64bit",
+          "slug": "rockylinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 8 64bit",
+          "slug": "rockylinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "openSUSE Leap 16 64bit",
+          "slug": "opensuse_leap_16_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 43 64bit",
+          "slug": "fedora_43_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 42 64bit",
+          "slug": "fedora_42_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 10 64bit",
+          "slug": "centos_stream_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 9 64bit",
+          "slug": "centos_stream_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlpineLinux 3 64bit",
+          "slug": "alpinelinux_3_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Arch Linux 64bit",
+          "slug": "arch_linux_64bit"
+        }
+      }
+    ],
+    "specs": {
+      "cpus": {
+        "count": 2,
+        "name": "2 x Intel Gold 6230R",
+        "cores": 4,
+        "frequency": 2.1,
+        "unit": "GHz"
+      },
+      "memory": {
+        "count": 1,
+        "total": 16,
+        "unit": "GB",
+        "name": "16GB"
+      },
+      "storage": [
+        {
+          "count": 1,
+          "name": "NVMe 100GB",
+          "size": 100,
+          "unit": "GB",
+          "type": "NVME"
+        }
+      ],
+      "nics": {
+        "name": "1Gbps"
+      },
+      "bandwidth": {
+        "name": "10TB"
+      }
+    },
+    "pricing": [
+      {
+        "id": 3,
+        "unit": "Monthly",
+        "price": 59.29,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 4,
+        "unit": "Quarterly",
+        "price": 168.9765,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 5,
+        "unit": "Semiannually",
+        "price": 320.166,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 6,
+        "unit": "Annually",
+        "price": 604.758,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 37,
+        "unit": "Hourly",
+        "price": 0.1016,
+        "currency": "EUR",
+        "taxed": true
+      }
+    ],
+    "available_regions": [
+      {
+        "id": 1,
+        "name": "Lithuania",
+        "region_iso_2": "LT",
+        "stock_qty": 136,
+        "spot_qty": 0,
+        "slug": "LT-Siauliai",
+        "bgp": {
+          "hosts": [
+            "46.166.166.122",
+            "46.166.166.123"
+          ],
+          "asn": 16125
+        },
+        "location": "Lithuania, Šiauliai"
+      },
+      {
+        "id": 2,
+        "name": "Amsterdam, NL",
+        "region_iso_2": "NL",
+        "stock_qty": 18,
+        "spot_qty": 0,
+        "slug": "NL-Amsterdam",
+        "bgp": {
+          "hosts": [
+            "195.189.96.10",
+            "195.189.96.11"
+          ],
+          "asn": 59642
+        },
+        "location": "Netherlands, Amsterdam"
+      },
+      {
+        "id": 3,
+        "name": "Chicago, US",
+        "region_iso_2": "US",
+        "stock_qty": 372,
+        "spot_qty": 0,
+        "slug": "US-Chicago",
+        "bgp": {
+          "hosts": [
+            "185.8.106.10",
+            "185.8.106.11"
+          ],
+          "asn": 204770
+        },
+        "location": "United States, Chicago"
+      },
+      {
+        "id": 4,
+        "name": "Singapore",
+        "region_iso_2": "SG",
+        "stock_qty": 272,
+        "spot_qty": 0,
+        "slug": "SG-Singapore",
+        "bgp": {
+          "hosts": [
+            "5.199.164.10",
+            "5.199.164.11"
+          ],
+          "asn": 216444
+        },
+        "location": "Singapore"
+      },
+      {
+        "id": 5,
+        "name": "Stockholm, SE",
+        "region_iso_2": "SE",
+        "stock_qty": 0,
+        "spot_qty": 0,
+        "slug": "SE-Stockholm",
+        "bgp": {
+          "hosts": [
+            "185.189.44.10",
+            "185.189.44.11"
+          ],
+          "asn": 214159
+        },
+        "location": "Sweden, Stockholm"
+      },
+      {
+        "id": 6,
+        "name": "Frankfurt, DE",
+        "region_iso_2": "DE",
+        "stock_qty": 0,
+        "spot_qty": 0,
+        "slug": "DE-Frankfurt",
+        "bgp": {
+          "hosts": [
+            "185.191.116.10",
+            "185.191.116.11"
+          ],
+          "asn": 213896
+        },
+        "location": "Germany, Frankfurt"
+      }
+    ]
+  },
+  {
+    "id": 625,
+    "href": "/plans/B1-1-1gb-20s-shared",
+    "name": "Cloud VPS 1",
+    "slug": "B1-1-1gb-20s-shared",
+    "title": "Cloud VPS 1",
+    "type": "vps",
+    "category": "Shared resources",
+    "softwares": [
+      {
+        "image": {
+          "name": "Ubuntu 24.04 64bit",
+          "slug": "ubuntu_24_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 22.04 64bit",
+          "slug": "ubuntu_22_04"
+        }
+      },
+      {
+        "image": {
+          "name": "Ubuntu 26.04 64bit",
+          "slug": "ubuntu_26_04_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 13 64bit",
+          "slug": "debian_13_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 12 64bit",
+          "slug": "debian_12_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Debian 11 64bit",
+          "slug": "debian_11_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 10 64bit",
+          "slug": "almalinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 9 64bit",
+          "slug": "almalinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlmaLinux 8 64bit",
+          "slug": "almalinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 10 64bit",
+          "slug": "rockylinux_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 9 64bit",
+          "slug": "rockylinux_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "RockyLinux 8 64bit",
+          "slug": "rockylinux_8_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "openSUSE Leap 16 64bit",
+          "slug": "opensuse_leap_16_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 43 64bit",
+          "slug": "fedora_43_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Fedora 42 64bit",
+          "slug": "fedora_42_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 10 64bit",
+          "slug": "centos_stream_10_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "CentOS Stream 9 64bit",
+          "slug": "centos_stream_9_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "AlpineLinux 3 64bit",
+          "slug": "alpinelinux_3_64bit"
+        }
+      },
+      {
+        "image": {
+          "name": "Arch Linux 64bit",
+          "slug": "arch_linux_64bit"
+        }
+      }
+    ],
+    "specs": {
+      "cpus": {
+        "count": 1,
+        "name": "1 vCore",
+        "cores": 1,
+        "frequency": 0.0,
+        "unit": "GHz"
+      },
+      "memory": {
+        "count": 1,
+        "total": 1,
+        "unit": "GB",
+        "name": "1GB"
+      },
+      "storage": [
+        {
+          "count": 1,
+          "name": "SSD 20GB",
+          "size": 20,
+          "unit": "GB",
+          "type": "SSD"
+        }
+      ],
+      "nics": {
+        "name": "1Gbps"
+      },
+      "bandwidth": {
+        "name": "5TB"
+      }
+    },
+    "pricing": [
+      {
+        "id": 3,
+        "unit": "Monthly",
+        "price": 10.89,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 4,
+        "unit": "Quarterly",
+        "price": 31.0365,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 5,
+        "unit": "Semiannually",
+        "price": 58.806,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 6,
+        "unit": "Annually",
+        "price": 78.408,
+        "currency": "EUR",
+        "taxed": true
+      },
+      {
+        "id": 37,
+        "unit": "Hourly",
+        "price": 0.0182,
+        "currency": "EUR",
+        "taxed": true
+      }
+    ],
+    "available_regions": [
+      {
+        "id": 1,
+        "name": "Lithuania",
+        "region_iso_2": "LT",
+        "stock_qty": 864,
+        "spot_qty": 0,
+        "slug": "LT-Siauliai",
+        "bgp": {
+          "hosts": [
+            "46.166.166.122",
+            "46.166.166.123"
+          ],
+          "asn": 16125
+        },
+        "location": "Lithuania, Šiauliai"
+      },
+      {
+        "id": 2,
+        "name": "Amsterdam, NL",
+        "region_iso_2": "NL",
+        "stock_qty": 342,
+        "spot_qty": 0,
+        "slug": "NL-Amsterdam",
+        "bgp": {
+          "hosts": [
+            "195.189.96.10",
+            "195.189.96.11"
+          ],
+          "asn": 59642
+        },
+        "location": "Netherlands, Amsterdam"
+      },
+      {
+        "id": 3,
+        "name": "Chicago, US",
+        "region_iso_2": "US",
+        "stock_qty": 463,
+        "spot_qty": 0,
+        "slug": "US-Chicago",
+        "bgp": {
+          "hosts": [
+            "185.8.106.10",
+            "185.8.106.11"
+          ],
+          "asn": 204770
+        },
+        "location": "United States, Chicago"
+      },
+      {
+        "id": 4,
+        "name": "Singapore",
+        "region_iso_2": "SG",
+        "stock_qty": 78,
+        "spot_qty": 0,
+        "slug": "SG-Singapore",
+        "bgp": {
+          "hosts": [
+            "5.199.164.10",
+            "5.199.164.11"
+          ],
+          "asn": 216444
+        },
+        "location": "Singapore"
+      }
+    ]
+  }
+]

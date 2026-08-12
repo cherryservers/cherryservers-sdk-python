@@ -123,6 +123,8 @@ def test_delete(
                 password="123456789",  # noqa: S106
                 ssh_keys=set(),
                 user_data="abc",
+                ipxe="test",
+                persist_ipxe=True,
             ),
         ),
         (
