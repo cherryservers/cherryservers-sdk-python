@@ -202,6 +202,34 @@ class PricingModel(_base.ResourceModel):
     unit: str | None = Field(description="Time unit type.", default=None)
 
 
+class SoftwareModel(_base.ResourceModel):
+    """Cherry Servers servers plan software model.
+
+    This model is frozen by default,
+    since it represents an actual Cherry Servers resource state.
+
+    Attributes:
+        image (cherryservers_sdk_python.plans.ImageModel): Image data.
+
+    """
+
+    image: ImageModel = Field(description="Image data.")
+
+
+class ImageModel(_base.ResourceModel):
+    """Cherry Servers server plan OS image model.
+
+    This model is frozen by default,
+    since it represents an actual Cherry Servers resource state.
+
+    Attributes:
+        slug (str): Slug of the software image.
+
+    """
+
+    slug: str = Field(description="Slug of the software image.")
+
+
 class PlanModel(_base.ResourceModel):
     """Cherry Servers plan model.
 
@@ -218,6 +246,8 @@ class PlanModel(_base.ResourceModel):
          Plan pricing.
         available_regions(list[cherryservers_sdk_python.plans.AvailableRegionsModel] | None):
          Available regions for the plan.
+        softwares (set[cherryservers_sdk_python.plans.SoftwareModel]) | None:
+         Available server software, OS images primarily.
 
     """  # noqa: W505
 
@@ -233,6 +263,9 @@ class PlanModel(_base.ResourceModel):
     )
     available_regions: list[AvailableRegionsModel] | None = Field(
         description="Available regions for the plan.", default=None
+    )
+    softwares: set[SoftwareModel] | None = Field(
+        description="Available server software, OS images primarily.", default=None
     )
 
 
@@ -260,7 +293,7 @@ class PlanClient(_base.ResourceClient):
         """Retrieve a plan by ID or slug."""
         response = self._api_client.get(
             f"plans/{plan_id_or_slug}",
-            {"fields": "plan,specs,pricing,region,href"},
+            {"fields": "plan,specs,pricing,region,softwares,href"},
             self.request_timeout,
         )
         plan_model = PlanModel.model_validate(response.json())
@@ -270,7 +303,7 @@ class PlanClient(_base.ResourceClient):
         """Get all plans that are available to a team."""
         response = self._api_client.get(
             f"teams/{team_id}/plans",
-            {"fields": "plan,specs,pricing,region,href"},
+            {"fields": "plan,specs,pricing,region,softwares,href"},
             self.request_timeout,
         )
         plans: list[Plan] = []

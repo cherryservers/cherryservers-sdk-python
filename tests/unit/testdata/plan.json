@@ -1,0 +1,375 @@
+{
+  "id": 1105,
+  "href": "/plans/amd-ryzen-9700x",
+  "name": "AMD Ryzen 9700X",
+  "slug": "amd-ryzen-9700x",
+  "title": "AMD Ryzen 9700X",
+  "type": "baremetal",
+  "category": "lightweight",
+  "softwares": [
+    {
+      "image": {
+        "name": "Ubuntu 24.04 64bit",
+        "slug": "ubuntu_24_04_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "Ubuntu 26.04 64bit",
+        "slug": "ubuntu_26_04_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "Ubuntu 22.04 64bit",
+        "slug": "ubuntu_22_04"
+      }
+    },
+    {
+      "image": {
+        "name": "AlmaLinux 10 64bit",
+        "slug": "almalinux_10_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "AlmaLinux 9 64bit",
+        "slug": "almalinux_9_64bit"
+      },
+      "addons": [
+        {
+          "name": "DirectAdmin",
+          "slug": "directadmin_php_7_1",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 10.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 30.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 60.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 120.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.0165,
+              "currency": "EUR",
+              "taxed": false
+            }
+          ]
+        },
+        {
+          "name": "DirectAdmin Lifetime",
+          "slug": "lifetime_directadmin_php_7_1",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 60.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 180.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 360.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 720.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.0987,
+              "currency": "EUR",
+              "taxed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "image": {
+        "name": "AlmaLinux 8 64bit",
+        "slug": "almalinux_8_64bit"
+      },
+      "addons": [
+        {
+          "name": "DirectAdmin",
+          "slug": "directadmin_php_7_1",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 10.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 30.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 60.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 120.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.0165,
+              "currency": "EUR",
+              "taxed": false
+            }
+          ]
+        },
+        {
+          "name": "DirectAdmin Lifetime",
+          "slug": "lifetime_directadmin_php_7_1",
+          "pricing": [
+            {
+              "id": 3,
+              "unit": "Monthly",
+              "price": 60.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 4,
+              "unit": "Quarterly",
+              "price": 180.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 5,
+              "unit": "Semiannually",
+              "price": 360.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 6,
+              "unit": "Annually",
+              "price": 720.0,
+              "currency": "EUR",
+              "taxed": false
+            },
+            {
+              "id": 37,
+              "unit": "Hourly",
+              "price": 0.0987,
+              "currency": "EUR",
+              "taxed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "image": {
+        "name": "Debian 13 64bit",
+        "slug": "debian_13_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "Debian 12 64bit",
+        "slug": "debian_12_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "Debian 11 64bit",
+        "slug": "debian_11_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "VMware ESXi 8 64bit",
+        "slug": "vmware_esxi_8_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "VMware ESXi 7 64bit",
+        "slug": "vmware_esxi_7_64bit"
+      }
+    },
+    {
+      "image": {
+        "name": "IP KVM self-install",
+        "slug": "self_install"
+      }
+    },
+    {
+      "image": {
+        "name": "Custom iPXE install",
+        "slug": "custom_ipxe_install"
+      }
+    }
+  ],
+  "specs": {
+    "cpus": {
+      "count": 1,
+      "name": "AMD Ryzen 9700X",
+      "cores": 8,
+      "frequency": 3.8,
+      "max_frequency": 5.5,
+      "unit": "GHz"
+    },
+    "memory": {
+      "count": 1,
+      "total": 96,
+      "unit": "GB",
+      "name": "96GB DDR5"
+    },
+    "storage": [
+      {
+        "count": 2,
+        "name": "NVMe 1TB",
+        "size": 1,
+        "unit": "TB",
+        "type": "NVME"
+      }
+    ],
+    "nics": {
+      "name": "10Gbps"
+    },
+    "bandwidth": {
+      "name": "100TB"
+    }
+  },
+  "pricing": [
+    {
+      "id": 3,
+      "unit": "Monthly",
+      "price": 189.0,
+      "currency": "EUR",
+      "taxed": false
+    },
+    {
+      "id": 4,
+      "unit": "Quarterly",
+      "price": 538.65,
+      "currency": "EUR",
+      "taxed": false
+    },
+    {
+      "id": 5,
+      "unit": "Semiannually",
+      "price": 1020.6,
+      "currency": "EUR",
+      "taxed": false
+    },
+    {
+      "id": 6,
+      "unit": "Annually",
+      "price": 1927.8,
+      "currency": "EUR",
+      "taxed": false
+    },
+    {
+      "id": 37,
+      "unit": "Hourly",
+      "price": 0.324,
+      "currency": "EUR",
+      "taxed": false
+    }
+  ],
+  "available_regions": [
+    {
+      "id": 3,
+      "name": "Chicago, US",
+      "region_iso_2": "US",
+      "stock_qty": 34,
+      "spot_qty": 0,
+      "slug": "US-Chicago",
+      "bgp": {
+        "hosts": [
+          "185.8.106.10",
+          "185.8.106.11"
+        ],
+        "asn": 204770
+      },
+      "location": "United States, Chicago"
+    },
+    {
+      "id": 2,
+      "name": "Amsterdam, NL",
+      "region_iso_2": "NL",
+      "stock_qty": 0,
+      "spot_qty": 0,
+      "slug": "NL-Amsterdam",
+      "bgp": {
+        "hosts": [
+          "195.189.96.10",
+          "195.189.96.11"
+        ],
+        "asn": 59642
+      },
+      "location": "Netherlands, Amsterdam"
+    },
+    {
+      "id": 7,
+      "name": "Tokyo, JP",
+      "region_iso_2": "JP",
+      "stock_qty": 0,
+      "spot_qty": 0,
+      "slug": "JP-Tokyo",
+      "bgp": {
+        "hosts": [
+          "109.109.164.10",
+          "109.109.164.11"
+        ],
+        "asn": 210162
+      },
+      "location": "Japan, Tokyo"
+    }
+  ]
+}

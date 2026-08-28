@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 import json
-from typing import Any
+import pathlib
+from typing import TYPE_CHECKING, Any
 
 import requests
+
+if TYPE_CHECKING:
+    import pathlib
 
 
 def build_api_response(
@@ -15,4 +19,14 @@ def build_api_response(
     response = requests.Response()
     response.status_code = status_code
     response._content = json.dumps(resp_content).encode("utf-8")
+    return response
+
+
+def fake_response(content: pathlib.Path, status: int) -> requests.Response:
+    """Build a fake API response with the given content and status."""
+    response = requests.Response()
+    response.status_code = status
+    response._content = content.read_bytes()
+    response.encoding = "utf-8"
+    response.headers["Content-Type"] = "application/json"
     return response
