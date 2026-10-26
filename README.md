@@ -40,7 +40,7 @@ For more examples, check out the [documentation](https://cherryservers-sdk-pytho
 
 ### Requirements
 
-* Python version >= 3.10
+* Python version >= 3.11
 * [poetry](https://python-poetry.org/) version >= 2.0.0
 
 ### Setup
