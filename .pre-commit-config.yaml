@@ -27,12 +27,12 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v2.4.0
     hooks:
       - id: mypy
         args: [ --strict, --ignore-missing-imports ]
         additional_dependencies:
           - requests==2.32.5
           - types-requests== 2.32.4.20250913
-          - pydantic == 2.12.5
+          - pydantic == 2.14.0
           - pytest == 9.0.2
